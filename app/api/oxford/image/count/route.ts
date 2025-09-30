@@ -1,32 +1,30 @@
 import { NextResponse } from "next/server";
-import { Pool } from "pg";
+import { supabase } from "@/lib/supabase";
 
 export const runtime = "nodejs";
-
-const pool = new Pool({
-  host: process.env.PGHOST,
-  port: Number.parseInt(process.env.PGPORT || "5432"),
-  database: process.env.PGDATABASE,
-  user: process.env.PGUSER,
-  password: process.env.PGPASSWORD,
-});
 
 // GET /api/oxford/count?search=...
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
     const search = searchParams.get("search") || "";
-    const params: any[] = [];
-    let where = "";
+
+    // Use Supabase select with exact count
+    let query = supabase.from("oxford_words").select("id", { count: "exact" });
     if (search) {
-      params.push(`%${search}%`);
-      where = "WHERE term ILIKE $1 OR meaning ILIKE $1";
+      // or() supports multiple ilike conditions
+      query = query.or(`term.ilike.%${search}%,meaning.ilike.%${search}%`);
     }
-    const sql = `SELECT COUNT(*)::int AS total FROM public.oxford_words ${where}`;
-    const { rows } = await pool.query(sql, params);
-    return NextResponse.json(rows[0]);
+
+    const { data, count, error } = await query;
+    if (error) {
+      console.error("COUNT Supabase error:", error);
+      return NextResponse.json({ error: "count failed" }, { status: 500 });
+    }
+
+    return NextResponse.json({ total: count || 0 });
   } catch (e: any) {
-    console.error("COUNT error:", e);
+    console.error("COUNT unexpected error:", e);
     return NextResponse.json({ error: "count failed" }, { status: 500 });
   }
 }

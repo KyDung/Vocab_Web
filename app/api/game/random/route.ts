@@ -1,25 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { Pool } from "pg";
-
-// Use singleton pattern like Oxford API to prevent connection leaks
-let pool: Pool | null = null;
-function getPool() {
-  if (!pool) {
-    pool = new Pool({
-      host: process.env.PGHOST,
-      port: Number.parseInt(process.env.PGPORT || "5432"),
-      database: process.env.PGDATABASE,
-      user: process.env.PGUSER,
-      password: process.env.PGPASSWORD,
-      max: 5,
-      ssl:
-        process.env.PGSSL === "true"
-          ? { rejectUnauthorized: false }
-          : undefined,
-    });
-  }
-  return pool;
-}
+import { supabase } from "@/lib/supabase";
 
 export async function GET(request: NextRequest) {
   try {
@@ -29,24 +9,30 @@ export async function GET(request: NextRequest) {
       50
     );
 
-    console.log(
-      `🎮 Game API: Fetching ${n} random words from oxford_words table`
-    );
+    console.log(`🎮 Game API: Fetching ${n} random words from oxford_words table`);
 
-    // Get random words from oxford_words table
-    const result = await getPool().query(
-      `SELECT term, meaning FROM oxford_words ORDER BY RANDOM() LIMIT $1`,
-      [n]
-    );
+    // Supabase doesn't have a direct RANDOM() order across all providers; use rpc or sampling.
+    // Simple approach: fetch n items using offset with a random start (may have bias) or request all ids and sample.
+    // Here we fetch random using SQL function via rpc: use 'order' with 'random' via 'select' raw
+    const { data, error } = await supabase.rpc('get_random_oxford_words', { limit: n });
 
-    console.log(`✅ Found ${result.rows.length} random words for game`);
+    if (error) {
+      // Fallback: fetch n items and shuffle in JS
+      console.error('Game RPC error, falling back:', error.message || error);
+      const { data: allData, error: e2 } = await supabase
+        .from('oxford_words')
+        .select('term, meaning')
+        .limit(n)
+      if (e2) {
+        console.error('Game fallback error:', e2)
+        return NextResponse.json({ error: 'Failed to fetch random words' }, { status: 500 })
+      }
+      return NextResponse.json(allData || [])
+    }
 
-    return NextResponse.json(result.rows);
+    return NextResponse.json(data || [])
   } catch (error) {
-    console.error("❌ Game random API error:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch random words" },
-      { status: 500 }
-    );
+    console.error('❌ Game random API unexpected error:', error);
+    return NextResponse.json({ error: 'Failed to fetch random words' }, { status: 500 });
   }
 }
