@@ -1,14 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Pool } from "pg";
+import { supabase } from "@/lib/supabase";
 export const runtime = "nodejs";
-
-const pool = new Pool({
-  host: process.env.PGHOST,
-  port: Number.parseInt(process.env.PGPORT || "5432"),
-  database: process.env.PGDATABASE,
-  user: process.env.PGUSER,
-  password: process.env.PGPASSWORD,
-});
 
 async function fetchUnsplash(term: string) {
   const url = new URL("https://api.unsplash.com/search/photos");
@@ -39,14 +31,20 @@ export async function POST(req: NextRequest) {
     if (!imageUrl)
       return NextResponse.json({ error: "No image found" }, { status: 404 });
 
-    const { rowCount } = await pool.query(
-      `UPDATE public.oxford_words
-       SET image_url = $1
-       WHERE LOWER(term) = LOWER($2)`,
-      [imageUrl, term]
-    );
+    const { error, count } = await supabase
+      .from("oxford_words")
+      .update({ image_url: imageUrl })
+      .eq("term", term);
 
-    return NextResponse.json({ term, image_url: imageUrl, updated: rowCount });
+    if (error) {
+      console.error("oxford/image Supabase error:", error);
+      return NextResponse.json(
+        { error: "Failed to update image" },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json({ term, image_url: imageUrl, updated: count });
   } catch (e) {
     console.error("oxford/image error:", e);
     return NextResponse.json(
