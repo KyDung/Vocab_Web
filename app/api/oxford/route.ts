@@ -7,13 +7,13 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get("search") || "";
     const topic = searchParams.get("topic") || "";
     const page = Number.parseInt(searchParams.get("page") || "1");
-    const limit =
-      searchParams.get("limit") === "all"
-        ? 10000 // Load all words
-        : Math.min(
-            Math.max(Number.parseInt(searchParams.get("limit") || "50"), 1),
-            10000
-          );
+    const isLoadAll = searchParams.get("limit") === "all";
+    const limit = isLoadAll
+      ? 50000 // Increased limit for all words
+      : Math.min(
+          Math.max(Number.parseInt(searchParams.get("limit") || "50"), 1),
+          50000
+        );
     const offset = (page - 1) * limit;
 
     // Build Supabase query
@@ -33,10 +33,11 @@ export async function GET(request: NextRequest) {
       query = query.eq("topic", topic);
     }
 
-    // Add pagination
-    query = query
-      .order("term", { ascending: true })
-      .range(offset, offset + limit - 1);
+    // Add pagination only if not loading all
+    query = query.order("term", { ascending: true });
+    if (!isLoadAll) {
+      query = query.range(offset, offset + limit - 1);
+    }
 
     const { data: words, error, count } = await query;
 

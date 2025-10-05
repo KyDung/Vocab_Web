@@ -183,7 +183,7 @@ export default function TopicsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState<ViewMode>("card");
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(12);
+  const [itemsPerPage, setItemsPerPage] = useState(10000);
   const [jumpToPage, setJumpToPage] = useState("");
   const [flashcardIndex, setFlashcardIndex] = useState(0);
   const [flashcardSearchQuery, setFlashcardSearchQuery] = useState("");
@@ -427,7 +427,7 @@ export default function TopicsPage() {
     setLoading(true);
     try {
       const response = await fetch(
-        `/api/oxford?topic=${encodeURIComponent(topicName)}`
+        `/api/oxford?topic=${encodeURIComponent(topicName)}&limit=all`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch words");
@@ -1248,21 +1248,22 @@ export default function TopicsPage() {
           </>
         )}
 
-        {/* Word Detail Dialog - Match Oxford layout */}
+        {/* Word Detail Dialog - Responsive Match Oxford */}
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogContent
-            className="!max-w-none !w-[96vw] !h-[92vh] p-0 !fixed !top-[50%] !left-[50%] !translate-x-[-50%] !translate-y-[-50%]"
+            className="!max-w-none !w-[95vw] !h-[95vh] sm:!w-[90vw] sm:!h-[90vh] lg:!w-[85vw] lg:!h-[85vh] p-0 !fixed !top-[50%] !left-[50%] !translate-x-[-50%] !translate-y-[-50%] bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700"
             showCloseButton={false}
           >
             {selectedWord && (
               <div className="flex flex-col h-full">
-                {/* Dialog Header */}
-                <DialogHeader className="p-6 border-b flex-shrink-0">
+                {/* Dialog Header - Responsive */}
+                <DialogHeader className="p-3 sm:p-4 lg:p-6 border-b border-gray-200 dark:border-slate-700 flex-shrink-0">
                   <div className="flex justify-between items-center">
-                    <DialogTitle className="text-2xl font-bold">
-                      Chi tiết từ vựng
+                    <DialogTitle className="text-lg lg:text-2xl font-bold text-gray-900 dark:text-white">
+                      <span className="hidden lg:inline">Chi tiết từ vựng</span>
+                      <span className="lg:hidden">{selectedWord.term}</span>
                     </DialogTitle>
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-1 sm:space-x-2">
                       <Button
                         variant="outline"
                         size="sm"
@@ -1272,11 +1273,12 @@ export default function TopicsPage() {
                             (w) => w.id === selectedWord.id
                           ) === 0
                         }
+                        className="text-xs sm:text-sm"
                       >
-                        <ArrowLeft className="w-4 h-4 mr-1" />
-                        Trước
+                        <ArrowLeft className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-1" />
+                        <span className="hidden sm:inline">Trước</span>
                       </Button>
-                      <span className="text-sm text-gray-600 font-medium px-3">
+                      <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 font-medium px-1 sm:px-3">
                         {filteredWords.findIndex(
                           (w) => w.id === selectedWord.id
                         ) + 1}{" "}
@@ -1292,23 +1294,24 @@ export default function TopicsPage() {
                           ) ===
                           filteredWords.length - 1
                         }
+                        className="text-xs sm:text-sm"
                       >
-                        Sau
-                        <ArrowRight className="w-4 h-4 ml-1" />
+                        <span className="hidden sm:inline">Sau</span>
+                        <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 sm:ml-1" />
                       </Button>
                       <Button variant="outline" size="sm" onClick={closeDialog}>
-                        <X className="w-4 h-4" />
+                        <X className="w-3 h-3 sm:w-4 sm:h-4" />
                       </Button>
                     </div>
                   </div>
                 </DialogHeader>
 
-                {/* Dialog Body - chỉ rộng gap, giữ nguyên nội dung */}
-                <div className="flex-1 flex gap-8 overflow-hidden">
-                  {/* Left Panel - Word Information - Căn giữa */}
-                  <div className="w-1/2 p-6 overflow-y-auto flex flex-col items-center text-center relative">
-                    {/* Nút phát âm và ngôi sao ở góc */}
-                    <div className="absolute top-4 right-4 flex items-center space-x-2">
+                {/* Dialog Body - Responsive Layout */}
+                <div className="flex-1 flex flex-col lg:flex-row gap-4 lg:gap-8 overflow-hidden">
+                  {/* Left Panel - Word Information - Mobile First */}
+                  <div className="w-full lg:w-1/2 p-4 lg:p-6 overflow-y-auto flex flex-col items-center text-center relative min-w-0 max-h-full">
+                    {/* Nút phát âm và ngôi sao ở góc - Mobile responsive */}
+                    <div className="absolute top-2 right-2 lg:top-4 lg:right-4 flex items-center space-x-1 lg:space-x-2">
                       <StarStatus
                         key={`dialog-${selectedWord.term}-${
                           wordStatuses[selectedWord.term] || "not-started"
@@ -1316,60 +1319,67 @@ export default function TopicsPage() {
                         status={
                           wordStatuses[selectedWord.term] || "not-started"
                         }
-                        size={20}
+                        size={16}
                         isAuthenticated={!!user}
                       />
                       <Button
                         variant="outline"
                         size="sm"
                         onClick={() => playPronunciation(selectedWord.term)}
-                        className="p-2"
+                        className="p-1 lg:p-2"
                       >
-                        <Volume2 className="h-4 w-4" />
+                        <Volume2 className="h-3 w-3 lg:h-4 lg:w-4" />
                       </Button>
                     </div>
 
-                    <div className="space-y-3 max-w-lg w-full min-h-0 flex-1 flex flex-col justify-center">
+                    <div className="space-y-2 lg:space-y-3 max-w-lg w-full min-h-0 flex-1 flex flex-col justify-center">
                       {/* Word image */}
                       {selectedWord.image_url && (
                         <div className="flex justify-center flex-shrink-0">
                           <img
                             src={selectedWord.image_url}
                             alt={selectedWord.term}
-                            className="max-w-full max-h-40 object-cover rounded-lg shadow-md"
+                            className="max-w-full max-h-32 lg:max-h-40 object-cover rounded-lg shadow-md"
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.src = "/placeholder.svg";
+                            }}
                           />
                         </div>
                       )}
 
                       <div className="text-center flex-shrink-0">
-                        <h2 className="text-3xl font-bold text-gray-900 dark:text-white break-words">
+                        <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white break-words">
                           {selectedWord.term}
                         </h2>
                       </div>
 
                       {selectedWord.ipa && selectedWord.ipa.trim() && (
-                        <div className="text-lg text-gray-600 dark:text-gray-300 text-center flex-shrink-0">
+                        <div className="text-base lg:text-lg text-gray-600 dark:text-gray-300 text-center flex-shrink-0">
                           {selectedWord.ipa}
                         </div>
                       )}
 
                       {selectedWord.pos && (
                         <div className="space-y-1 text-center flex-shrink-0">
-                          <Badge variant="secondary" className="text-sm">
+                          <Badge
+                            variant="secondary"
+                            className="text-xs lg:text-sm"
+                          >
                             {selectedWord.pos}
                           </Badge>
                         </div>
                       )}
 
                       <div className="space-y-1 flex-shrink-0">
-                        <p className="text-gray-700 dark:text-gray-300 break-words leading-relaxed">
+                        <p className="text-sm lg:text-base text-gray-700 dark:text-gray-300 break-words leading-relaxed">
                           {selectedWord.meaning}
                         </p>
                       </div>
 
                       <div className="space-y-1 flex-shrink-0">
                         {selectedWord.example && (
-                          <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 text-sm text-gray-600 dark:text-gray-300 italic break-words leading-relaxed">
+                          <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-2 lg:p-3 text-xs lg:text-sm text-gray-600 dark:text-gray-300 italic break-words leading-relaxed">
                             "{selectedWord.example}"
                           </div>
                         )}
@@ -1377,17 +1387,17 @@ export default function TopicsPage() {
                     </div>
                   </div>
 
-                  {/* Right Panel - AI Practice */}
-                  <div className="w-1/2 border-l border-gray-200 dark:border-gray-700 flex flex-col">
+                  {/* Right Panel - AI Practice - Mobile responsive */}
+                  <div className="w-full lg:w-1/2 border-t lg:border-t-0 lg:border-l border-gray-200 dark:border-gray-700 flex flex-col bg-gradient-to-br from-gray-50 to-white dark:from-slate-800 dark:to-slate-900">
                     {/* Practice Content */}
-                    <div className="flex-1 p-6 flex flex-col min-h-0">
-                      <div className="space-y-4 flex-1 flex flex-col">
+                    <div className="flex-1 p-4 lg:p-6 flex flex-col min-h-0">
+                      <div className="space-y-3 lg:space-y-4 flex-1 flex flex-col">
                         <div className="flex-shrink-0">
                           <Textarea
                             placeholder={`Viết một câu tiếng Anh có từ "${selectedWord.term}"...`}
                             value={practiceInput}
                             onChange={(e) => setPracticeInput(e.target.value)}
-                            className="min-h-28 resize-none"
+                            className="min-h-[80px] lg:min-h-28 resize-none text-sm lg:text-base"
                           />
                         </div>
 
@@ -1395,17 +1405,17 @@ export default function TopicsPage() {
                           <Button
                             onClick={handlePractice}
                             disabled={practiceLoading || !practiceInput.trim()}
-                            className="w-full"
+                            className="w-full text-sm lg:text-base"
                             size="lg"
                           >
                             {practiceLoading ? (
                               <>
-                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                                <div className="animate-spin rounded-full h-3 w-3 lg:h-4 lg:w-4 border-b-2 border-white mr-2"></div>
                                 Đang phân tích...
                               </>
                             ) : (
                               <>
-                                <Zap className="h-4 w-4 mr-2" />
+                                <Zap className="h-3 w-3 lg:h-4 lg:w-4 mr-2" />
                                 Gửi để nhận phản hồi
                               </>
                             )}
