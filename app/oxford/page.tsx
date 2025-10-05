@@ -1,8 +1,9 @@
 "use client";
 
 // Oxford vocabulary page with flashcard mode
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/lib/auth-context";
+import { useWords } from "@/lib/words-context";
 import { supabase } from "@/lib/supabase";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -38,6 +39,7 @@ import {
   Star,
 } from "lucide-react";
 import { WordEvaluation } from "@/components/word-evaluation";
+import { WordCardSkeleton, WordListSkeleton } from "@/components/ui/skeleton";
 
 // Star Status Component
 interface StarStatusProps {
@@ -237,10 +239,9 @@ const getLevelFromWord = (word: Word): string => {
 
 export default function OxfordPage() {
   const { user } = useAuth(); // Add authentication hook
+  const { oxfordWords, oxfordLoading, loadOxfordWords } = useWords(); // Use words context
   const prevUserRef = useRef(user); // Track previous user state
-  const [words, setWords] = useState<Word[]>([]);
   const [filteredWords, setFilteredWords] = useState<Word[]>([]);
-  const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(20);
@@ -258,7 +259,6 @@ export default function OxfordPage() {
   const [practiceFeedback, setPracticeFeedback] = useState("");
   const [practiceResult, setPracticeResult] = useState<boolean | null>(null);
   const [practiceLoading, setPracticeLoading] = useState(false);
-  const [imageLoadingCount, setImageLoadingCount] = useState(0);
 
   // Word learning status tracking
   const [wordStatuses, setWordStatuses] = useState<
@@ -480,66 +480,12 @@ export default function OxfordPage() {
     }, 100);
   };
 
-  // Fetch words from API
+  // Fetch words from API - now using context
   useEffect(() => {
-    const fetchWords = async () => {
-      try {
-        setLoading(true);
-        console.log("🔄 Fetching all Oxford words...");
-        const response = await fetch("/api/oxford?limit=all");
-        const data = await response.json();
-
-        console.log("📊 API Response:", {
-          hasWords: !!data.words,
-          wordsLength: data.words?.length,
-          total: data.total,
-          isArray: Array.isArray(data),
-        });
-
-        let wordsArray: Word[] = [];
-
-        if (data.words && Array.isArray(data.words)) {
-          // New API format with words property
-          wordsArray = data.words;
-        } else if (Array.isArray(data)) {
-          // Old API format - direct array
-          wordsArray = data;
-        } else {
-          console.error("Unexpected API response format:", data);
-          return;
-        }
-
-        console.log(
-          `✅ Successfully loaded ${wordsArray.length} words from database`
-        );
-
-        // Add virtual topic and level fields
-        const wordsWithMeta = wordsArray.map((word: Word) => ({
-          ...word,
-          topic: word.topic || getTopicFromWord(word), // Use existing topic or generate
-          level: getLevelFromWord(word),
-        }));
-
-        setWords(wordsWithMeta);
-        setFilteredWords(wordsWithMeta);
-        console.log(`Loaded ${wordsWithMeta.length} words from database`);
-
-        // Load word learning statuses from database
-        await loadWordStatuses(wordsWithMeta);
-
-        // Start batch loading images after a short delay
-        setTimeout(() => {
-          batchLoadImages(wordsWithMeta);
-        }, 2000);
-      } catch (error) {
-        console.error("Error fetching words:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchWords();
-  }, []);
+    if (!oxfordWords.length && !oxfordLoading) {
+      loadOxfordWords();
+    }
+  }, [oxfordWords.length, oxfordLoading, loadOxfordWords]);
 
   // Load word statuses when user authentication state changes
   useEffect(() => {
@@ -552,20 +498,20 @@ export default function OxfordPage() {
       `Current:`,
       !!currentUser,
       `Loading:`,
-      loading
+      oxfordLoading
     );
 
     // Update ref with current user
     prevUserRef.current = currentUser;
 
     // Only reload if user state actually changed and words are loaded
-    if (prevUser !== currentUser && words.length > 0 && !loading) {
+    if (prevUser !== currentUser && oxfordWords.length > 0 && !oxfordLoading) {
       if (currentUser) {
         // User just logged in - load their word statuses
         console.log(
-          `� User logged in, loading word statuses for ${words.length} words`
+          `🔑 User logged in, loading word statuses for ${oxfordWords.length} words`
         );
-        loadWordStatuses(words);
+        loadWordStatuses(oxfordWords);
       } else if (prevUser && !currentUser) {
         // User just logged out - clear word statuses
         console.log(`🚪 User logged out, clearing word statuses`);
@@ -573,22 +519,22 @@ export default function OxfordPage() {
           string,
           "mastered" | "learning" | "not-started"
         > = {};
-        words.forEach((word) => {
+        oxfordWords.forEach((word: Word) => {
           clearedStatuses[word.term] = "not-started";
         });
         setWordStatuses(clearedStatuses);
       }
     }
-  }, [user, words.length, loading]); // React when user or words change
+  }, [user, oxfordWords.length, oxfordLoading]); // React when user or words change
 
   // Filter and search logic
   useEffect(() => {
-    let filtered = words;
+    let filtered = oxfordWords;
 
     // Apply search filter
     if (searchQuery.trim()) {
       filtered = filtered.filter(
-        (word) =>
+        (word: Word) =>
           word.term.toLowerCase().includes(searchQuery.toLowerCase()) ||
           word.meaning.toLowerCase().includes(searchQuery.toLowerCase())
       );
@@ -596,7 +542,7 @@ export default function OxfordPage() {
 
     setFilteredWords(filtered);
     setCurrentPage(1); // Reset to first page when filters change
-  }, [words, searchQuery]);
+  }, [oxfordWords, searchQuery]);
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -813,15 +759,24 @@ export default function OxfordPage() {
       ? filteredWords
       : filteredWords.slice(startIndex, endIndex);
 
-  if (loading) {
+  if (oxfordLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
         <div className="container mx-auto px-4 py-8">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
-            <p className="mt-4 text-lg text-gray-900 dark:text-white">
-              Đang tải từ vựng Oxford...
+          <div className="mb-8 text-center">
+            <h1 className="text-4xl font-bold text-gray-800 dark:text-white mb-2">
+              Oxford 3000 Vocabulary
+            </h1>
+            <p className="text-lg text-gray-600 dark:text-gray-300 mb-6">
+              3000 từ vựng thiết yếu để thành thạo tiếng Anh
             </p>
+          </div>
+
+          {/* Loading skeletons */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {Array.from({ length: 12 }).map((_, index) => (
+              <WordCardSkeleton key={index} />
+            ))}
           </div>
         </div>
       </div>
@@ -838,13 +793,10 @@ export default function OxfordPage() {
           </h1>
           <p className="text-lg text-gray-600 dark:text-gray-300">
             Khám phá{" "}
-            {words.length > 0 ? words.length.toLocaleString() : "3000+"} từ vựng
-            tiếng Anh với hình ảnh và phát âm
-            {imageLoadingCount > 0 && (
-              <span className="ml-2 text-sm text-blue-600 dark:text-blue-400">
-                (Đang tải {imageLoadingCount} ảnh...)
-              </span>
-            )}
+            {oxfordWords.length > 0
+              ? oxfordWords.length.toLocaleString()
+              : "3000+"}{" "}
+            từ vựng tiếng Anh với hình ảnh và phát âm
           </p>
         </div>
 

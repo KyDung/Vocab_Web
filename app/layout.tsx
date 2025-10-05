@@ -4,6 +4,7 @@ import { Work_Sans, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Navigation } from "@/components/navigation";
 import { AuthProvider } from "@/lib/auth-context";
+import { WordsProvider } from "@/lib/words-context";
 
 const workSans = Work_Sans({
   subsets: ["latin", "vietnamese"],
@@ -54,8 +55,10 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen bg-background" suppressHydrationWarning>
         <AuthProvider>
-          <Navigation />
-          <main className="min-h-screen">{children}</main>
+          <WordsProvider>
+            <Navigation />
+            <main className="min-h-screen">{children}</main>
+          </WordsProvider>
         </AuthProvider>
       </body>
     </html>

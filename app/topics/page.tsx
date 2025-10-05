@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/lib/auth-context";
+import { useWords } from "@/lib/words-context";
 import { supabase } from "@/lib/supabase";
 import {
   Card,
@@ -47,6 +48,12 @@ import {
   Star,
 } from "lucide-react";
 import { WordEvaluation } from "@/components/word-evaluation";
+import {
+  SkeletonGrid,
+  TopicCardSkeleton,
+  WordCardSkeleton,
+  WordListSkeleton,
+} from "@/components/ui/skeleton";
 
 // Star Status Component
 interface StarStatusProps {
@@ -175,6 +182,7 @@ const TOPICS = [
 
 export default function TopicsPage() {
   const { user } = useAuth(); // Add authentication hook
+  const { topicStats, topicStatsLoading, getWordsByTopic } = useWords(); // Use words context
   const prevUserRef = useRef(user); // Track previous user state
   const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
   const [words, setWords] = useState<Word[]>([]);
@@ -188,9 +196,6 @@ export default function TopicsPage() {
   const [flashcardIndex, setFlashcardIndex] = useState(0);
   const [flashcardSearchQuery, setFlashcardSearchQuery] = useState("");
   const [topicViewMode, setTopicViewMode] = useState<"grid" | "list">("grid");
-  const [topicWordCounts, setTopicWordCounts] = useState<
-    Record<string, number>
-  >({});
 
   // Word dialog states
   const [selectedWord, setSelectedWord] = useState<Word | null>(null);
@@ -359,9 +364,9 @@ export default function TopicsPage() {
     }, 100);
   };
 
-  // Load topic word counts on mount
+  // Load topic word counts on mount - now handled by context
   useEffect(() => {
-    loadTopicWordCounts();
+    // Topic stats are loaded automatically by context
   }, []);
 
   // Load word statuses when user authentication state changes
@@ -404,54 +409,27 @@ export default function TopicsPage() {
     }
   }, [user, words.length]); // React when user or words change
 
-  const loadTopicWordCounts = async () => {
-    try {
-      const counts: Record<string, number> = {};
-      for (const topic of TOPICS) {
-        const response = await fetch(
-          `/api/oxford?topic=${encodeURIComponent(topic.name)}&limit=1`
-        );
-        if (response.ok) {
-          const data = await response.json();
-          // Handle both API response formats
-          counts[topic.name] = data.total || data.words?.length || 0;
-        }
-      }
-      setTopicWordCounts(counts);
-    } catch (error) {
-      console.error("Error loading topic word counts:", error);
-    }
-  };
-
   const loadTopicWords = async (topicName: string) => {
     setLoading(true);
     try {
-      const response = await fetch(
-        `/api/oxford?topic=${encodeURIComponent(topicName)}`
-      );
-      if (!response.ok) {
-        throw new Error("Failed to fetch words");
-      }
+      console.log(`🔄 Loading words for topic: ${topicName}`);
 
-      const data = await response.json();
+      // Use context method to get words by topic
+      const topicWords = await getWordsByTopic(topicName);
 
-      // Handle both old and new API response formats
-      let wordsArray: Word[] = [];
-      if (data.words && Array.isArray(data.words)) {
-        wordsArray = data.words;
-      } else if (Array.isArray(data)) {
-        wordsArray = data;
-      }
-
-      setWords(wordsArray);
+      setWords(topicWords);
       setSelectedTopic(topicName);
       setCurrentPage(1);
       setFlashcardIndex(0);
       setSearchQuery("");
       setFlashcardSearchQuery("");
 
-      // Load word learning statuses from localStorage
-      await loadWordStatuses(wordsArray);
+      // Load word learning statuses
+      await loadWordStatuses(topicWords);
+
+      console.log(
+        `✅ Loaded ${topicWords.length} words for topic: ${topicName}`
+      );
     } catch (error) {
       console.error("Error loading topic words:", error);
       setWords([]);
@@ -721,9 +699,15 @@ export default function TopicsPage() {
           </div>
 
           {/* Topics Display */}
-          {topicViewMode === "grid" ? (
+          {topicStatsLoading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {TOPICS.map((topic) => (
+              {Array.from({ length: 25 }).map((_, index) => (
+                <TopicCardSkeleton key={index} />
+              ))}
+            </div>
+          ) : topicViewMode === "grid" ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {topicStats.map((topic) => (
                 <Card
                   key={topic.name}
                   className="cursor-pointer hover:shadow-lg transition-all duration-300 group bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700 hover:border-blue-300 dark:hover:border-blue-500"
@@ -738,15 +722,21 @@ export default function TopicsPage() {
                       {topic.description}
                     </p>
                     <Badge variant="secondary">
-                      {topicWordCounts[topic.name] || 0} từ
+                      {topic.word_count || 0} từ
                     </Badge>
                   </CardContent>
                 </Card>
               ))}
             </div>
+          ) : topicStatsLoading ? (
+            <div className="space-y-2">
+              {Array.from({ length: 25 }).map((_, index) => (
+                <TopicCardSkeleton key={index} />
+              ))}
+            </div>
           ) : (
             <div className="space-y-2">
-              {TOPICS.map((topic) => (
+              {topicStats.map((topic) => (
                 <Card
                   key={topic.name}
                   className="cursor-pointer hover:shadow-md transition-all duration-200 bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700 hover:border-blue-300 dark:hover:border-blue-500"
@@ -765,7 +755,7 @@ export default function TopicsPage() {
                       </div>
                       <div className="flex items-center space-x-2">
                         <Badge variant="secondary" className="text-xs">
-                          {topicWordCounts[topic.name] || 0} từ
+                          {topic.word_count || 0} từ
                         </Badge>
                         <ArrowRight className="h-4 w-4 text-gray-400" />
                       </div>
@@ -793,7 +783,7 @@ export default function TopicsPage() {
           <div className="flex items-center justify-between mb-6">
             <div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-                {TOPICS.find((t) => t.name === selectedTopic)?.icon}{" "}
+                {topicStats.find((t) => t.name === selectedTopic)?.icon}{" "}
                 {selectedTopic}
               </h1>
               <p className="text-lg text-gray-600 dark:text-gray-300">
@@ -1019,7 +1009,13 @@ export default function TopicsPage() {
             ) : (
               <>
                 {/* Words Display - Match Oxford exactly */}
-                {viewMode === "card" ? (
+                {loading ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
+                    {Array.from({ length: 12 }).map((_, index) => (
+                      <WordCardSkeleton key={index} />
+                    ))}
+                  </div>
+                ) : viewMode === "card" ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
                     {paginatedWords.map((word) => (
                       <Card
@@ -1077,6 +1073,12 @@ export default function TopicsPage() {
                           </div>
                         </CardContent>
                       </Card>
+                    ))}
+                  </div>
+                ) : loading ? (
+                  <div className="space-y-3 mb-8">
+                    {Array.from({ length: 10 }).map((_, index) => (
+                      <WordListSkeleton key={index} />
                     ))}
                   </div>
                 ) : (
