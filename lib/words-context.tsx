@@ -354,12 +354,13 @@ export function WordsProvider({ children }: { children: ReactNode }) {
     try {
       console.log("🔄 Computing topic stats...");
 
-      // First ensure Oxford words are loaded
-      if (!oxfordLoaded) {
-        await loadOxfordWords();
+      // Compute topic stats from Oxford words (should already be loaded)
+      if (oxfordWords.length === 0) {
+        console.warn("⚠️ No Oxford words available for topic stats computation");
+        setTopicStats([]);
+        return;
       }
 
-      // Compute topic stats from Oxford words
       const statsMap = new Map<string, number>();
 
       // Initialize all topics with 0 count
@@ -378,6 +379,8 @@ export function WordsProvider({ children }: { children: ReactNode }) {
         ...topic,
         word_count: statsMap.get(topic.name) || 0,
       }));
+
+      console.log("📊 Topic stats computed:", computedStats.map(t => `${t.name}: ${t.word_count}`));
 
       setTopicStats(computedStats);
       setTopicStatsLoaded(true);
@@ -457,8 +460,14 @@ export function WordsProvider({ children }: { children: ReactNode }) {
   // Auto-load on mount
   useEffect(() => {
     loadOxfordWords();
-    loadTopicStats();
   }, []);
+
+  // Load topic stats after Oxford words are loaded
+  useEffect(() => {
+    if (oxfordLoaded && oxfordWords.length > 0) {
+      loadTopicStats();
+    }
+  }, [oxfordLoaded, oxfordWords.length]);
 
   const value: WordsContextType = {
     oxfordWords,
