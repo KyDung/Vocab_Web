@@ -243,7 +243,7 @@ export default function OxfordPage() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10000);
+  const [itemsPerPage, setItemsPerPage] = useState(20);
   const [viewMode, setViewMode] = useState<ViewMode>("card");
   const [jumpToPage, setJumpToPage] = useState("");
   const [flashcardIndex, setFlashcardIndex] = useState(0);
@@ -1279,55 +1279,50 @@ export default function OxfordPage() {
             </div>
           )}
 
-        {/* Word Detail Dialog - Responsive Design */}
+        {/* Word Detail Dialog - Force width nhưng giữ ở giữa */}
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogContent
-            className="!max-w-none !w-[95vw] !h-[95vh] sm:!w-[90vw] sm:!h-[90vh] lg:!w-[85vw] lg:!h-[85vh] p-0 !fixed !top-[50%] !left-[50%] !translate-x-[-50%] !translate-y-[-50%] bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700"
+            className="!max-w-none !w-[96vw] !h-[92vh] p-0 !fixed !top-[50%] !left-[50%] !translate-x-[-50%] !translate-y-[-50%] bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700"
             showCloseButton={false}
           >
             {selectedWord && (
               <div className="flex flex-col h-full">
-                {/* Dialog Header - Responsive */}
-                <DialogHeader className="p-3 sm:p-4 border-b border-gray-200 dark:border-slate-700 flex-shrink-0">
+                {/* Dialog Header - Compact */}
+                <DialogHeader className="p-3 border-b border-gray-200 dark:border-slate-700 flex-shrink-0">
                   <VisuallyHidden>
                     <DialogTitle>Chi tiết từ vựng</DialogTitle>
                   </VisuallyHidden>
-                  <div className="flex justify-between items-center">
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white md:hidden">
-                      {selectedWord.term}
-                    </h3>
-                    <div className="flex items-center space-x-1 sm:space-x-2">
+                  <div className="flex justify-end items-center">
+                    <div className="flex items-center space-x-2">
                       <Button
                         variant="outline"
                         size="sm"
                         onClick={() => navigateWord(-1)}
-                        className="text-xs sm:text-sm"
                       >
-                        <ChevronLeft className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-1" />
-                        <span className="hidden sm:inline">Trước</span>
+                        <ChevronLeft className="w-4 h-4 mr-1" />
+                        Trước
                       </Button>
                       <Button
                         variant="outline"
                         size="sm"
                         onClick={() => navigateWord(1)}
-                        className="text-xs sm:text-sm"
                       >
-                        <span className="hidden sm:inline">Sau</span>
-                        <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 sm:ml-1" />
+                        Sau
+                        <ChevronRight className="w-4 h-4 ml-1" />
                       </Button>
                       <Button variant="outline" size="sm" onClick={closeDialog}>
-                        <X className="w-3 h-3 sm:w-4 sm:h-4" />
+                        <X className="w-4 h-4" />
                       </Button>
                     </div>
                   </div>
                 </DialogHeader>
 
-                {/* Dialog Body - Responsive Layout */}
-                <div className="flex-1 flex flex-col lg:flex-row gap-4 lg:gap-8 min-h-0 max-h-full overflow-hidden">
-                  {/* Left Panel - Word Information - Mobile First */}
-                  <div className="w-full lg:w-1/2 p-4 lg:p-6 overflow-y-auto flex flex-col items-center text-center relative min-w-0 max-h-full">
-                    {/* Nút phát âm và ngôi sao ở góc - Mobile responsive */}
-                    <div className="absolute top-2 right-2 lg:top-4 lg:right-4 flex items-center space-x-1 lg:space-x-2">
+                {/* Dialog Body - chỉ rộng gap, giữ nguyên nội dung */}
+                <div className="flex-1 flex gap-8 min-h-0 max-h-full overflow-hidden">
+                  {/* Left Panel - Word Information - Căn giữa */}
+                  <div className="w-1/2 p-6 overflow-y-auto flex flex-col items-center text-center relative min-w-0 max-h-full">
+                    {/* Nút phát âm và ngôi sao ở góc */}
+                    <div className="absolute top-4 right-4 flex items-center space-x-2">
                       <StarStatus
                         key={`${selectedWord.term}-${
                           wordStatuses[selectedWord.term] || "not-started"
@@ -1335,82 +1330,78 @@ export default function OxfordPage() {
                         status={
                           wordStatuses[selectedWord.term] || "not-started"
                         }
-                        size={16}
+                        size={20}
                         isAuthenticated={!!user}
                       />
                       <Button
                         variant="outline"
                         size="sm"
                         onClick={() => playPronunciation(selectedWord.term)}
-                        className="p-1 lg:p-2"
+                        className="p-2"
                       >
-                        <Volume2 className="h-3 w-3 lg:h-4 lg:w-4" />
+                        <Volume2 className="h-4 w-4" />
                       </Button>
                     </div>
 
-                    <div className="space-y-2 lg:space-y-3 max-w-lg w-full min-h-0 flex-1 flex flex-col justify-center">
+                    <div className="space-y-3 max-w-lg w-full min-h-0 flex-1 flex flex-col justify-center">
                       {/* Word image */}
                       {selectedWord.image_url && (
                         <div className="flex justify-center flex-shrink-0">
                           <img
                             src={selectedWord.image_url}
                             alt={selectedWord.term}
-                            className="max-w-full max-h-32 lg:max-h-40 object-cover rounded-lg shadow-md"
+                            className="max-w-full max-h-40 object-cover rounded-lg shadow-md"
                           />
                         </div>
                       )}
 
                       <div className="text-center flex-shrink-0">
-                        <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white break-words">
+                        <h2 className="text-3xl font-bold text-gray-900 dark:text-white break-words">
                           {selectedWord.term}
                         </h2>
                       </div>
 
                       {selectedWord.ipa && selectedWord.ipa.trim() && (
-                        <div className="text-base lg:text-lg text-gray-600 dark:text-gray-300 text-center flex-shrink-0">
+                        <div className="text-lg text-gray-600 dark:text-gray-300 text-center flex-shrink-0">
                           {selectedWord.ipa}
                         </div>
                       )}
 
                       {selectedWord.pos && (
                         <div className="space-y-1 text-center flex-shrink-0">
-                          <Badge
-                            variant="secondary"
-                            className="text-xs lg:text-sm"
-                          >
+                          <Badge variant="secondary" className="text-sm">
                             {selectedWord.pos}
                           </Badge>
                         </div>
                       )}
 
                       <div className="space-y-1 flex-shrink-0">
-                        <p className="text-sm lg:text-base text-gray-700 dark:text-gray-300 break-words leading-relaxed">
+                        <p className="text-gray-700 dark:text-gray-300 break-words leading-relaxed">
                           {selectedWord.meaning}
                         </p>
                       </div>
 
                       <div className="space-y-1 flex-shrink-0">
-                        <p className="italic text-gray-600 dark:text-gray-300 break-words leading-relaxed text-xs lg:text-sm">
+                        <p className="italic text-gray-600 dark:text-gray-300 break-words leading-relaxed text-sm">
                           "{selectedWord.example}"
                         </p>
                       </div>
                     </div>
                   </div>
 
-                  {/* Right Panel - Practice Section - Mobile responsive */}
-                  <div className="w-full lg:w-1/2 border-t lg:border-t-0 lg:border-l border-gray-200 dark:border-slate-700 flex flex-col bg-gradient-to-br from-gray-50 to-white dark:from-slate-800 dark:to-slate-900 min-w-0 min-h-0 max-h-full">
-                    <div className="p-3 lg:p-4 pb-3 flex-shrink-0">
-                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                        <h3 className="text-base lg:text-lg font-semibold text-gray-900 dark:text-slate-100 flex items-center gap-2">
-                          <Zap className="h-3 w-3 lg:h-4 lg:w-4 text-yellow-500 dark:text-yellow-400" />
+                  {/* Right Panel - Practice Section */}
+                  <div className="w-1/2 border-l border-gray-200 dark:border-slate-700 flex flex-col bg-gradient-to-br from-gray-50 to-white dark:from-slate-800 dark:to-slate-900 min-w-0 min-h-0 max-h-full">
+                    <div className="p-4 pb-3 flex-shrink-0">
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-slate-100 flex items-center gap-2">
+                          <Zap className="h-4 w-4 text-yellow-500 dark:text-yellow-400" />
                           AI Practice
                         </h3>
-                        <div className="flex items-center space-x-1 lg:space-x-2">
+                        <div className="flex items-center space-x-2">
                           <Button
                             onClick={handlePractice}
                             disabled={!practiceInput.trim() || practiceLoading}
                             size="sm"
-                            className="text-xs lg:text-sm"
                           >
                             {practiceLoading
                               ? "Phân tích..."
@@ -1420,24 +1411,23 @@ export default function OxfordPage() {
                             variant="outline"
                             size="sm"
                             onClick={resetPractice}
-                            className="text-xs lg:text-sm"
                           >
-                            <RotateCcw className="h-2 w-2 lg:h-3 lg:w-3 mr-1" />
+                            <RotateCcw className="h-3 w-3 mr-1" />
                             Reset
                           </Button>
                         </div>
                       </div>
                     </div>
 
-                    <div className="flex-1 px-3 lg:px-4 pb-4 lg:pb-6 min-h-0 flex flex-col max-h-full overflow-hidden">
-                      <div className="h-full space-y-2 lg:space-y-3 flex flex-col min-h-0">
+                    <div className="flex-1 px-4 pb-6 min-h-0 flex flex-col max-h-full overflow-hidden">
+                      <div className="h-full space-y-3 flex flex-col min-h-0">
                         <div className="flex-shrink-0">
                           <div className="relative">
                             <Textarea
                               placeholder={`Viết một câu tiếng Anh có từ "${selectedWord.term}"...`}
                               value={practiceInput}
                               onChange={(e) => setPracticeInput(e.target.value)}
-                              className="min-h-[80px] lg:min-h-[100px] w-full resize-none pr-12 lg:pr-16 text-sm lg:text-base"
+                              className="min-h-[100px] w-full resize-none pr-16"
                               maxLength={200}
                             />
                             <span className="absolute bottom-2 right-2 text-xs text-gray-400">
@@ -1448,14 +1438,14 @@ export default function OxfordPage() {
 
                         {practiceFeedback && (
                           <div
-                            className={`p-3 lg:p-4 rounded-lg flex-1 min-h-0 flex flex-col ${
+                            className={`p-4 rounded-lg flex-1 min-h-0 flex flex-col ${
                               practiceResult === true
                                 ? "bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800"
                                 : "bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800"
                             }`}
                           >
                             <h4
-                              className={`font-medium mb-2 lg:mb-3 text-xs lg:text-sm flex-shrink-0 ${
+                              className={`font-medium mb-3 text-sm flex-shrink-0 ${
                                 practiceResult === true
                                   ? "text-yellow-900 dark:text-yellow-100"
                                   : "text-red-900 dark:text-red-100"
@@ -1465,7 +1455,7 @@ export default function OxfordPage() {
                             </h4>
                             <div className="flex-1 overflow-y-auto min-h-0">
                               <div
-                                className={`text-xs lg:text-sm whitespace-pre-wrap break-words leading-relaxed ${
+                                className={`text-sm whitespace-pre-wrap break-words leading-relaxed ${
                                   practiceResult === true
                                     ? "text-yellow-800 dark:text-yellow-200"
                                     : "text-red-800 dark:text-red-200"
