@@ -485,8 +485,16 @@ export default function OxfordPage() {
     const fetchWords = async () => {
       try {
         setLoading(true);
+        console.log("🔄 Fetching all Oxford words...");
         const response = await fetch("/api/oxford?limit=all");
         const data = await response.json();
+
+        console.log("📊 API Response:", {
+          hasWords: !!data.words,
+          wordsLength: data.words?.length,
+          total: data.total,
+          isArray: Array.isArray(data),
+        });
 
         let wordsArray: Word[] = [];
 
@@ -500,6 +508,10 @@ export default function OxfordPage() {
           console.error("Unexpected API response format:", data);
           return;
         }
+
+        console.log(
+          `✅ Successfully loaded ${wordsArray.length} words from database`
+        );
 
         // Add virtual topic and level fields
         const wordsWithMeta = wordsArray.map((word: Word) => ({
@@ -825,7 +837,9 @@ export default function OxfordPage() {
             📚 Oxford Vocabulary
           </h1>
           <p className="text-lg text-gray-600 dark:text-gray-300">
-            Khám phá {words.length} từ vựng tiếng Anh với hình ảnh và phát âm
+            Khám phá{" "}
+            {words.length > 0 ? words.length.toLocaleString() : "3000+"} từ vựng
+            tiếng Anh với hình ảnh và phát âm
             {imageLoadingCount > 0 && (
               <span className="ml-2 text-sm text-blue-600 dark:text-blue-400">
                 (Đang tải {imageLoadingCount} ảnh...)
