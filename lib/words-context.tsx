@@ -356,10 +356,16 @@ export function WordsProvider({ children }: { children: ReactNode }) {
 
       // Compute topic stats from Oxford words (should already be loaded)
       if (oxfordWords.length === 0) {
-        console.warn("⚠️ No Oxford words available for topic stats computation");
+        console.warn(
+          "⚠️ No Oxford words available for topic stats computation"
+        );
         setTopicStats([]);
         return;
       }
+
+      console.log(
+        `🔄 Computing topic stats for ${oxfordWords.length} Oxford words...`
+      );
 
       const statsMap = new Map<string, number>();
 
@@ -369,10 +375,15 @@ export function WordsProvider({ children }: { children: ReactNode }) {
       });
 
       // Count words per topic
+      let totalMapped = 0;
       oxfordWords.forEach((word: Word) => {
         const topic = word.topic || getTopicFromWord(word);
         statsMap.set(topic, (statsMap.get(topic) || 0) + 1);
+        totalMapped++;
       });
+
+      console.log(`📈 Mapped ${totalMapped} words to topics`);
+      console.log(`🎯 Topic distribution:`, Array.from(statsMap.entries()));
 
       // Build topic stats array
       const computedStats: TopicStats[] = TOPICS_METADATA.map((topic) => ({
@@ -380,7 +391,10 @@ export function WordsProvider({ children }: { children: ReactNode }) {
         word_count: statsMap.get(topic.name) || 0,
       }));
 
-      console.log("📊 Topic stats computed:", computedStats.map(t => `${t.name}: ${t.word_count}`));
+      console.log(
+        "📊 Topic stats computed:",
+        computedStats.map((t) => `${t.name}: ${t.word_count}`)
+      );
 
       setTopicStats(computedStats);
       setTopicStatsLoaded(true);

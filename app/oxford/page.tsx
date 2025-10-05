@@ -265,12 +265,17 @@ export default function OxfordPage() {
     Record<string, "mastered" | "learning" | "not-started">
   >({});
 
+  // Image loading tracking
+  const [imageLoadingCount, setImageLoadingCount] = useState(0);
+
   // Auto-load image for a word
   const autoLoadImage = async (word: Word) => {
     if (word.image_url) return; // Already has image
 
     try {
       setImageLoadingCount((prev) => prev + 1);
+      console.log(`🖼️ Loading image for word: ${word.term}`);
+
       const response = await fetch("/api/oxford/image", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -280,12 +285,8 @@ export default function OxfordPage() {
       if (response.ok) {
         const data = await response.json();
         if (data.image_url) {
-          // Update word in state
-          setWords((prevWords) =>
-            prevWords.map((w) =>
-              w.id === word.id ? { ...w, image_url: data.image_url } : w
-            )
-          );
+          console.log(`✅ Image loaded for ${word.term}: ${data.image_url}`);
+          // Update filteredWords (since oxfordWords comes from context and is readonly)
           setFilteredWords((prevWords) =>
             prevWords.map((w) =>
               w.id === word.id ? { ...w, image_url: data.image_url } : w
@@ -526,6 +527,19 @@ export default function OxfordPage() {
       }
     }
   }, [user, oxfordWords.length, oxfordLoading]); // React when user or words change
+
+  // Auto-load images for words without images
+  useEffect(() => {
+    if (oxfordWords.length > 0) {
+      const wordsWithoutImages = oxfordWords.filter((w: Word) => !w.image_url);
+      if (wordsWithoutImages.length > 0) {
+        console.log(
+          `🖼️ Starting auto-load for ${wordsWithoutImages.length} words without images`
+        );
+        batchLoadImages(wordsWithoutImages);
+      }
+    }
+  }, [oxfordWords.length]); // Only run when oxford words are loaded
 
   // Filter and search logic
   useEffect(() => {
@@ -798,6 +812,14 @@ export default function OxfordPage() {
               : "3000+"}{" "}
             từ vựng tiếng Anh với hình ảnh và phát âm
           </p>
+
+          {/* Image loading indicator */}
+          {imageLoadingCount > 0 && (
+            <div className="mt-3 flex items-center justify-center gap-2 text-sm text-blue-600 dark:text-blue-400">
+              <div className="animate-spin h-4 w-4 border-2 border-blue-600 border-t-transparent rounded-full"></div>
+              <span>Đang tải ảnh cho {imageLoadingCount} từ...</span>
+            </div>
+          )}
         </div>
 
         {/* Controls in flashcard mode */}

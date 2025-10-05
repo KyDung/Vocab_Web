@@ -183,6 +183,13 @@ const TOPICS = [
 export default function TopicsPage() {
   const { user } = useAuth(); // Add authentication hook
   const { topicStats, topicStatsLoading, getWordsByTopic } = useWords(); // Use words context
+
+  console.log("🎯 Topics page debug:", {
+    topicStatsLoading,
+    topicStatsCount: topicStats.length,
+    firstTopicStats: topicStats[0],
+    sampleWordCounts: topicStats.slice(0, 3).map(t => `${t.name}: ${t.word_count}`)
+  });
   const prevUserRef = useRef(user); // Track previous user state
   const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
   const [words, setWords] = useState<Word[]>([]);
@@ -674,6 +681,16 @@ export default function TopicsPage() {
             <p className="text-lg text-gray-600 dark:text-gray-300 mb-6">
               Chọn chủ đề để học từ vựng một cách có hệ thống
             </p>
+            
+            {/* Debug info - remove in production */}
+            {process.env.NODE_ENV === 'development' && (
+              <div className="text-xs text-gray-500 mb-4 p-2 bg-gray-100 dark:bg-gray-800 rounded">
+                Debug: {topicStatsLoading ? 'Loading topic stats...' : `${topicStats.length} topics loaded`}
+                {topicStats.length > 0 && (
+                  <div>Sample counts: {topicStats.slice(0, 3).map(t => `${t.name}: ${t.word_count}`).join(', ')}</div>
+                )}
+              </div>
+            )}
 
             {/* Topic View Controls */}
             <div className="flex justify-center items-center space-x-2 mb-6">
