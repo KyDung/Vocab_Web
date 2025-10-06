@@ -188,7 +188,9 @@ export default function TopicsPage() {
     topicStatsLoading,
     topicStatsCount: topicStats.length,
     firstTopicStats: topicStats[0],
-    sampleWordCounts: topicStats.slice(0, 3).map(t => `${t.name}: ${t.word_count}`)
+    sampleWordCounts: topicStats
+      .slice(0, 3)
+      .map((t) => `${t.name}: ${t.word_count}`),
   });
   const prevUserRef = useRef(user); // Track previous user state
   const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
@@ -393,28 +395,30 @@ export default function TopicsPage() {
     // Update ref with current user
     prevUserRef.current = currentUser;
 
-    // Only reload if user state actually changed and words are loaded
-    if (prevUser !== currentUser && words.length > 0) {
-      if (currentUser) {
-        // User just logged in - load their word statuses
-        console.log(
-          `� User logged in to Topics, loading word statuses for ${words.length} words`
-        );
-        loadWordStatuses(words);
-      } else if (prevUser && !currentUser) {
-        // User just logged out - clear word statuses
-        console.log(`🚪 User logged out from Topics, clearing word statuses`);
-        const clearedStatuses: Record<
-          string,
-          "mastered" | "learning" | "not-started"
-        > = {};
-        words.forEach((word) => {
-          clearedStatuses[word.term] = "not-started";
-        });
-        setWordStatuses(clearedStatuses);
-      }
+    // Load word statuses when:
+    // 1. User state changes (login/logout)
+    // 2. Topic words become available (empty → loaded)
+    // 3. User is authenticated and words are available
+    if (currentUser && words.length > 0) {
+      console.log(
+        `🔑 Loading word statuses for authenticated user with ${words.length} topic words`
+      );
+      loadWordStatuses(words);
+    } else if (!currentUser && words.length > 0) {
+      // User not authenticated - set all to not-started
+      console.log(
+        `🚪 No user authentication, setting topic words to not-started`
+      );
+      const clearedStatuses: Record<
+        string,
+        "mastered" | "learning" | "not-started"
+      > = {};
+      words.forEach((word) => {
+        clearedStatuses[word.term] = "not-started";
+      });
+      setWordStatuses(clearedStatuses);
     }
-  }, [user, words.length]); // React when user or words change
+  }, [user, words]); // React when user or words change - fixed to include words array
 
   const loadTopicWords = async (topicName: string) => {
     setLoading(true);
@@ -681,13 +685,22 @@ export default function TopicsPage() {
             <p className="text-lg text-gray-600 dark:text-gray-300 mb-6">
               Chọn chủ đề để học từ vựng một cách có hệ thống
             </p>
-            
+
             {/* Debug info - remove in production */}
-            {process.env.NODE_ENV === 'development' && (
+            {process.env.NODE_ENV === "development" && (
               <div className="text-xs text-gray-500 mb-4 p-2 bg-gray-100 dark:bg-gray-800 rounded">
-                Debug: {topicStatsLoading ? 'Loading topic stats...' : `${topicStats.length} topics loaded`}
+                Debug:{" "}
+                {topicStatsLoading
+                  ? "Loading topic stats..."
+                  : `${topicStats.length} topics loaded`}
                 {topicStats.length > 0 && (
-                  <div>Sample counts: {topicStats.slice(0, 3).map(t => `${t.name}: ${t.word_count}`).join(', ')}</div>
+                  <div>
+                    Sample counts:{" "}
+                    {topicStats
+                      .slice(0, 3)
+                      .map((t) => `${t.name}: ${t.word_count}`)
+                      .join(", ")}
+                  </div>
                 )}
               </div>
             )}

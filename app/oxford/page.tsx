@@ -505,28 +505,30 @@ export default function OxfordPage() {
     // Update ref with current user
     prevUserRef.current = currentUser;
 
-    // Only reload if user state actually changed and words are loaded
-    if (prevUser !== currentUser && oxfordWords.length > 0 && !oxfordLoading) {
-      if (currentUser) {
-        // User just logged in - load their word statuses
-        console.log(
-          `🔑 User logged in, loading word statuses for ${oxfordWords.length} words`
-        );
-        loadWordStatuses(oxfordWords);
-      } else if (prevUser && !currentUser) {
-        // User just logged out - clear word statuses
-        console.log(`🚪 User logged out, clearing word statuses`);
-        const clearedStatuses: Record<
-          string,
-          "mastered" | "learning" | "not-started"
-        > = {};
-        oxfordWords.forEach((word: Word) => {
-          clearedStatuses[word.term] = "not-started";
-        });
-        setWordStatuses(clearedStatuses);
-      }
+    // Load word statuses when:
+    // 1. User state changes (login/logout)
+    // 2. Oxford words become available (empty → loaded)
+    // 3. User is authenticated and words are available
+    if (currentUser && oxfordWords.length > 0 && !oxfordLoading) {
+      console.log(
+        `🔑 Loading word statuses for authenticated user with ${oxfordWords.length} words`
+      );
+      loadWordStatuses(oxfordWords);
+    } else if (!currentUser && oxfordWords.length > 0) {
+      // User not authenticated - set all to not-started
+      console.log(
+        `🚪 No user authentication, setting all words to not-started`
+      );
+      const clearedStatuses: Record<
+        string,
+        "mastered" | "learning" | "not-started"
+      > = {};
+      oxfordWords.forEach((word: Word) => {
+        clearedStatuses[word.term] = "not-started";
+      });
+      setWordStatuses(clearedStatuses);
     }
-  }, [user, oxfordWords.length, oxfordLoading]); // React when user or words change
+  }, [user, oxfordWords, oxfordLoading]); // React when user or words change - fixed to include oxfordWords array
 
   // Auto-load images for words without images
   useEffect(() => {
