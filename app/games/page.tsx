@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Gamepad2, Play, Trophy, Clock, Target, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,6 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { FlashcardGame } from "@/components/games/flashcard-game";
 import { QuizGame } from "@/components/games/quiz-game";
 import { TypingGame } from "@/components/games/typing-game";
+import { GodotGame } from "@/components/games/godot-game";
 
 type GameType = "flashcard" | "quiz" | "typing" | "godot" | null;
 
@@ -50,14 +51,14 @@ const games = [
   },
   {
     id: "godot",
-    title: "Game tương tác",
-    description: "Các trò chơi phức tạp được phát triển bằng Godot Engine",
+    title: "Gem Catcher Vocab",
+    description:
+      "Game thu thập đá quý và học từ vựng được tạo bằng Godot Engine",
     icon: Gamepad2,
     color: "bg-gradient-to-br from-blue-500 to-purple-500",
-    difficulty: "Đa dạng",
-    time: "20+ phút",
+    difficulty: "Trung bình",
+    time: "10-20 phút",
     image: "/godot_game.png",
-    comingSoon: true,
   },
 ];
 
@@ -125,7 +126,7 @@ export default function GamesPage() {
           />
         );
       case "godot":
-        return <GodotGameFrame onBack={handleBackToGames} />;
+        return <GodotGame onBack={handleBackToGames} />;
       default:
         return null;
     }
@@ -206,16 +207,6 @@ export default function GamesPage() {
                 key={game.id}
                 className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 relative overflow-hidden bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700"
               >
-                {game.comingSoon && (
-                  <div className="absolute top-4 right-4 z-10">
-                    <Badge
-                      variant="secondary"
-                      className="bg-orange-100 text-orange-800 dark:bg-orange-900/50 dark:text-orange-200"
-                    >
-                      Sắp ra mắt
-                    </Badge>
-                  </div>
-                )}
                 <div className="relative overflow-hidden rounded-t-lg">
                   <img
                     src={game.image || "/placeholder.svg"}
@@ -250,10 +241,9 @@ export default function GamesPage() {
                   <Button
                     className="w-full"
                     onClick={() => handleGameSelect(game.id as GameType)}
-                    disabled={game.comingSoon}
                   >
                     <Play className="w-4 h-4 mr-2" />
-                    {game.comingSoon ? "Sắp ra mắt" : "Chơi ngay"}
+                    Chơi ngay
                   </Button>
                 </CardContent>
               </Card>
