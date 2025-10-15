@@ -22,7 +22,7 @@ export function GodotGame({ onBack }: GodotGameProps) {
 
   const handlePlayGame = () => {
     // Mở game trong tab mới để tránh vấn đề iframe với headers
-    window.open(gameUrl, '_blank', 'noopener,noreferrer');
+    window.open(gameUrl, "_blank", "noopener,noreferrer");
   };
 
   const handleRestart = () => {
@@ -97,7 +97,9 @@ export function GodotGame({ onBack }: GodotGameProps) {
               <div className="flex items-center justify-center h-[600px] text-white">
                 <div className="text-center">
                   <div className="text-8xl mb-6">🍭</div>
-                  <h2 className="text-3xl font-bold mb-4">Candy Catcher Vocab</h2>
+                  <h2 className="text-3xl font-bold mb-4">
+                    Candy Catcher Vocab
+                  </h2>
                   <p className="text-lg mb-8 opacity-90">
                     Thu thập kẹo và học từ vựng tiếng Anh!
                   </p>

@@ -15,8 +15,9 @@ import { FlashcardGame } from "@/components/games/flashcard-game";
 import { QuizGame } from "@/components/games/quiz-game";
 import { TypingGame } from "@/components/games/typing-game";
 import { GodotGame } from "@/components/games/godot-game";
+import { CapyrunGame } from "@/components/games/capyrun-game";
 
-type GameType = "flashcard" | "quiz" | "typing" | "godot" | null;
+type GameType = "flashcard" | "quiz" | "typing" | "godot" | "capyrun" | null;
 
 const games = [
   {
@@ -58,6 +59,17 @@ const games = [
     difficulty: "Trung bình",
     time: "10-20 phút",
     image: "/godot_game.png",
+  },
+  {
+    id: "capyrun",
+    title: "Capyrun Adventure",
+    description:
+      "Cuộc phiêu lưu của Capybara với nhiều thử thách và từ vựng mới",
+    icon: Gamepad2,
+    color: "bg-gradient-to-br from-green-500 to-blue-500",
+    difficulty: "Trung bình",
+    time: "15-25 phút",
+    image: "/capyrun_game.png",
   },
 ];
 
@@ -126,6 +138,8 @@ export default function GamesPage() {
         );
       case "godot":
         return <GodotGame onBack={handleBackToGames} />;
+      case "capyrun":
+        return <CapyrunGame onBack={handleBackToGames} />;
       default:
         return null;
     }

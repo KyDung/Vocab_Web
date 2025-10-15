@@ -1,58 +1,66 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
-import { Mail, ArrowLeft } from "lucide-react"
-import { supabase } from "@/lib/supabase"
+import { useState } from "react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Mail, ArrowLeft } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 
 export default function ForgotPasswordPage() {
-  const [email, setEmail] = useState("")
-  const [loading, setLoading] = useState(false)
-  const [sent, setSent] = useState(false)
-  const [error, setError] = useState("")
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [sent, setSent] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-    setError("")
+    e.preventDefault();
+    setLoading(true);
+    setError("");
 
     // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      setError("Vui lòng nhập địa chỉ email hợp lệ")
-      setLoading(false)
-      return
+      setError("Vui lòng nhập địa chỉ email hợp lệ");
+      setLoading(false);
+      return;
     }
 
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: `${window.location.origin}/auth/reset-password`,
-      })
+      });
 
       if (error) {
         // Handle different error cases
         if (error.message.includes("User not found")) {
-          setError("Không tìm thấy tài khoản với email này")
+          setError("Không tìm thấy tài khoản với email này");
         } else if (error.message.includes("Email rate limit")) {
-          setError("Bạn đã gửi quá nhiều yêu cầu. Vui lòng đợi 5 phút trước khi thử lại.")
+          setError(
+            "Bạn đã gửi quá nhiều yêu cầu. Vui lòng đợi 5 phút trước khi thử lại."
+          );
         } else {
-          setError(error.message)
+          setError(error.message);
         }
       } else {
-        setSent(true)
+        setSent(true);
       }
     } catch (err) {
-      setError("Có lỗi xảy ra. Vui lòng thử lại.")
+      setError("Có lỗi xảy ra. Vui lòng thử lại.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   if (sent) {
     return (
@@ -62,16 +70,24 @@ export default function ForgotPasswordPage() {
             <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-green-500 rounded-2xl flex items-center justify-center text-white font-bold text-2xl mx-auto mb-4">
               ✓
             </div>
-            <CardTitle className="text-2xl font-bold">Email đã được gửi</CardTitle>
+            <CardTitle className="text-2xl font-bold">
+              Email đã được gửi
+            </CardTitle>
             <CardDescription>
-              Chúng tôi đã gửi hướng dẫn đặt lại mật khẩu đến email <strong>{email}</strong>
+              Chúng tôi đã gửi hướng dẫn đặt lại mật khẩu đến email{" "}
+              <strong>{email}</strong>
             </CardDescription>
           </CardHeader>
 
           <CardContent className="space-y-4">
             <div className="text-center text-sm text-gray-600 dark:text-gray-400 space-y-2">
-              <p>Kiểm tra hộp thư đến (và thư mục spam) để tìm email từ chúng tôi.</p>
-              <p className="text-xs">Link đặt lại mật khẩu có hiệu lực trong 1 giờ.</p>
+              <p>
+                Kiểm tra hộp thư đến (và thư mục spam) để tìm email từ chúng
+                tôi.
+              </p>
+              <p className="text-xs">
+                Link đặt lại mật khẩu có hiệu lực trong 1 giờ.
+              </p>
             </div>
 
             <div className="flex flex-col gap-2">
@@ -81,13 +97,13 @@ export default function ForgotPasswordPage() {
                   Quay lại đăng nhập
                 </Link>
               </Button>
-              
-              <Button 
-                variant="outline" 
+
+              <Button
+                variant="outline"
                 className="w-full"
                 onClick={() => {
-                  setSent(false)
-                  setEmail("")
+                  setSent(false);
+                  setEmail("");
                 }}
               >
                 Gửi lại với email khác
@@ -96,7 +112,7 @@ export default function ForgotPasswordPage() {
           </CardContent>
         </Card>
       </div>
-    )
+    );
   }
 
   return (
@@ -107,7 +123,9 @@ export default function ForgotPasswordPage() {
             V
           </div>
           <CardTitle className="text-2xl font-bold">Quên mật khẩu</CardTitle>
-          <CardDescription>Nhập email của bạn để nhận hướng dẫn đặt lại mật khẩu</CardDescription>
+          <CardDescription>
+            Nhập email của bạn để nhận hướng dẫn đặt lại mật khẩu
+          </CardDescription>
         </CardHeader>
 
         <CardContent className="space-y-4">
@@ -143,7 +161,10 @@ export default function ForgotPasswordPage() {
           </form>
 
           <div className="text-center">
-            <Link href="/auth/login" className="text-sm text-blue-600 hover:text-blue-500 inline-flex items-center">
+            <Link
+              href="/auth/login"
+              className="text-sm text-blue-600 hover:text-blue-500 inline-flex items-center"
+            >
               <ArrowLeft className="mr-1 h-3 w-3" />
               Quay lại đăng nhập
             </Link>
@@ -151,5 +172,5 @@ export default function ForgotPasswordPage() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

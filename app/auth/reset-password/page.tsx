@@ -1,97 +1,103 @@
-"use client"
+"use client";
 
-import React, { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
-import { Eye, EyeOff, Lock, CheckCircle } from "lucide-react"
-import { supabase } from "@/lib/supabase"
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Eye, EyeOff, Lock, CheckCircle } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 
 export default function ResetPasswordPage() {
-  const [password, setPassword] = useState("")
-  const [confirmPassword, setConfirmPassword] = useState("")
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState("")
-  const [success, setSuccess] = useState(false)
-  const router = useRouter()
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     // Check if user came from reset email link
-    const hashParams = new URLSearchParams(window.location.hash.substring(1))
-    const accessToken = hashParams.get('access_token')
-    const refreshToken = hashParams.get('refresh_token')
-    
+    const hashParams = new URLSearchParams(window.location.hash.substring(1));
+    const accessToken = hashParams.get("access_token");
+    const refreshToken = hashParams.get("refresh_token");
+
     if (accessToken && refreshToken) {
       // Set the session with the tokens from the URL
       supabase.auth.setSession({
         access_token: accessToken,
         refresh_token: refreshToken,
-      })
+      });
     } else {
       // If no tokens, redirect to forgot password page
-      router.push('/auth/forgot-password')
+      router.push("/auth/forgot-password");
     }
-  }, [router])
+  }, [router]);
 
   const validatePassword = (password: string) => {
     if (password.length < 8) {
-      return "Mật khẩu phải có ít nhất 8 ký tự"
+      return "Mật khẩu phải có ít nhất 8 ký tự";
     }
     if (!/(?=.*[a-z])/.test(password)) {
-      return "Mật khẩu phải có ít nhất 1 chữ thường"
+      return "Mật khẩu phải có ít nhất 1 chữ thường";
     }
     if (!/(?=.*[A-Z])/.test(password)) {
-      return "Mật khẩu phải có ít nhất 1 chữ hoa"
+      return "Mật khẩu phải có ít nhất 1 chữ hoa";
     }
     if (!/(?=.*\d)/.test(password)) {
-      return "Mật khẩu phải có ít nhất 1 số"
+      return "Mật khẩu phải có ít nhất 1 số";
     }
-    return null
-  }
+    return null;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-    setError("")
+    e.preventDefault();
+    setLoading(true);
+    setError("");
 
     // Validate password
-    const passwordError = validatePassword(password)
+    const passwordError = validatePassword(password);
     if (passwordError) {
-      setError(passwordError)
-      setLoading(false)
-      return
+      setError(passwordError);
+      setLoading(false);
+      return;
     }
 
     if (password !== confirmPassword) {
-      setError("Mật khẩu xác nhận không khớp")
-      setLoading(false)
-      return
+      setError("Mật khẩu xác nhận không khớp");
+      setLoading(false);
+      return;
     }
 
     try {
       const { error } = await supabase.auth.updateUser({
-        password: password
-      })
+        password: password,
+      });
 
       if (error) {
-        setError(error.message)
+        setError(error.message);
       } else {
-        setSuccess(true)
+        setSuccess(true);
         // Redirect to login after 3 seconds
         setTimeout(() => {
-          router.push('/auth/login')
-        }, 3000)
+          router.push("/auth/login");
+        }, 3000);
       }
     } catch (err) {
-      setError("Có lỗi xảy ra. Vui lòng thử lại.")
+      setError("Có lỗi xảy ra. Vui lòng thử lại.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   if (success) {
     return (
@@ -101,8 +107,12 @@ export default function ResetPasswordPage() {
             <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center text-white mx-auto mb-4">
               <CheckCircle className="h-8 w-8" />
             </div>
-            <CardTitle className="text-2xl font-bold text-green-600">Mật khẩu đã được cập nhật!</CardTitle>
-            <CardDescription>Bạn sẽ được chuyển hướng đến trang đăng nhập trong giây lát...</CardDescription>
+            <CardTitle className="text-2xl font-bold text-green-600">
+              Mật khẩu đã được cập nhật!
+            </CardTitle>
+            <CardDescription>
+              Bạn sẽ được chuyển hướng đến trang đăng nhập trong giây lát...
+            </CardDescription>
           </CardHeader>
 
           <CardContent className="text-center">
@@ -110,7 +120,7 @@ export default function ResetPasswordPage() {
           </CardContent>
         </Card>
       </div>
-    )
+    );
   }
 
   return (
@@ -121,7 +131,9 @@ export default function ResetPasswordPage() {
             <Lock className="h-8 w-8" />
           </div>
           <CardTitle className="text-2xl font-bold">Đặt lại mật khẩu</CardTitle>
-          <CardDescription>Nhập mật khẩu mới cho tài khoản của bạn</CardDescription>
+          <CardDescription>
+            Nhập mật khẩu mới cho tài khoản của bạn
+          </CardDescription>
         </CardHeader>
 
         <CardContent className="space-y-4">
@@ -150,16 +162,40 @@ export default function ResetPasswordPage() {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
                 >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  {showPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
                 </button>
               </div>
               <div className="text-xs text-gray-600 space-y-1">
                 <p>Mật khẩu phải có:</p>
                 <ul className="list-disc list-inside space-y-1 ml-2">
-                  <li className={password.length >= 8 ? "text-green-600" : ""}>Ít nhất 8 ký tự</li>
-                  <li className={/(?=.*[a-z])/.test(password) ? "text-green-600" : ""}>1 chữ thường</li>
-                  <li className={/(?=.*[A-Z])/.test(password) ? "text-green-600" : ""}>1 chữ hoa</li>
-                  <li className={/(?=.*\d)/.test(password) ? "text-green-600" : ""}>1 số</li>
+                  <li className={password.length >= 8 ? "text-green-600" : ""}>
+                    Ít nhất 8 ký tự
+                  </li>
+                  <li
+                    className={
+                      /(?=.*[a-z])/.test(password) ? "text-green-600" : ""
+                    }
+                  >
+                    1 chữ thường
+                  </li>
+                  <li
+                    className={
+                      /(?=.*[A-Z])/.test(password) ? "text-green-600" : ""
+                    }
+                  >
+                    1 chữ hoa
+                  </li>
+                  <li
+                    className={
+                      /(?=.*\d)/.test(password) ? "text-green-600" : ""
+                    }
+                  >
+                    1 số
+                  </li>
                 </ul>
               </div>
             </div>
@@ -182,18 +218,29 @@ export default function ResetPasswordPage() {
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
                 >
-                  {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  {showConfirmPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
                 </button>
               </div>
               {confirmPassword && password !== confirmPassword && (
-                <p className="text-xs text-red-600">Mật khẩu xác nhận không khớp</p>
+                <p className="text-xs text-red-600">
+                  Mật khẩu xác nhận không khớp
+                </p>
               )}
             </div>
 
-            <Button 
-              type="submit" 
-              className="w-full" 
-              disabled={loading || !password || !confirmPassword || password !== confirmPassword}
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={
+                loading ||
+                !password ||
+                !confirmPassword ||
+                password !== confirmPassword
+              }
             >
               {loading ? "Đang cập nhật..." : "Cập nhật mật khẩu"}
             </Button>
@@ -201,5 +248,5 @@ export default function ResetPasswordPage() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

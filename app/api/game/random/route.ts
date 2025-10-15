@@ -9,30 +9,69 @@ export async function GET(request: NextRequest) {
       50
     );
 
-    console.log(`🎮 Game API: Fetching ${n} random words from oxford_words table`);
+    console.log(
+      `🎮 Game API: Fetching ${n} random words from oxford_words table`
+    );
 
-    // Supabase doesn't have a direct RANDOM() order across all providers; use rpc or sampling.
-    // Simple approach: fetch n items using offset with a random start (may have bias) or request all ids and sample.
-    // Here we fetch random using SQL function via rpc: use 'order' with 'random' via 'select' raw
-    const { data, error } = await supabase.rpc('get_random_oxford_words', { limit: n });
+    // Try to use RPC function first
+    const { data: rpcData, error: rpcError } = await supabase.rpc(
+      "get_random_oxford_words",
+      { limit_param: n }
+    );
 
-    if (error) {
-      // Fallback: fetch n items and shuffle in JS
-      console.error('Game RPC error, falling back:', error.message || error);
-      const { data: allData, error: e2 } = await supabase
-        .from('oxford_words')
-        .select('term, meaning')
-        .limit(n)
-      if (e2) {
-        console.error('Game fallback error:', e2)
-        return NextResponse.json({ error: 'Failed to fetch random words' }, { status: 500 })
-      }
-      return NextResponse.json(allData || [])
+    if (!rpcError && rpcData) {
+      console.log(
+        `✅ Game API: Successfully fetched ${rpcData.length} random words via RPC`
+      );
+      return NextResponse.json(rpcData);
     }
 
-    return NextResponse.json(data || [])
+    // Fallback: fetch all words and shuffle in JavaScript
+    console.log(
+      "🔄 Game API: RPC failed, using fallback method:",
+      rpcError?.message
+    );
+
+    // Get total count first
+    const { count } = await supabase
+      .from("oxford_words")
+      .select("*", { count: "exact", head: true });
+
+    if (!count || count === 0) {
+      return NextResponse.json(
+        { error: "No words found in database" },
+        { status: 404 }
+      );
+    }
+
+    // Generate random offset
+    const randomOffset = Math.floor(Math.random() * Math.max(0, count - n));
+
+    const { data: fallbackData, error: fallbackError } = await supabase
+      .from("oxford_words")
+      .select("term, meaning, ipa, pos, example")
+      .range(randomOffset, randomOffset + n - 1);
+
+    if (fallbackError) {
+      console.error("❌ Game fallback error:", fallbackError);
+      return NextResponse.json(
+        { error: "Failed to fetch random words" },
+        { status: 500 }
+      );
+    }
+
+    // Shuffle the results for better randomness
+    const shuffledData = (fallbackData || []).sort(() => Math.random() - 0.5);
+
+    console.log(
+      `✅ Game API: Successfully fetched ${shuffledData.length} words via fallback`
+    );
+    return NextResponse.json(shuffledData);
   } catch (error) {
-    console.error('❌ Game random API unexpected error:', error);
-    return NextResponse.json({ error: 'Failed to fetch random words' }, { status: 500 });
+    console.error("❌ Game random API unexpected error:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch random words" },
+      { status: 500 }
+    );
   }
 }
