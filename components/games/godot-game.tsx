@@ -14,7 +14,7 @@ export function GodotGame({ onBack }: GodotGameProps) {
   const [isLoading, setIsLoading] = React.useState(true);
   const [isFullscreen, setIsFullscreen] = React.useState(false);
 
-  const gameUrl = "/games/godot/Gem_Catcher_Vocab.html";
+  const gameUrl = "/games/godot/Candy_Catcher_Vocab.html";
 
   const handleLoad = () => {
     setIsLoading(false);
@@ -63,7 +63,7 @@ export function GodotGame({ onBack }: GodotGameProps) {
               Quay lại
             </Button>
             <h1 className="text-2xl font-bold text-gray-800">
-              🎮 Gem Catcher Vocab
+              � Candy Catcher Vocab
             </h1>
           </div>
 
@@ -91,7 +91,7 @@ export function GodotGame({ onBack }: GodotGameProps) {
         <Card className="w-full">
           <CardHeader>
             <CardTitle className="text-center">
-              🎯 Thu thập đá quý và học từ vựng!
+              � Thu thập kẹo và học từ vựng!
             </CardTitle>
           </CardHeader>
           <CardContent className="p-0">
@@ -115,7 +115,7 @@ export function GodotGame({ onBack }: GodotGameProps) {
                 src={gameUrl}
                 onLoad={handleLoad}
                 className="w-full h-[600px] border-0"
-                title="Gem Catcher Vocab Game"
+                title="Candy Catcher Vocab Game"
                 allow="fullscreen"
                 style={{
                   minHeight: "600px",
@@ -146,7 +146,7 @@ export function GodotGame({ onBack }: GodotGameProps) {
               <div>
                 <h3 className="font-semibold mb-2">🎯 Mục tiêu:</h3>
                 <ul className="space-y-1 text-sm text-gray-600">
-                  <li>• Thu thập đá quý để kiếm điểm</li>
+                  <li>• Thu thập kẹo để kiếm điểm</li>
                   <li>• Học từ vựng tiếng Anh mới</li>
                   <li>• Hoàn thành các thử thách</li>
                 </ul>

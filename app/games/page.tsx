@@ -51,11 +51,10 @@ const games = [
   },
   {
     id: "godot",
-    title: "Gem Catcher Vocab",
-    description:
-      "Game thu thập đá quý và học từ vựng được tạo bằng Godot Engine",
+    title: "Candy Catcher Vocab",
+    description: "Game thu thập kẹo và học từ vựng được tạo bằng Godot Engine",
     icon: Gamepad2,
-    color: "bg-gradient-to-br from-blue-500 to-purple-500",
+    color: "bg-gradient-to-br from-pink-500 to-orange-500",
     difficulty: "Trung bình",
     time: "10-20 phút",
     image: "/godot_game.png",
