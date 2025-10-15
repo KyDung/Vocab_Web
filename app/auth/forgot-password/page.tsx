@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Mail, ArrowLeft } from "lucide-react"
+import { supabase } from "@/lib/supabase"
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("")
@@ -21,10 +22,31 @@ export default function ForgotPasswordPage() {
     setLoading(true)
     setError("")
 
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      setError("Vui lòng nhập địa chỉ email hợp lệ")
+      setLoading(false)
+      return
+    }
+
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-      setSent(true)
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/auth/reset-password`,
+      })
+
+      if (error) {
+        // Handle different error cases
+        if (error.message.includes("User not found")) {
+          setError("Không tìm thấy tài khoản với email này")
+        } else if (error.message.includes("Email rate limit")) {
+          setError("Bạn đã gửi quá nhiều yêu cầu. Vui lòng đợi 5 phút trước khi thử lại.")
+        } else {
+          setError(error.message)
+        }
+      } else {
+        setSent(true)
+      }
     } catch (err) {
       setError("Có lỗi xảy ra. Vui lòng thử lại.")
     } finally {
@@ -41,20 +63,36 @@ export default function ForgotPasswordPage() {
               ✓
             </div>
             <CardTitle className="text-2xl font-bold">Email đã được gửi</CardTitle>
-            <CardDescription>Chúng tôi đã gửi hướng dẫn đặt lại mật khẩu đến email của bạn</CardDescription>
+            <CardDescription>
+              Chúng tôi đã gửi hướng dẫn đặt lại mật khẩu đến email <strong>{email}</strong>
+            </CardDescription>
           </CardHeader>
 
           <CardContent className="space-y-4">
-            <div className="text-center text-sm text-gray-600 dark:text-gray-400">
-              Kiểm tra hộp thư đến (và thư mục spam) để tìm email từ chúng tôi.
+            <div className="text-center text-sm text-gray-600 dark:text-gray-400 space-y-2">
+              <p>Kiểm tra hộp thư đến (và thư mục spam) để tìm email từ chúng tôi.</p>
+              <p className="text-xs">Link đặt lại mật khẩu có hiệu lực trong 1 giờ.</p>
             </div>
 
-            <Button asChild className="w-full">
-              <Link href="/auth/login">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Quay lại đăng nhập
-              </Link>
-            </Button>
+            <div className="flex flex-col gap-2">
+              <Button asChild className="w-full">
+                <Link href="/auth/login">
+                  <ArrowLeft className="mr-2 h-4 w-4" />
+                  Quay lại đăng nhập
+                </Link>
+              </Button>
+              
+              <Button 
+                variant="outline" 
+                className="w-full"
+                onClick={() => {
+                  setSent(false)
+                  setEmail("")
+                }}
+              >
+                Gửi lại với email khác
+              </Button>
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -81,7 +119,7 @@ export default function ForgotPasswordPage() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">Email đã đăng ký</Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                 <Input
@@ -89,11 +127,14 @@ export default function ForgotPasswordPage() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="your@email.com"
+                  placeholder="example@email.com"
                   className="pl-10"
                   required
                 />
               </div>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                Nhập email bạn đã sử dụng để đăng ký tài khoản
+              </p>
             </div>
 
             <Button type="submit" className="w-full" disabled={loading}>
