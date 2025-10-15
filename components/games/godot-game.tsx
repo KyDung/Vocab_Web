@@ -20,6 +20,11 @@ export function GodotGame({ onBack }: GodotGameProps) {
     setIsLoading(false);
   };
 
+  const handlePlayGame = () => {
+    // Mở game trong tab mới để tránh vấn đề iframe với headers
+    window.open(gameUrl, '_blank', 'noopener,noreferrer');
+  };
+
   const handleRestart = () => {
     if (iframeRef.current) {
       iframeRef.current.src = gameUrl;
@@ -70,19 +75,11 @@ export function GodotGame({ onBack }: GodotGameProps) {
           <div className="flex items-center gap-2">
             <Button
               variant="outline"
-              onClick={handleRestart}
+              onClick={handlePlayGame}
               className="flex items-center gap-2"
             >
               <RotateCcw className="w-4 h-4" />
-              Chơi lại
-            </Button>
-            <Button
-              variant="outline"
-              onClick={toggleFullscreen}
-              className="flex items-center gap-2"
-            >
-              <Maximize2 className="w-4 h-4" />
-              {isFullscreen ? "Thoát" : "Toàn màn hình"}
+              Chơi Game
             </Button>
           </div>
         </div>
@@ -95,33 +92,27 @@ export function GodotGame({ onBack }: GodotGameProps) {
             </CardTitle>
           </CardHeader>
           <CardContent className="p-0">
-            <div className="relative w-full bg-black rounded-b-lg overflow-hidden">
-              {/* Loading State */}
-              {isLoading && (
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-600 to-indigo-600 flex items-center justify-center z-10">
-                  <div className="text-center text-white">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
-                    <p className="text-lg font-medium">Đang tải game...</p>
-                    <p className="text-sm opacity-80">
-                      Vui lòng đợi trong giây lát
-                    </p>
-                  </div>
+            <div className="relative w-full bg-gradient-to-br from-pink-500 to-orange-500 rounded-b-lg overflow-hidden">
+              {/* Game Preview */}
+              <div className="flex items-center justify-center h-[600px] text-white">
+                <div className="text-center">
+                  <div className="text-8xl mb-6">🍭</div>
+                  <h2 className="text-3xl font-bold mb-4">Candy Catcher Vocab</h2>
+                  <p className="text-lg mb-8 opacity-90">
+                    Thu thập kẹo và học từ vựng tiếng Anh!
+                  </p>
+                  <Button
+                    onClick={handlePlayGame}
+                    size="lg"
+                    className="bg-white text-pink-600 hover:bg-gray-100 font-bold text-xl px-8 py-4"
+                  >
+                    🎮 Chơi Game Ngay
+                  </Button>
+                  <p className="text-sm mt-4 opacity-75">
+                    Game sẽ mở trong tab mới
+                  </p>
                 </div>
-              )}
-
-              {/* Game iframe */}
-              <iframe
-                ref={iframeRef}
-                src={gameUrl}
-                onLoad={handleLoad}
-                className="w-full h-[600px] border-0"
-                title="Candy Catcher Vocab Game"
-                allow="fullscreen"
-                style={{
-                  minHeight: "600px",
-                  background: "black",
-                }}
-              />
+              </div>
             </div>
           </CardContent>
         </Card>

@@ -11,6 +11,25 @@ const nextConfig = {
   },
   async headers() {
     return [
+      // Headers cho trang game HTML chính
+      {
+        source: "/games/godot/Candy_Catcher_Vocab.html",
+        headers: [
+          {
+            key: "Cross-Origin-Embedder-Policy",
+            value: "require-corp",
+          },
+          {
+            key: "Cross-Origin-Opener-Policy",
+            value: "same-origin",
+          },
+          {
+            key: "Cross-Origin-Resource-Policy",
+            value: "cross-origin",
+          },
+        ],
+      },
+      // Headers cho tất cả files trong thư mục godot
       {
         source: "/games/godot/(.*)",
         headers: [
