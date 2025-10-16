@@ -801,28 +801,61 @@ export default function OxfordPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      <div className="container mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="mb-8 text-center">
-          <h1 className="text-4xl font-bold text-gray-800 dark:text-white mb-2">
-            📚 Oxford Vocabulary
-          </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-300">
-            Khám phá{" "}
-            {oxfordWords.length > 0
-              ? oxfordWords.length.toLocaleString()
-              : "3000+"}{" "}
-            từ vựng tiếng Anh với hình ảnh và phát âm
-          </p>
-
-          {/* Image loading indicator */}
-          {imageLoadingCount > 0 && (
-            <div className="mt-3 flex items-center justify-center gap-2 text-sm text-blue-600 dark:text-blue-400">
-              <div className="animate-spin h-4 w-4 border-2 border-blue-600 border-t-transparent rounded-full"></div>
-              <span>Đang tải ảnh cho {imageLoadingCount} từ...</span>
+      {/* Hero Banner */}
+      <div className="relative overflow-hidden bg-gradient-to-r from-blue-600 to-indigo-700 dark:from-blue-800 dark:to-indigo-900 py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="text-white">
+              <div className="inline-flex items-center px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-sm font-medium mb-4">
+                <BookOpen className="w-4 h-4 mr-2" />
+                Oxford Vocabulary
+              </div>
+              <h1 className="text-4xl md:text-6xl font-bold mb-6">
+                📚 Oxford Vocabulary
+              </h1>
+              <p className="text-xl text-white/90 mb-8 leading-relaxed">
+                Khám phá{" "}
+                {oxfordWords.length > 0
+                  ? oxfordWords.length.toLocaleString()
+                  : "3000+"}{" "}
+                từ vựng tiếng Anh với hình ảnh và phát âm
+              </p>
+              <div className="flex gap-4">
+                <div className="bg-white/20 backdrop-blur-sm text-white px-6 py-3 rounded-lg font-semibold">
+                  <Star className="w-5 h-5 mr-2 inline" />
+                  Từ vựng chất lượng cao
+                </div>
+              </div>
             </div>
-          )}
+            <div className="relative">
+              <div className="relative overflow-hidden rounded-2xl shadow-2xl">
+                <img
+                  src="/oxford-banner.jpg"
+                  alt="Oxford Vocabulary"
+                  className="w-full h-80 object-cover"
+                  onError={(e) => {
+                    e.currentTarget.src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDQwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yMDAgMTUwQzIxMS4wNDYgMTUwIDIyMCAxNDAuNDkzIDIyMCAxMjguNjM2QzIyMCAxMTYuNzc5IDIxMS4wNDYgMTA3LjI3MyAyMDAgMTA3LjI3M0MxODguOTU0IDEwNy4yNzMgMTgwIDExNi43NzkgMTgwIDEyOC42MzZDMTgwIDE0MC40OTMgMTg4Ljk1NCAxNTAgMjAwIDE1MFoiIGZpbGw9IiM5Q0EzQUYiLz4KPHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4PSIxODgiIHk9IjEzOCI+CjxwYXRoIGQ9Ik0xMiAyQzYuNDggMiAyIDYuNDggMiAxMlM2LjQ4IDIyIDEyIDIyIDIyIDE3LjUyIDIyIDEyIDE3LjUyIDIgMTIgMlpNMTMgMTdIMTFWMTVIMTNWMTdaTTEzIDEzSDExVjdIMTNWMTNaIiBmaWxsPSIjOUNBM0FGIi8+Cjwvc3ZnPgo8L3N2Zz4K";
+                  }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+              </div>
+              {/* Decorative elements */}
+              <div className="absolute -top-4 -right-4 w-24 h-24 bg-white/10 rounded-full blur-xl"></div>
+              <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-white/10 rounded-full blur-xl"></div>
+            </div>
+          </div>
         </div>
+        
+        {/* Image loading indicator */}
+        {imageLoadingCount > 0 && (
+          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex items-center justify-center gap-2 text-sm text-white/80 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full">
+            <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"></div>
+            <span>Đang tải ảnh cho {imageLoadingCount} từ...</span>
+          </div>
+        )}
+      </div>
+
+      <div className="container mx-auto px-4 py-8">
 
         {/* Controls in flashcard mode */}
         {viewMode === "flashcard" && (

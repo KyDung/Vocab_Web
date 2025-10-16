@@ -65,52 +65,72 @@ export function AboutSection() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-            {/* Author 1 */}
-            <div className="text-center">
-              <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <User className="w-10 h-10 text-white" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-8">
+            {/* Author 1 - Xa Kỳ Trung Dũng */}
+            <div className="bg-white dark:bg-slate-800/50 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-slate-700">
+              <div className="text-center mb-4">
+                <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <User className="w-10 h-10 text-white" />
+                </div>
+                <h4 className="text-xl font-semibold text-gray-900 dark:text-slate-100">
+                  Xa Kỳ Trung Dũng
+                </h4>
               </div>
-              <h4 className="text-xl font-semibold mb-4 text-gray-900 dark:text-slate-100">
-                Tác giả Dũng
-              </h4>
-              <div className="text-left space-y-2 max-w-sm mx-auto">
-                <p className="text-sm text-gray-700 dark:text-slate-300">
-                  <strong>Khoa:</strong> Công nghệ thông tin
-                </p>
-                <p className="text-sm text-gray-700 dark:text-slate-300">
-                  <strong>Lớp:</strong> K72A1
-                </p>
-                <div className="text-sm text-gray-700 dark:text-slate-300">
-                  <strong>Liên hệ:</strong>
-                  <div className="ml-4 mt-1 space-y-1">
-                    <p>📧 Gmail: Kydung204@gmail.com</p>
-                    <p>📱 Số điện thoại: 0899145429</p>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-slate-700">
+                  <span className="font-medium text-gray-600 dark:text-slate-400">Khoa:</span>
+                  <span className="text-gray-900 dark:text-slate-200">Công nghệ thông tin</span>
+                </div>
+                <div className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-slate-700">
+                  <span className="font-medium text-gray-600 dark:text-slate-400">Lớp:</span>
+                  <span className="text-gray-900 dark:text-slate-200">K72A1</span>
+                </div>
+                <div className="pt-2">
+                  <h5 className="font-medium text-gray-600 dark:text-slate-400 mb-2">Liên hệ:</h5>
+                  <div className="space-y-2">
+                    <div className="flex items-center space-x-2 text-sm">
+                      <span className="w-6 text-center">📧</span>
+                      <span className="text-gray-700 dark:text-slate-300">Kydung204@gmail.com</span>
+                    </div>
+                    <div className="flex items-center space-x-2 text-sm">
+                      <span className="w-6 text-center">📱</span>
+                      <span className="text-gray-700 dark:text-slate-300">0899145429</span>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Author 2 */}
-            <div className="text-center">
-              <div className="w-20 h-20 bg-gradient-to-br from-green-500 to-teal-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <User className="w-10 h-10 text-white" />
+            {/* Author 2 - Chu Thị Việt Chinh */}
+            <div className="bg-white dark:bg-slate-800/50 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-slate-700">
+              <div className="text-center mb-4">
+                <div className="w-20 h-20 bg-gradient-to-br from-green-500 to-teal-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <User className="w-10 h-10 text-white" />
+                </div>
+                <h4 className="text-xl font-semibold text-gray-900 dark:text-slate-100">
+                  Chu Thị Việt Chinh
+                </h4>
               </div>
-              <h4 className="text-xl font-semibold mb-4 text-gray-900 dark:text-slate-100">
-                Tác giả Chinh
-              </h4>
-              <div className="text-left space-y-2 max-w-sm mx-auto">
-                <p className="text-sm text-gray-700 dark:text-slate-300">
-                  <strong>Khoa:</strong> Công nghệ thông tin
-                </p>
-                <p className="text-sm text-gray-700 dark:text-slate-300">
-                  <strong>Lớp:</strong> K72K
-                </p>
-                <div className="text-sm text-gray-700 dark:text-slate-300">
-                  <strong>Liên hệ:</strong>
-                  <div className="ml-4 mt-1 space-y-1">
-                    <p>📧 Gmail: [Đang cập nhật]</p>
-                    <p>📱 Số điện thoại: [Đang cập nhật]</p>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-slate-700">
+                  <span className="font-medium text-gray-600 dark:text-slate-400">Khoa:</span>
+                  <span className="text-gray-900 dark:text-slate-200">Công nghệ thông tin</span>
+                </div>
+                <div className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-slate-700">
+                  <span className="font-medium text-gray-600 dark:text-slate-400">Lớp:</span>
+                  <span className="text-gray-900 dark:text-slate-200">K72K</span>
+                </div>
+                <div className="pt-2">
+                  <h5 className="font-medium text-gray-600 dark:text-slate-400 mb-2">Liên hệ:</h5>
+                  <div className="space-y-2">
+                    <div className="flex items-center space-x-2 text-sm">
+                      <span className="w-6 text-center">📧</span>
+                      <span className="text-gray-500 dark:text-slate-400 italic">[Đang cập nhật]</span>
+                    </div>
+                    <div className="flex items-center space-x-2 text-sm">
+                      <span className="w-6 text-center">📱</span>
+                      <span className="text-gray-500 dark:text-slate-400 italic">[Đang cập nhật]</span>
+                    </div>
                   </div>
                 </div>
               </div>

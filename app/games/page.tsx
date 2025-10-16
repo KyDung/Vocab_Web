@@ -1,7 +1,16 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Gamepad2, Play, Trophy, Clock, Target, Zap, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  Gamepad2,
+  Play,
+  Trophy,
+  Clock,
+  Target,
+  Zap,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -85,24 +94,25 @@ export default function GamesPage() {
       description: "Lật thẻ để xem nghĩa, kiểm tra khả năng ghi nhớ từ vựng",
       image: "/flashcard.png",
       gradient: "from-blue-500 to-purple-600",
-      badge: "Phổ biến nhất"
+      badge: "Phổ biến nhất",
     },
     {
-      id: "typing", 
+      id: "typing",
       title: "Gõ từ nhanh",
       description: "Gõ từ tiếng Anh tương ứng với nghĩa tiếng Việt",
-      image: "/typing_game.png", 
+      image: "/typing_game.png",
       gradient: "from-purple-500 to-pink-600",
-      badge: "Thử thách"
+      badge: "Thử thách",
     },
     {
       id: "godot",
-      title: "Candy Catcher Vocab", 
-      description: "Game thu thập kẹo và học từ vựng được tạo bằng Godot Engine",
+      title: "Candy Catcher Vocab",
+      description:
+        "Game thu thập kẹo và học từ vựng được tạo bằng Godot Engine",
       image: "/godot_game.png",
       gradient: "from-pink-500 to-orange-500",
-      badge: "Mới nhất"
-    }
+      badge: "Mới nhất",
+    },
   ];
 
   const handleBackToGames = () => {
@@ -120,7 +130,9 @@ export default function GamesPage() {
   };
 
   const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + bannerSlides.length) % bannerSlides.length);
+    setCurrentSlide(
+      (prev) => (prev - 1 + bannerSlides.length) % bannerSlides.length
+    );
   };
 
   // Auto slide
@@ -178,9 +190,15 @@ export default function GamesPage() {
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
       {/* Hero Banner Carousel */}
       <div className="relative overflow-hidden">
-        <div className="flex transition-transform duration-500 ease-in-out" style={{ transform: `translateX(-${currentSlide * 100}%)` }}>
+        <div
+          className="flex transition-transform duration-500 ease-in-out"
+          style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+        >
           {bannerSlides.map((slide, index) => (
-            <div key={slide.id} className={`w-full flex-shrink-0 bg-gradient-to-r ${slide.gradient} py-20`}>
+            <div
+              key={slide.id}
+              className={`w-full flex-shrink-0 bg-gradient-to-r ${slide.gradient} py-20`}
+            >
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                   <div className="text-white">
@@ -225,7 +243,7 @@ export default function GamesPage() {
             </div>
           ))}
         </div>
-        
+
         {/* Navigation buttons */}
         <button
           onClick={prevSlide}
@@ -239,7 +257,7 @@ export default function GamesPage() {
         >
           <ChevronRight className="w-6 h-6" />
         </button>
-        
+
         {/* Slide indicators */}
         <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-2">
           {bannerSlides.map((_, index) => (
@@ -247,7 +265,7 @@ export default function GamesPage() {
               key={index}
               onClick={() => setCurrentSlide(index)}
               className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                currentSlide === index ? 'bg-white' : 'bg-white/50'
+                currentSlide === index ? "bg-white" : "bg-white/50"
               }`}
             />
           ))}
