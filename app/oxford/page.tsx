@@ -23,7 +23,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import {
   Search,
   Volume2,
@@ -834,7 +833,8 @@ export default function OxfordPage() {
                   alt="Oxford Vocabulary"
                   className="w-full h-80 object-cover"
                   onError={(e) => {
-                    e.currentTarget.src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDQwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yMDAgMTUwQzIxMS4wNDYgMTUwIDIyMCAxNDAuNDkzIDIyMCAxMjguNjM2QzIyMCAxMTYuNzc5IDIxMS4wNDYgMTA3LjI3MyAyMDAgMTA3LjI3M0MxODguOTU0IDEwNy4yNzMgMTgwIDExNi43NzkgMTgwIDEyOC42MzZDMTgwIDE0MC40OTMgMTg4Ljk1NCAxNTAgMjAwIDE1MFoiIGZpbGw9IiM5Q0EzQUYiLz4KPHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4PSIxODgiIHk9IjEzOCI+CjxwYXRoIGQ9Ik0xMiAyQzYuNDggMiAyIDYuNDggMiAxMlM2LjQ4IDIyIDEyIDIyIDIyIDE3LjUyIDIyIDEyIDE3LjUyIDIgMTIgMlpNMTMgMTdIMTFWMTVIMTNWMTdaTTEzIDEzSDExVjdIMTNWMTNaIiBmaWxsPSIjOUNBM0FGIi8+Cjwvc3ZnPgo8L3N2Zz4K";
+                    e.currentTarget.src =
+                      "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDQwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yMDAgMTUwQzIxMS4wNDYgMTUwIDIyMCAxNDAuNDkzIDIyMCAxMjguNjM2QzIyMCAxMTYuNzc5IDIxMS4wNDYgMTA3LjI3MyAyMDAgMTA3LjI3M0MxODguOTU0IDEwNy4yNzMgMTgwIDExNi43NzkgMTgwIDEyOC42MzZDMTgwIDE0MC40OTMgMTg4Ljk1NCAxNTAgMjAwIDE1MFoiIGZpbGw9IiM5Q0EzQUYiLz4KPHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4PSIxODgiIHk9IjEzOCI+CjxwYXRoIGQ9Ik0xMiAyQzYuNDggMiAyIDYuNDggMiAxMlM2LjQ4IDIyIDEyIDIyIDIyIDE3LjUyIDIyIDEyIDE3LjUyIDIgMTIgMlpNMTMgMTdIMTFWMTVIMTNWMTdaTTEzIDEzSDExVjdIMTNWMTNaIiBmaWxsPSIjOUNBM0FGIi8+Cjwvc3ZnPgo8L3N2Zz4K";
                   }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
@@ -845,7 +845,7 @@ export default function OxfordPage() {
             </div>
           </div>
         </div>
-        
+
         {/* Image loading indicator */}
         {imageLoadingCount > 0 && (
           <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex items-center justify-center gap-2 text-sm text-white/80 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full">
@@ -856,7 +856,6 @@ export default function OxfordPage() {
       </div>
 
       <div className="container mx-auto px-4 py-8">
-
         {/* Controls in flashcard mode */}
         {viewMode === "flashcard" && (
           <div className="mb-6">
@@ -1312,9 +1311,7 @@ export default function OxfordPage() {
               <div className="flex flex-col h-full">
                 {/* Dialog Header - Responsive */}
                 <DialogHeader className="p-2 sm:p-3 border-b border-gray-200 dark:border-slate-700 flex-shrink-0">
-                  <VisuallyHidden>
-                    <DialogTitle>Chi tiết từ vựng</DialogTitle>
-                  </VisuallyHidden>
+                  <DialogTitle className="sr-only">Chi tiết từ vựng</DialogTitle>
                   <div className="flex justify-end items-center">
                     <div className="flex items-center space-x-1 sm:space-x-2">
                       <Button

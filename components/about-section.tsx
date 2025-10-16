@@ -78,23 +78,37 @@ export function AboutSection() {
               </div>
               <div className="space-y-3">
                 <div className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-slate-700">
-                  <span className="font-medium text-gray-600 dark:text-slate-400">Khoa:</span>
-                  <span className="text-gray-900 dark:text-slate-200">Công nghệ thông tin</span>
+                  <span className="font-medium text-gray-600 dark:text-slate-400">
+                    Khoa:
+                  </span>
+                  <span className="text-gray-900 dark:text-slate-200">
+                    Công nghệ thông tin
+                  </span>
                 </div>
                 <div className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-slate-700">
-                  <span className="font-medium text-gray-600 dark:text-slate-400">Lớp:</span>
-                  <span className="text-gray-900 dark:text-slate-200">K72A1</span>
+                  <span className="font-medium text-gray-600 dark:text-slate-400">
+                    Lớp:
+                  </span>
+                  <span className="text-gray-900 dark:text-slate-200">
+                    K72A1
+                  </span>
                 </div>
                 <div className="pt-2">
-                  <h5 className="font-medium text-gray-600 dark:text-slate-400 mb-2">Liên hệ:</h5>
+                  <h5 className="font-medium text-gray-600 dark:text-slate-400 mb-2">
+                    Liên hệ:
+                  </h5>
                   <div className="space-y-2">
                     <div className="flex items-center space-x-2 text-sm">
                       <span className="w-6 text-center">📧</span>
-                      <span className="text-gray-700 dark:text-slate-300">Kydung204@gmail.com</span>
+                      <span className="text-gray-700 dark:text-slate-300">
+                        Kydung204@gmail.com
+                      </span>
                     </div>
                     <div className="flex items-center space-x-2 text-sm">
                       <span className="w-6 text-center">📱</span>
-                      <span className="text-gray-700 dark:text-slate-300">0899145429</span>
+                      <span className="text-gray-700 dark:text-slate-300">
+                        0899145429
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -113,23 +127,37 @@ export function AboutSection() {
               </div>
               <div className="space-y-3">
                 <div className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-slate-700">
-                  <span className="font-medium text-gray-600 dark:text-slate-400">Khoa:</span>
-                  <span className="text-gray-900 dark:text-slate-200">Công nghệ thông tin</span>
+                  <span className="font-medium text-gray-600 dark:text-slate-400">
+                    Khoa:
+                  </span>
+                  <span className="text-gray-900 dark:text-slate-200">
+                    Công nghệ thông tin
+                  </span>
                 </div>
                 <div className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-slate-700">
-                  <span className="font-medium text-gray-600 dark:text-slate-400">Lớp:</span>
-                  <span className="text-gray-900 dark:text-slate-200">K72K</span>
+                  <span className="font-medium text-gray-600 dark:text-slate-400">
+                    Lớp:
+                  </span>
+                  <span className="text-gray-900 dark:text-slate-200">
+                    K72K
+                  </span>
                 </div>
                 <div className="pt-2">
-                  <h5 className="font-medium text-gray-600 dark:text-slate-400 mb-2">Liên hệ:</h5>
+                  <h5 className="font-medium text-gray-600 dark:text-slate-400 mb-2">
+                    Liên hệ:
+                  </h5>
                   <div className="space-y-2">
                     <div className="flex items-center space-x-2 text-sm">
                       <span className="w-6 text-center">📧</span>
-                      <span className="text-gray-500 dark:text-slate-400 italic">[Đang cập nhật]</span>
+                      <span className="text-gray-500 dark:text-slate-400 italic">
+                        [Đang cập nhật]
+                      </span>
                     </div>
                     <div className="flex items-center space-x-2 text-sm">
                       <span className="w-6 text-center">📱</span>
-                      <span className="text-gray-500 dark:text-slate-400 italic">[Đang cập nhật]</span>
+                      <span className="text-gray-500 dark:text-slate-400 italic">
+                        [Đang cập nhật]
+                      </span>
                     </div>
                   </div>
                 </div>
