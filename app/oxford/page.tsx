@@ -817,7 +817,6 @@ export default function OxfordPage() {
             <div className="lg:col-span-2 text-white">
               <div className="flex items-center space-x-4 mb-6">
                 <div className="flex items-center px-4 py-2 bg-white/15 backdrop-blur-sm rounded-full text-sm font-medium border border-white/20">
-                  <BookOpen className="w-4 h-4 mr-2" />
                   Oxford Vocabulary
                 </div>
                 <Badge
