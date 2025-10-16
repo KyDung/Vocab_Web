@@ -678,11 +678,13 @@ export default function TopicsPage() {
   if (!selectedTopic) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-        {/* Hero Banner - Vertical Layout for Diversity */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-emerald-500 via-teal-600 to-cyan-700 dark:from-emerald-800 dark:via-teal-900 dark:to-cyan-900 py-16">
+        {/* Hero Banner - Beautiful Gradient inspired by Games Page */}
+        <div className="relative overflow-hidden bg-gradient-to-r from-green-500 to-blue-500 dark:from-green-800 dark:to-blue-900 py-16">
           {/* Background Pattern */}
           <div className="absolute inset-0 opacity-10">
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+            <div className="absolute top-10 right-10 w-32 h-32 bg-white/5 rounded-full animate-pulse"></div>
+            <div className="absolute bottom-10 left-10 w-24 h-24 bg-white/5 rounded-full animate-pulse delay-300"></div>
           </div>
 
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative">
@@ -705,8 +707,8 @@ export default function TopicsPage() {
               <div className="relative max-w-2xl w-full">
                 <div className="relative overflow-hidden rounded-2xl shadow-2xl transform hover:scale-105 transition-transform duration-300">
                   <img
-                    src="/topic-based-learning-categories-with-colorful-icon.jpg"
-                    alt="Topic-based Learning"
+                    src="/vocab_topic.png"
+                    alt="Vocabulary Topics"
                     className="w-full h-64 md:h-80 object-cover"
                     onError={(e) => {
                       e.currentTarget.src =
@@ -723,8 +725,8 @@ export default function TopicsPage() {
                   </div>
                 </div>
                 {/* Decorative elements around image */}
-                <div className="absolute -top-2 -left-2 w-16 h-16 bg-yellow-400/20 rounded-full blur-xl"></div>
-                <div className="absolute -bottom-2 -right-2 w-20 h-20 bg-pink-400/20 rounded-full blur-xl"></div>
+                <div className="absolute -top-2 -left-2 w-16 h-16 bg-green-400/20 rounded-full blur-xl"></div>
+                <div className="absolute -bottom-2 -right-2 w-20 h-20 bg-blue-400/20 rounded-full blur-xl"></div>
               </div>
             </div>
 

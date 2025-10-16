@@ -802,12 +802,13 @@ export default function OxfordPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       {/* Hero Banner - Asymmetric Layout for Diversity */}
-      <div className="relative overflow-hidden bg-gradient-to-tr from-amber-500 via-orange-600 to-red-600 dark:from-amber-800 dark:via-orange-900 dark:to-red-900 py-24">
+      <div className="relative overflow-hidden bg-gradient-to-r from-blue-500 to-purple-600 dark:from-blue-800 dark:to-purple-900 py-24">
         {/* Animated Background Elements */}
         <div className="absolute inset-0">
-          <div className="absolute top-10 left-10 w-32 h-32 bg-white/5 rounded-full animate-pulse"></div>
-          <div className="absolute bottom-20 right-20 w-24 h-24 bg-white/5 rounded-full animate-pulse delay-300"></div>
-          <div className="absolute top-1/2 left-1/4 w-16 h-16 bg-white/5 rounded-full animate-pulse delay-700"></div>
+          <div className="absolute top-10 left-10 w-32 h-32 bg-white/10 rounded-full animate-pulse"></div>
+          <div className="absolute bottom-20 right-20 w-24 h-24 bg-white/10 rounded-full animate-pulse delay-300"></div>
+          <div className="absolute top-1/2 left-1/4 w-16 h-16 bg-white/10 rounded-full animate-pulse delay-700"></div>
+          <div className="absolute top-20 right-1/3 w-20 h-20 bg-white/5 rounded-full animate-pulse delay-1000"></div>
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
@@ -830,7 +831,7 @@ export default function OxfordPage() {
               <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
                 � Oxford
                 <br />
-                <span className="text-yellow-200">Vocabulary</span>
+                <span className="text-blue-200">Vocabulary</span>
               </h1>
 
               <p className="text-xl text-white/90 mb-8 leading-relaxed max-w-2xl">
@@ -845,19 +846,19 @@ export default function OxfordPage() {
               {/* Feature List */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
                 <div className="flex items-center text-white/90">
-                  <Star className="w-5 h-5 mr-3 text-yellow-300" />
+                  <Star className="w-5 h-5 mr-3 text-blue-200" />
                   Từ vựng chất lượng cao
                 </div>
                 <div className="flex items-center text-white/90">
-                  <Volume2 className="w-5 h-5 mr-3 text-yellow-300" />
+                  <Volume2 className="w-5 h-5 mr-3 text-blue-200" />
                   Phát âm chuẩn xác
                 </div>
                 <div className="flex items-center text-white/90">
-                  <BookOpen className="w-5 h-5 mr-3 text-yellow-300" />
+                  <BookOpen className="w-5 h-5 mr-3 text-blue-200" />
                   Ví dụ thực tế
                 </div>
                 <div className="flex items-center text-white/90">
-                  <Target className="w-5 h-5 mr-3 text-yellow-300" />
+                  <Target className="w-5 h-5 mr-3 text-blue-200" />
                   Hình ảnh minh họa
                 </div>
               </div>
@@ -868,8 +869,8 @@ export default function OxfordPage() {
               <div className="relative">
                 <div className="relative overflow-hidden rounded-3xl shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-500">
                   <img
-                    src="/oxford-dictionary-books-and-vocabulary-cards.jpg"
-                    alt="Oxford Dictionary and Vocabulary"
+                    src="/3000_Vocab.png"
+                    alt="3000 Vocabulary Collection"
                     className="w-full h-96 object-cover"
                     onError={(e) => {
                       e.currentTarget.src =
@@ -891,8 +892,8 @@ export default function OxfordPage() {
                 </div>
 
                 {/* Decorative elements */}
-                <div className="absolute -z-10 -top-4 -left-4 w-full h-full bg-gradient-to-br from-yellow-400/20 to-orange-400/20 rounded-3xl transform rotate-6"></div>
-                <div className="absolute -z-20 -top-8 -left-8 w-full h-full bg-gradient-to-br from-red-400/10 to-pink-400/10 rounded-3xl transform rotate-12"></div>
+                <div className="absolute -z-10 -top-4 -left-4 w-full h-full bg-gradient-to-br from-blue-400/20 to-purple-400/20 rounded-3xl transform rotate-6"></div>
+                <div className="absolute -z-20 -top-8 -left-8 w-full h-full bg-gradient-to-br from-purple-400/10 to-indigo-400/10 rounded-3xl transform rotate-12"></div>
               </div>
             </div>
           </div>
