@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Gamepad2, Play, Trophy, Clock, Target, Zap } from "lucide-react";
+import { Gamepad2, Play, Trophy, Clock, Target, Zap, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -76,6 +76,34 @@ const games = [
 export default function GamesPage() {
   const [selectedGame, setSelectedGame] = useState<GameType>(null);
   const [gameKey, setGameKey] = useState(0); // Add key to force reset
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const bannerSlides = [
+    {
+      id: "flashcard",
+      title: "Flashcard nhanh",
+      description: "Lật thẻ để xem nghĩa, kiểm tra khả năng ghi nhớ từ vựng",
+      image: "/flashcard.png",
+      gradient: "from-blue-500 to-purple-600",
+      badge: "Phổ biến nhất"
+    },
+    {
+      id: "typing", 
+      title: "Gõ từ nhanh",
+      description: "Gõ từ tiếng Anh tương ứng với nghĩa tiếng Việt",
+      image: "/typing_game.png", 
+      gradient: "from-purple-500 to-pink-600",
+      badge: "Thử thách"
+    },
+    {
+      id: "godot",
+      title: "Candy Catcher Vocab", 
+      description: "Game thu thập kẹo và học từ vựng được tạo bằng Godot Engine",
+      image: "/godot_game.png",
+      gradient: "from-pink-500 to-orange-500",
+      badge: "Mới nhất"
+    }
+  ];
 
   const handleBackToGames = () => {
     setSelectedGame(null);
@@ -86,6 +114,20 @@ export default function GamesPage() {
     setSelectedGame(gameType);
     setGameKey((prev) => prev + 1); // Reset game state when selecting new game
   };
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % bannerSlides.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + bannerSlides.length) % bannerSlides.length);
+  };
+
+  // Auto slide
+  useEffect(() => {
+    const timer = setInterval(nextSlide, 4000);
+    return () => clearInterval(timer);
+  }, []);
 
   // Simple completion handler - just go back to games
   const handleGameComplete = (correct: number, total: number, time: number) => {
@@ -134,19 +176,81 @@ export default function GamesPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
-      <div className="bg-gradient-to-r from-purple-100/80 via-blue-50/60 to-green-50/80 dark:from-slate-800/80 dark:via-slate-700/60 dark:to-slate-800/80 py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-              <Gamepad2 className="w-10 h-10 text-white" />
+      {/* Hero Banner Carousel */}
+      <div className="relative overflow-hidden">
+        <div className="flex transition-transform duration-500 ease-in-out" style={{ transform: `translateX(-${currentSlide * 100}%)` }}>
+          {bannerSlides.map((slide, index) => (
+            <div key={slide.id} className={`w-full flex-shrink-0 bg-gradient-to-r ${slide.gradient} py-20`}>
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                  <div className="text-white">
+                    <div className="inline-flex items-center px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-sm font-medium mb-4">
+                      <Gamepad2 className="w-4 h-4 mr-2" />
+                      {slide.badge}
+                    </div>
+                    <h1 className="text-4xl md:text-6xl font-bold mb-6">
+                      {slide.title}
+                    </h1>
+                    <p className="text-xl text-white/90 mb-8 leading-relaxed">
+                      {slide.description}
+                    </p>
+                    <div className="flex gap-4">
+                      <button
+                        onClick={() => handleGameSelect(slide.id as GameType)}
+                        className="bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center"
+                      >
+                        <Play className="w-5 h-5 mr-2" />
+                        Chơi ngay
+                      </button>
+                      <button className="border border-white/30 hover:bg-white/10 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300">
+                        Tìm hiểu thêm
+                      </button>
+                    </div>
+                  </div>
+                  <div className="relative">
+                    <div className="relative overflow-hidden rounded-2xl shadow-2xl">
+                      <img
+                        src={slide.image}
+                        alt={slide.title}
+                        className="w-full h-80 object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                    </div>
+                    {/* Decorative elements */}
+                    <div className="absolute -top-4 -right-4 w-24 h-24 bg-white/10 rounded-full blur-xl"></div>
+                    <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-white/10 rounded-full blur-xl"></div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-slate-100 mb-4">
-              Game từ vựng
-            </h1>
-            <p className="text-xl text-gray-600 dark:text-slate-300 max-w-2xl mx-auto">
-              Học từ vựng qua các trò chơi tương tác và thú vị
-            </p>
-          </div>
+          ))}
+        </div>
+        
+        {/* Navigation buttons */}
+        <button
+          onClick={prevSlide}
+          className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white p-3 rounded-full transition-all duration-300"
+        >
+          <ChevronLeft className="w-6 h-6" />
+        </button>
+        <button
+          onClick={nextSlide}
+          className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white p-3 rounded-full transition-all duration-300"
+        >
+          <ChevronRight className="w-6 h-6" />
+        </button>
+        
+        {/* Slide indicators */}
+        <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-2">
+          {bannerSlides.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentSlide(index)}
+              className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                currentSlide === index ? 'bg-white' : 'bg-white/50'
+              }`}
+            />
+          ))}
         </div>
       </div>
 
@@ -159,7 +263,10 @@ export default function GamesPage() {
           <div className="relative overflow-hidden rounded-xl bg-gradient-to-r from-purple-100 to-blue-100 dark:from-slate-800 dark:to-slate-700 p-8">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {/* Game 1: Flashcard */}
-              <div className="text-center group cursor-pointer" onClick={() => handleGameSelect("flashcard")}>
+              <div
+                className="text-center group cursor-pointer"
+                onClick={() => handleGameSelect("flashcard")}
+              >
                 <div className="relative overflow-hidden rounded-lg mb-4 transition-transform duration-300 group-hover:scale-105">
                   <img
                     src="/flashcard.png"
@@ -168,7 +275,9 @@ export default function GamesPage() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent rounded-lg" />
                   <div className="absolute bottom-2 left-2">
-                    <Badge className="bg-blue-500 text-white">Phổ biến nhất</Badge>
+                    <Badge className="bg-blue-500 text-white">
+                      Phổ biến nhất
+                    </Badge>
                   </div>
                 </div>
                 <h3 className="font-semibold text-lg mb-2 text-gray-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
@@ -180,7 +289,10 @@ export default function GamesPage() {
               </div>
 
               {/* Game 2: Typing */}
-              <div className="text-center group cursor-pointer" onClick={() => handleGameSelect("typing")}>
+              <div
+                className="text-center group cursor-pointer"
+                onClick={() => handleGameSelect("typing")}
+              >
                 <div className="relative overflow-hidden rounded-lg mb-4 transition-transform duration-300 group-hover:scale-105">
                   <img
                     src="/typing_game.png"
@@ -189,7 +301,9 @@ export default function GamesPage() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent rounded-lg" />
                   <div className="absolute bottom-2 left-2">
-                    <Badge className="bg-purple-500 text-white">Thử thách</Badge>
+                    <Badge className="bg-purple-500 text-white">
+                      Thử thách
+                    </Badge>
                   </div>
                 </div>
                 <h3 className="font-semibold text-lg mb-2 text-gray-900 dark:text-slate-100 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
@@ -201,7 +315,10 @@ export default function GamesPage() {
               </div>
 
               {/* Game 3: Candy Catcher */}
-              <div className="text-center group cursor-pointer" onClick={() => handleGameSelect("godot")}>
+              <div
+                className="text-center group cursor-pointer"
+                onClick={() => handleGameSelect("godot")}
+              >
                 <div className="relative overflow-hidden rounded-lg mb-4 transition-transform duration-300 group-hover:scale-105">
                   <img
                     src="/godot_game.png"
@@ -221,7 +338,7 @@ export default function GamesPage() {
                 </p>
               </div>
             </div>
-            
+
             {/* Decorative elements */}
             <div className="absolute top-4 right-4 opacity-20">
               <Gamepad2 className="w-12 h-12 text-purple-500" />

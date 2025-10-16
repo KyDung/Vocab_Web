@@ -60,7 +60,8 @@ export function AboutSection() {
               Đội ngũ phát triển
             </h3>
             <p className="text-lg text-gray-700 dark:text-slate-300 mb-8">
-              VocabApp được phát triển bởi đội ngũ có đam mê với giáo dục và công nghệ
+              VocabApp được phát triển bởi đội ngũ có đam mê với giáo dục và
+              công nghệ
             </p>
           </div>
 
@@ -70,22 +71,23 @@ export function AboutSection() {
               <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
                 <User className="w-10 h-10 text-white" />
               </div>
-              <h4 className="text-xl font-semibold mb-2 text-gray-900 dark:text-slate-100">
-                Lê Kỳ Dũng
+              <h4 className="text-xl font-semibold mb-4 text-gray-900 dark:text-slate-100">
+                Tác giả Dũng
               </h4>
-              <p className="text-blue-600 dark:text-blue-400 font-medium mb-2">
-                Lead Developer & UI/UX Designer
-              </p>
-              <p className="text-sm text-gray-600 dark:text-slate-300 mb-3">
-                Chuyên về phát triển Frontend, thiết kế giao diện người dùng và trải nghiệm học tập tương tác
-              </p>
-              <div className="flex justify-center space-x-2">
-                <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded text-xs">
-                  React & Next.js
-                </span>
-                <span className="px-2 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 rounded text-xs">
-                  TypeScript
-                </span>
+              <div className="text-left space-y-2 max-w-sm mx-auto">
+                <p className="text-sm text-gray-700 dark:text-slate-300">
+                  <strong>Khoa:</strong> Công nghệ thông tin
+                </p>
+                <p className="text-sm text-gray-700 dark:text-slate-300">
+                  <strong>Lớp:</strong> K72A1
+                </p>
+                <div className="text-sm text-gray-700 dark:text-slate-300">
+                  <strong>Liên hệ:</strong>
+                  <div className="ml-4 mt-1 space-y-1">
+                    <p>📧 Gmail: Kydung204@gmail.com</p>
+                    <p>📱 Số điện thoại: 0899145429</p>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -94,22 +96,23 @@ export function AboutSection() {
               <div className="w-20 h-20 bg-gradient-to-br from-green-500 to-teal-600 rounded-full flex items-center justify-center mx-auto mb-4">
                 <User className="w-10 h-10 text-white" />
               </div>
-              <h4 className="text-xl font-semibold mb-2 text-gray-900 dark:text-slate-100">
-                Nguyễn Minh Tú
+              <h4 className="text-xl font-semibold mb-4 text-gray-900 dark:text-slate-100">
+                Tác giả Chinh
               </h4>
-              <p className="text-green-600 dark:text-green-400 font-medium mb-2">
-                Backend Developer & AI Integration
-              </p>
-              <p className="text-sm text-gray-600 dark:text-slate-300 mb-3">
-                Chuyên về phát triển Backend, tích hợp AI và các hệ thống đánh giá từ vựng thông minh
-              </p>
-              <div className="flex justify-center space-x-2">
-                <span className="px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 rounded text-xs">
-                  Supabase
-                </span>
-                <span className="px-2 py-1 bg-teal-100 dark:bg-teal-900/30 text-teal-800 dark:text-teal-300 rounded text-xs">
-                  Gemini AI
-                </span>
+              <div className="text-left space-y-2 max-w-sm mx-auto">
+                <p className="text-sm text-gray-700 dark:text-slate-300">
+                  <strong>Khoa:</strong> Công nghệ thông tin
+                </p>
+                <p className="text-sm text-gray-700 dark:text-slate-300">
+                  <strong>Lớp:</strong> K72K
+                </p>
+                <div className="text-sm text-gray-700 dark:text-slate-300">
+                  <strong>Liên hệ:</strong>
+                  <div className="ml-4 mt-1 space-y-1">
+                    <p>📧 Gmail: [Đang cập nhật]</p>
+                    <p>📱 Số điện thoại: [Đang cập nhật]</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
