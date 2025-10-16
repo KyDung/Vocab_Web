@@ -15,7 +15,7 @@
 📱 **Responsive Design** - Hoạt động tốt trên mọi thiết bị  
 🔐 **Authentication** - Đăng ký/đăng nhập với Supabase  
 📊 **Theo dõi tiến độ** - Thống kê học tập cá nhân  
-🎨 **Dark/Light Mode** - Giao diện tùy chỉnh  
+🎨 **Dark/Light Mode** - Giao diện tùy chỉnh
 
 ## 🚀 Quick Start
 
@@ -25,7 +25,7 @@
 # Windows
 setup.bat
 
-# macOS/Linux  
+# macOS/Linux
 chmod +x setup.sh && ./setup.sh
 ```
 
@@ -57,15 +57,15 @@ pnpm dev
 
 ## 🛠️ Tech Stack
 
-| Công nghệ | Mô tả | Phiên bản |
-|-----------|--------|-----------|
-| **Next.js** | React Framework với App Router | 15.2.4 |
-| **TypeScript** | Type-safe JavaScript | 5.9.2 |
-| **Supabase** | Backend-as-a-Service | Latest |
-| **Tailwind CSS** | Utility-first CSS | Latest |
-| **Radix UI** | Headless UI components | Latest |
-| **Lucide React** | Icon library | Latest |
-| **Google Gemini** | AI cho đánh giá từ vựng | Latest |
+| Công nghệ         | Mô tả                          | Phiên bản |
+| ----------------- | ------------------------------ | --------- |
+| **Next.js**       | React Framework với App Router | 15.2.4    |
+| **TypeScript**    | Type-safe JavaScript           | 5.9.2     |
+| **Supabase**      | Backend-as-a-Service           | Latest    |
+| **Tailwind CSS**  | Utility-first CSS              | Latest    |
+| **Radix UI**      | Headless UI components         | Latest    |
+| **Lucide React**  | Icon library                   | Latest    |
+| **Google Gemini** | AI cho đánh giá từ vựng        | Latest    |
 
 ## 📁 Cấu trúc Project
 
@@ -93,26 +93,31 @@ pnpm dev
 ## 🎮 Game Features
 
 ### 1. **Flashcard Game**
+
 - Lật thẻ học từ vựng truyền thống
 - Hình ảnh minh họa từ Unsplash
 - Phát âm chuẩn
 
-### 2. **Quiz Game** 
+### 2. **Quiz Game**
+
 - Trắc nghiệm 4 đáp án
 - Random questions
 - Scoring system
 
 ### 3. **Typing Game**
+
 - Gõ từ tiếng Anh theo nghĩa
 - Tính thời gian
 - Độ chính xác
 
 ### 4. **Godot Games**
+
 - Candy Catcher Vocab
-- Capyrun Adventure  
+- Capyrun Adventure
 - WebAssembly integration
 
 ### 5. **Custom Vocabulary**
+
 - Tạo bộ từ vựng riêng
 - Import từ Google Sheets
 - Chia sẻ với cộng đồng
@@ -126,12 +131,14 @@ pnpm dev
 ## 🌐 Deployment
 
 ### Vercel (Khuyến nghị)
+
 ```bash
 # Deploy to Vercel
 vercel --prod
 ```
 
 ### Docker
+
 ```bash
 # Build Docker image
 docker build -t vocabapp .
@@ -142,10 +149,10 @@ docker run -p 3000:3000 vocabapp
 
 ## 👥 Đội ngũ phát triển
 
-| Tác giả | Vai trò | Liên hệ |
-|---------|---------|---------|
-| **Xa Kỳ Trung Dũng** | Frontend Developer | Kydung204@gmail.com |
-| **Chu Thị Việt Chinh** | Backend Developer | [Updating...] |
+| Tác giả                | Vai trò            | Liên hệ             |
+| ---------------------- | ------------------ | ------------------- |
+| **Xa Kỳ Trung Dũng**   | Frontend Developer | Kydung204@gmail.com |
+| **Chu Thị Việt Chinh** | Backend Developer  | [Updating...]       |
 
 **Khoa:** Công nghệ Thông tin  
 **Trường:** [Tên trường]

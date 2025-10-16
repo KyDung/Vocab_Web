@@ -1311,7 +1311,9 @@ export default function OxfordPage() {
               <div className="flex flex-col h-full">
                 {/* Dialog Header - Responsive */}
                 <DialogHeader className="p-2 sm:p-3 border-b border-gray-200 dark:border-slate-700 flex-shrink-0">
-                  <DialogTitle className="sr-only">Chi tiết từ vựng</DialogTitle>
+                  <DialogTitle className="sr-only">
+                    Chi tiết từ vựng
+                  </DialogTitle>
                   <div className="flex justify-end items-center">
                     <div className="flex items-center space-x-1 sm:space-x-2">
                       <Button

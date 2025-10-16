@@ -41,11 +41,13 @@ notepad .env.local
 ### 4. Cấu hình Supabase
 
 #### 4.1. Đăng ký Supabase (miễn phí):
+
 - Truy cập: https://supabase.com
 - Đăng ký/đăng nhập
 - Tạo project mới
 
 #### 4.2. Lấy thông tin kết nối:
+
 - Vào **Settings** → **API**
 - Copy **Project URL** và **anon public key**
 - Dán vào file `.env.local`:
@@ -57,6 +59,7 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 
 #### 4.3. Setup Database:
+
 ```bash
 # Chạy SQL scripts từ thư mục sql/
 # Vào Supabase Dashboard → SQL Editor
@@ -121,11 +124,13 @@ pnpm format
 ## 🔧 Cấu hình tùy chọn
 
 ### Google Gemini AI (cho tính năng đánh giá):
+
 ```bash
 GOOGLE_AI_API_KEY=your_gemini_api_key
 ```
 
 ### Google Sheets Integration:
+
 ```bash
 GOOGLE_SHEETS_API_KEY=your_api_key
 GOOGLE_SHEETS_SPREADSHEET_ID=your_sheet_id
@@ -134,13 +139,16 @@ GOOGLE_SHEETS_SPREADSHEET_ID=your_sheet_id
 ## 🐛 Troubleshooting
 
 ### Lỗi "supabaseUrl is required":
+
 - Kiểm tra file `.env.local` có đúng format không
 - Restart development server sau khi thay đổi env
 
 ### Lỗi CORS:
+
 - Thêm `http://localhost:3000` vào Supabase → Authentication → URL Configuration
 
 ### Lỗi Database:
+
 - Chạy lại SQL scripts trong `sql/` folder
 - Kiểm tra RLS policies trong Supabase
 
