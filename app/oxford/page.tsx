@@ -802,7 +802,7 @@ export default function OxfordPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       {/* Hero Banner - Asymmetric Layout for Diversity */}
-      <div className="relative overflow-hidden bg-gradient-to-r from-blue-500 to-purple-600 dark:from-blue-800 dark:to-purple-900 py-24">
+      <div className="relative overflow-hidden bg-gradient-to-r from-blue-500 to-purple-600 dark:from-blue-800 dark:to-purple-900 py-20">
         {/* Animated Background Elements */}
         <div className="absolute inset-0">
           <div className="absolute top-10 left-10 w-32 h-32 bg-white/10 rounded-full animate-pulse"></div>
@@ -867,7 +867,7 @@ export default function OxfordPage() {
             {/* Right Side - Image (1/3 width) */}
             <div className="lg:col-span-1">
               <div className="relative">
-                <div className="relative overflow-hidden rounded-3xl shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-500">
+                <div className="relative overflow-hidden rounded-3xl shadow-2xl transition-transform duration-500">
                   <img
                     src="/3000_Vocab.png"
                     alt="3000 Vocabulary Collection"

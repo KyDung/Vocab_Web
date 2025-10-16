@@ -679,7 +679,7 @@ export default function TopicsPage() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
         {/* Hero Banner - Beautiful Gradient inspired by Games Page */}
-        <div className="relative overflow-hidden bg-gradient-to-r from-green-500 to-blue-500 dark:from-green-800 dark:to-blue-900 py-16">
+        <div className="relative overflow-hidden bg-gradient-to-r from-green-500 to-blue-500 dark:from-green-800 dark:to-blue-900 py-20">
           {/* Background Pattern */}
           <div className="absolute inset-0 opacity-10">
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
