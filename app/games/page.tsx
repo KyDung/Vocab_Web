@@ -69,7 +69,7 @@ const games = [
     color: "bg-gradient-to-br from-green-500 to-blue-500",
     difficulty: "Trung bình",
     time: "15-25 phút",
-    image: "/capyrun_game.png",
+    image: "/Capybara_adventure.png",
   },
 ];
 
