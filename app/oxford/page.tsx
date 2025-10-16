@@ -829,7 +829,7 @@ export default function OxfordPage() {
               </div>
 
               <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-                � Oxford
+                Oxford
                 <br />
                 <span className="text-blue-200">Vocabulary</span>
               </h1>
