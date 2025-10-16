@@ -107,7 +107,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
 
       if (error) {
-        return { error: { message: error.message } };
+        // Map Supabase login errors to user-friendly Vietnamese messages
+        let errorMessage = error.message;
+
+        if (error.message.includes("Invalid login credentials")) {
+          errorMessage = "Email hoặc mật khẩu không đúng";
+        } else if (error.message.includes("Email not confirmed")) {
+          errorMessage =
+            "Email chưa được xác nhận. Vui lòng kiểm tra hộp thư và xác nhận email trước khi đăng nhập";
+        } else if (error.message.includes("Too many requests")) {
+          errorMessage = "Quá nhiều lần thử đăng nhập. Vui lòng đợi vài phút";
+        } else if (error.message.includes("User not found")) {
+          errorMessage =
+            "Tài khoản không tồn tại. Vui lòng đăng ký tài khoản mới";
+        } else if (error.message.includes("Invalid email")) {
+          errorMessage = "Định dạng email không hợp lệ";
+        }
+
+        return { error: { message: errorMessage } };
       }
 
       if (data.user) {
@@ -129,9 +146,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setLoading(true);
     try {
       // Dynamic redirect URL detection
-      const redirectUrl = typeof window !== 'undefined' 
-        ? `${window.location.origin}/auth/callback`
-        : `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/auth/callback`;
+      const redirectUrl =
+        typeof window !== "undefined"
+          ? `${window.location.origin}/auth/callback`
+          : `${
+              process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
+            }/auth/callback`;
 
       const { data, error } = await supabase.auth.signUp({
         email,
@@ -146,7 +166,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
 
       if (error) {
-        return { error: { message: error.message } };
+        // Map Supabase errors to user-friendly Vietnamese messages
+        let errorMessage = error.message;
+
+        if (error.message.includes("User already registered")) {
+          errorMessage = "Email này đã được đăng ký";
+        } else if (error.message.includes("already registered")) {
+          errorMessage = "Tài khoản với email này đã tồn tại";
+        } else if (error.message.includes("Email rate limit")) {
+          errorMessage = "Quá nhiều yêu cầu, vui lòng đợi vài phút";
+        } else if (error.message.includes("Invalid email")) {
+          errorMessage = "Địa chỉ email không hợp lệ";
+        } else if (error.message.includes("Password should be at least")) {
+          errorMessage = "Mật khẩu phải có ít nhất 6 ký tự";
+        } else if (error.message.includes("signup is disabled")) {
+          errorMessage = "Tính năng đăng ký tạm thời bị vô hiệu hóa";
+        }
+
+        return { error: { message: errorMessage } };
       }
 
       // KHÔNG tự động set user - để user xác thực email trước
@@ -190,9 +227,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       console.log("✅ Supabase connection OK");
 
       // Thử Google OAuth
-      const redirectUrl = typeof window !== 'undefined' 
-        ? `${window.location.origin}/auth/callback`
-        : `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/auth/callback`;
+      const redirectUrl =
+        typeof window !== "undefined"
+          ? `${window.location.origin}/auth/callback`
+          : `${
+              process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
+            }/auth/callback`;
 
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: "google",

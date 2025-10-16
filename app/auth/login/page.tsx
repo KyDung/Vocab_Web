@@ -35,25 +35,26 @@ export default function LoginPage() {
     e.preventDefault();
     setLoading(true);
     setError("");
+    setShowResendButton(false);
 
     try {
       const result = await signIn(email, password);
-      router.push("/profile");
+      
+      if (result.error) {
+        const errorMessage = result.error.message;
+        setError(errorMessage);
+        
+        // Show resend button for email confirmation errors
+        if (errorMessage.includes("Email chưa được xác nhận") || 
+            errorMessage.includes("Email not confirmed")) {
+          setShowResendButton(true);
+        }
+      } else {
+        router.push("/profile");
+      }
     } catch (err) {
       const error = err as Error;
-      // Xử lý các loại lỗi khác nhau
-      if (error.message.includes("Email not confirmed")) {
-        setError(
-          "Email chưa được xác thực. Vui lòng kiểm tra hộp thư và click vào link xác thực."
-        );
-        setShowResendButton(true);
-      } else if (error.message.includes("Invalid login credentials")) {
-        setError("Email hoặc mật khẩu không đúng.");
-        setShowResendButton(false);
-      } else {
-        setError(error.message);
-        setShowResendButton(false);
-      }
+      setError("Có lỗi xảy ra trong quá trình đăng nhập. Vui lòng thử lại.");
     } finally {
       setLoading(false);
     }

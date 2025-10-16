@@ -53,7 +53,20 @@ export default function RegisterPage() {
         data: { full_name: name },
       });
       if (authError) {
-        setError(authError.message);
+        // Handle specific error cases for better UX
+        if (authError.message.includes("User already registered")) {
+          setError("Email này đã được đăng ký. Vui lòng sử dụng email khác hoặc đăng nhập.");
+        } else if (authError.message.includes("already registered")) {
+          setError("Tài khoản với email này đã tồn tại. Vui lòng đăng nhập hoặc sử dụng email khác.");
+        } else if (authError.message.includes("Email rate limit")) {
+          setError("Bạn đã gửi quá nhiều yêu cầu. Vui lòng đợi vài phút trước khi thử lại.");
+        } else if (authError.message.includes("Invalid email")) {
+          setError("Địa chỉ email không hợp lệ. Vui lòng kiểm tra lại.");
+        } else if (authError.message.includes("Password")) {
+          setError("Mật khẩu không đáp ứng yêu cầu bảo mật. Vui lòng sử dụng mật khẩu mạnh hơn.");
+        } else {
+          setError(authError.message);
+        }
       } else {
         // Thông báo cho người dùng cần xác thực email
         setError("");
@@ -64,7 +77,7 @@ export default function RegisterPage() {
       }
     } catch (err) {
       const error = err as Error;
-      setError(error.message);
+      setError("Có lỗi xảy ra trong quá trình đăng ký. Vui lòng thử lại.");
     } finally {
       setLoading(false);
     }
