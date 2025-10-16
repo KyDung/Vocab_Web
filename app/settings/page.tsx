@@ -65,7 +65,9 @@ export default function SettingsPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-  const [messageType, setMessageType] = useState<"success" | "error">("success");
+  const [messageType, setMessageType] = useState<"success" | "error">(
+    "success"
+  );
 
   // Settings
   const [emailNotifications, setEmailNotifications] = useState(true);
@@ -139,15 +141,15 @@ export default function SettingsPage() {
       hasUppercase: /[A-Z]/.test(password),
       hasLowercase: /[a-z]/.test(password),
       hasNumber: /[0-9]/.test(password),
-      hasSpecialChar: /[!@#$%^&*]/.test(password)
+      hasSpecialChar: /[!@#$%^&*]/.test(password),
     };
 
-    const isValid = Object.values(requirements).every(req => req === true);
-    
-    return { 
-      isValid, 
+    const isValid = Object.values(requirements).every((req) => req === true);
+
+    return {
+      isValid,
       requirements,
-      score: getPasswordStrength(password)
+      score: getPasswordStrength(password),
     };
   };
 
@@ -211,7 +213,7 @@ export default function SettingsPage() {
       // Try to sign in with current password to verify it
       const { error: verifyError } = await supabase.auth.signInWithPassword({
         email: currentUser.data.user.email,
-        password: currentPassword
+        password: currentPassword,
       });
 
       if (verifyError) {
@@ -222,14 +224,16 @@ export default function SettingsPage() {
 
       // Step 2: Update password
       const { error: updateError } = await supabase.auth.updateUser({
-        password: newPassword
+        password: newPassword,
       });
 
       if (updateError) {
         // Handle specific Supabase errors
         if (updateError.message.includes("Password should be at least")) {
           showMessage("Mật khẩu phải có ít nhất 6 ký tự", "error");
-        } else if (updateError.message.includes("New password should be different")) {
+        } else if (
+          updateError.message.includes("New password should be different")
+        ) {
           showMessage("Mật khẩu mới phải khác mật khẩu hiện tại", "error");
         } else {
           showMessage(`Lỗi cập nhật mật khẩu: ${updateError.message}`, "error");
@@ -243,7 +247,6 @@ export default function SettingsPage() {
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
-      
     } catch (error: any) {
       console.error("Password change error:", error);
       showMessage("Có lỗi không mong muốn xảy ra. Vui lòng thử lại.", "error");
@@ -310,11 +313,13 @@ export default function SettingsPage() {
         </div>
 
         {message && (
-          <div className={`mb-6 p-4 rounded-lg border ${
-            messageType === "success" 
-              ? "bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800 text-green-800 dark:text-green-200"
-              : "bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 text-red-800 dark:text-red-200"
-          }`}>
+          <div
+            className={`mb-6 p-4 rounded-lg border ${
+              messageType === "success"
+                ? "bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800 text-green-800 dark:text-green-200"
+                : "bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 text-red-800 dark:text-red-200"
+            }`}
+          >
             {message}
           </div>
         )}
@@ -448,7 +453,9 @@ export default function SettingsPage() {
                           <SelectItem value="male">Nam</SelectItem>
                           <SelectItem value="female">Nữ</SelectItem>
                           <SelectItem value="other">Khác</SelectItem>
-                          <SelectItem value="prefer-not-to-say">Không muốn tiết lộ</SelectItem>
+                          <SelectItem value="prefer-not-to-say">
+                            Không muốn tiết lộ
+                          </SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -496,7 +503,11 @@ export default function SettingsPage() {
                     </div>
                   </div>
 
-                  <Button type="submit" disabled={loading} className="w-full md:w-auto">
+                  <Button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full md:w-auto"
+                  >
                     {loading ? "Đang cập nhật..." : "Cập nhật thông tin"}
                   </Button>
                 </form>
@@ -542,33 +553,90 @@ export default function SettingsPage() {
                     {newPassword && (
                       <div className="space-y-2">
                         <div className="flex justify-between items-center text-sm">
-                          <span className="text-gray-600 dark:text-gray-400">Độ mạnh mật khẩu:</span>
-                          <span className={getPasswordStrengthText(getPasswordStrength(newPassword)).color}>
-                            {getPasswordStrengthText(getPasswordStrength(newPassword)).text}
+                          <span className="text-gray-600 dark:text-gray-400">
+                            Độ mạnh mật khẩu:
+                          </span>
+                          <span
+                            className={
+                              getPasswordStrengthText(
+                                getPasswordStrength(newPassword)
+                              ).color
+                            }
+                          >
+                            {
+                              getPasswordStrengthText(
+                                getPasswordStrength(newPassword)
+                              ).text
+                            }
                           </span>
                         </div>
                         <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                          <div 
-                            className={`h-2 rounded-full transition-all duration-300 ${getPasswordStrengthBar(getPasswordStrength(newPassword)).colorClass}`}
-                            style={{ width: `${getPasswordStrengthBar(getPasswordStrength(newPassword)).percentage}%` }}
+                          <div
+                            className={`h-2 rounded-full transition-all duration-300 ${
+                              getPasswordStrengthBar(
+                                getPasswordStrength(newPassword)
+                              ).colorClass
+                            }`}
+                            style={{
+                              width: `${
+                                getPasswordStrengthBar(
+                                  getPasswordStrength(newPassword)
+                                ).percentage
+                              }%`,
+                            }}
                           ></div>
                         </div>
                         <div className="text-xs text-gray-500 dark:text-gray-400 space-y-1">
                           <p>Để có mật khẩu mạnh hơn, hãy bao gồm:</p>
                           <ul className="ml-4 space-y-0.5">
-                            <li className={validatePassword(newPassword).requirements.minLength ? "text-green-600" : "text-gray-400"}>
+                            <li
+                              className={
+                                validatePassword(newPassword).requirements
+                                  .minLength
+                                  ? "text-green-600"
+                                  : "text-gray-400"
+                              }
+                            >
                               ✓ Ít nhất 8 ký tự
                             </li>
-                            <li className={validatePassword(newPassword).requirements.hasUppercase ? "text-green-600" : "text-gray-400"}>
+                            <li
+                              className={
+                                validatePassword(newPassword).requirements
+                                  .hasUppercase
+                                  ? "text-green-600"
+                                  : "text-gray-400"
+                              }
+                            >
                               ✓ Chữ hoa (A-Z)
                             </li>
-                            <li className={validatePassword(newPassword).requirements.hasLowercase ? "text-green-600" : "text-gray-400"}>
+                            <li
+                              className={
+                                validatePassword(newPassword).requirements
+                                  .hasLowercase
+                                  ? "text-green-600"
+                                  : "text-gray-400"
+                              }
+                            >
                               ✓ Chữ thường (a-z)
                             </li>
-                            <li className={validatePassword(newPassword).requirements.hasNumber ? "text-green-600" : "text-gray-400"}>
+                            <li
+                              className={
+                                validatePassword(newPassword).requirements
+                                  .hasNumber
+                                  ? "text-green-600"
+                                  : "text-gray-400"
+                              }
+                            >
                               ✓ Số (0-9)
                             </li>
-                            <li className={validatePassword(newPassword).requirements.hasSpecialChar ? "text-green-600" : "text-gray-400"}>
+                            <li
+                              className={
+                                validatePassword(newPassword).requirements
+                                  .hasSpecialChar
+                                  ? "text-green-600"
+                                  : "text-gray-400"
+                              }
+                            >
                               ✓ Ký tự đặc biệt (!@#$%^&*)
                             </li>
                           </ul>
@@ -577,7 +645,9 @@ export default function SettingsPage() {
                     )}
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="confirmPassword">Xác nhận mật khẩu mới</Label>
+                    <Label htmlFor="confirmPassword">
+                      Xác nhận mật khẩu mới
+                    </Label>
                     <Input
                       id="confirmPassword"
                       type="password"
@@ -586,22 +656,34 @@ export default function SettingsPage() {
                       placeholder="Nhập lại mật khẩu mới"
                       required
                     />
-                    {confirmPassword && newPassword && confirmPassword !== newPassword && (
-                      <p className="text-sm text-red-500 flex items-center gap-1">
-                        <AlertCircle className="w-4 h-4" />
-                        Mật khẩu xác nhận không khớp
-                      </p>
-                    )}
-                    {confirmPassword && newPassword && confirmPassword === newPassword && confirmPassword.length > 0 && (
-                      <p className="text-sm text-green-600 flex items-center gap-1">
-                        <Check className="w-4 h-4" />
-                        Mật khẩu khớp
-                      </p>
-                    )}
+                    {confirmPassword &&
+                      newPassword &&
+                      confirmPassword !== newPassword && (
+                        <p className="text-sm text-red-500 flex items-center gap-1">
+                          <AlertCircle className="w-4 h-4" />
+                          Mật khẩu xác nhận không khớp
+                        </p>
+                      )}
+                    {confirmPassword &&
+                      newPassword &&
+                      confirmPassword === newPassword &&
+                      confirmPassword.length > 0 && (
+                        <p className="text-sm text-green-600 flex items-center gap-1">
+                          <Check className="w-4 h-4" />
+                          Mật khẩu khớp
+                        </p>
+                      )}
                   </div>
-                  <Button 
-                    type="submit" 
-                    disabled={loading || !currentPassword || !newPassword || !confirmPassword || newPassword !== confirmPassword || !validatePassword(newPassword).isValid}
+                  <Button
+                    type="submit"
+                    disabled={
+                      loading ||
+                      !currentPassword ||
+                      !newPassword ||
+                      !confirmPassword ||
+                      newPassword !== confirmPassword ||
+                      !validatePassword(newPassword).isValid
+                    }
                     className="w-full md:w-auto"
                   >
                     {loading ? (
@@ -691,9 +773,16 @@ export default function SettingsPage() {
                     Thông tin tài khoản
                   </h4>
                   <div className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
-                    <p><strong>Email:</strong> {user.email}</p>
-                    <p><strong>Ngày tạo:</strong> {new Date().toLocaleDateString('vi-VN')}</p>
-                    <p><strong>Trạng thái:</strong> Đã xác thực</p>
+                    <p>
+                      <strong>Email:</strong> {user.email}
+                    </p>
+                    <p>
+                      <strong>Ngày tạo:</strong>{" "}
+                      {new Date().toLocaleDateString("vi-VN")}
+                    </p>
+                    <p>
+                      <strong>Trạng thái:</strong> Đã xác thực
+                    </p>
                   </div>
                 </div>
 

@@ -22,7 +22,7 @@ interface Word {
 }
 
 interface TypingGameProps {
-  onComplete: (correct: number, total: number, time: number) => void;
+  onComplete?: (correct: number, total: number, time: number) => void;
   onBack: () => void;
 }
 
@@ -97,6 +97,7 @@ export function TypingGame({ onComplete, onBack }: TypingGameProps) {
       setTimeLeft(45);
     } else {
       // Game completed - show completion dialog
+      console.log("Game completed, moving to results screen");
       setCurrentIndex(words.length);
     }
   };
@@ -156,9 +157,29 @@ export function TypingGame({ onComplete, onBack }: TypingGameProps) {
               <Button
                 variant="outline"
                 onClick={() => {
-                  const endTime = Date.now();
-                  const timeSpent = Math.round((endTime - startTime) / 1000);
-                  onComplete(correctCount, words.length, timeSpent);
+                  try {
+                    const endTime = Date.now();
+                    const timeSpent = Math.round((endTime - startTime) / 1000);
+                    console.log("Completing game with:", {
+                      correct: correctCount,
+                      total: words.length,
+                      time: timeSpent,
+                    });
+
+                    // Check if onComplete function exists before calling
+                    if (onComplete && typeof onComplete === "function") {
+                      onComplete(correctCount, words.length, timeSpent);
+                    } else {
+                      console.warn(
+                        "onComplete function not provided, going back"
+                      );
+                      onBack();
+                    }
+                  } catch (error) {
+                    console.error("Error completing game:", error);
+                    // Fallback: just go back to games page
+                    onBack();
+                  }
                 }}
               >
                 Xem kết quả

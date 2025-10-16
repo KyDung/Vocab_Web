@@ -55,15 +55,23 @@ export default function RegisterPage() {
       if (authError) {
         // Handle specific error cases for better UX
         if (authError.message.includes("User already registered")) {
-          setError("Email này đã được đăng ký. Vui lòng sử dụng email khác hoặc đăng nhập.");
+          setError(
+            "Email này đã được đăng ký. Vui lòng sử dụng email khác hoặc đăng nhập."
+          );
         } else if (authError.message.includes("already registered")) {
-          setError("Tài khoản với email này đã tồn tại. Vui lòng đăng nhập hoặc sử dụng email khác.");
+          setError(
+            "Tài khoản với email này đã tồn tại. Vui lòng đăng nhập hoặc sử dụng email khác."
+          );
         } else if (authError.message.includes("Email rate limit")) {
-          setError("Bạn đã gửi quá nhiều yêu cầu. Vui lòng đợi vài phút trước khi thử lại.");
+          setError(
+            "Bạn đã gửi quá nhiều yêu cầu. Vui lòng đợi vài phút trước khi thử lại."
+          );
         } else if (authError.message.includes("Invalid email")) {
           setError("Địa chỉ email không hợp lệ. Vui lòng kiểm tra lại.");
         } else if (authError.message.includes("Password")) {
-          setError("Mật khẩu không đáp ứng yêu cầu bảo mật. Vui lòng sử dụng mật khẩu mạnh hơn.");
+          setError(
+            "Mật khẩu không đáp ứng yêu cầu bảo mật. Vui lòng sử dụng mật khẩu mạnh hơn."
+          );
         } else {
           setError(authError.message);
         }

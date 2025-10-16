@@ -39,14 +39,16 @@ export default function LoginPage() {
 
     try {
       const result = await signIn(email, password);
-      
+
       if (result.error) {
         const errorMessage = result.error.message;
         setError(errorMessage);
-        
+
         // Show resend button for email confirmation errors
-        if (errorMessage.includes("Email chưa được xác nhận") || 
-            errorMessage.includes("Email not confirmed")) {
+        if (
+          errorMessage.includes("Email chưa được xác nhận") ||
+          errorMessage.includes("Email not confirmed")
+        ) {
           setShowResendButton(true);
         }
       } else {

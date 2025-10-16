@@ -76,29 +76,6 @@ const games = [
 export default function GamesPage() {
   const [selectedGame, setSelectedGame] = useState<GameType>(null);
   const [gameKey, setGameKey] = useState(0); // Add key to force reset
-  const [gameStats, setGameStats] = useState({
-    totalGames: 0,
-    correctAnswers: 0,
-    totalTime: 0,
-  });
-
-  useEffect(() => {
-    // Load game stats from localStorage
-    const stats = localStorage.getItem("vocab-game-stats");
-    if (stats) {
-      setGameStats(JSON.parse(stats));
-    }
-  }, []);
-
-  const updateStats = (correct: number, total: number, time: number) => {
-    const newStats = {
-      totalGames: gameStats.totalGames + 1,
-      correctAnswers: gameStats.correctAnswers + correct,
-      totalTime: gameStats.totalTime + time,
-    };
-    setGameStats(newStats);
-    localStorage.setItem("vocab-game-stats", JSON.stringify(newStats));
-  };
 
   const handleBackToGames = () => {
     setSelectedGame(null);
@@ -110,13 +87,19 @@ export default function GamesPage() {
     setGameKey((prev) => prev + 1); // Reset game state when selecting new game
   };
 
+  // Simple completion handler - just go back to games
+  const handleGameComplete = (correct: number, total: number, time: number) => {
+    console.log(`Game completed: ${correct}/${total} in ${time}s`);
+    handleBackToGames();
+  };
+
   const renderGame = () => {
     switch (selectedGame) {
       case "flashcard":
         return (
           <FlashcardGame
             key={`flashcard-${gameKey}`}
-            onComplete={updateStats}
+            onComplete={handleGameComplete}
             onBack={handleBackToGames}
           />
         );
@@ -124,7 +107,7 @@ export default function GamesPage() {
         return (
           <QuizGame
             key={`quiz-${gameKey}`}
-            onComplete={updateStats}
+            onComplete={handleGameComplete}
             onBack={handleBackToGames}
           />
         );
@@ -132,7 +115,7 @@ export default function GamesPage() {
         return (
           <TypingGame
             key={`typing-${gameKey}`}
-            onComplete={updateStats}
+            onComplete={handleGameComplete}
             onBack={handleBackToGames}
           />
         );
@@ -168,47 +151,85 @@ export default function GamesPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Game Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <Card className="bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 shadow-sm">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-900 dark:text-slate-100">
-                Tổng số game
-              </CardTitle>
-              <Trophy className="h-4 w-4 text-purple-500" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-gray-900 dark:text-slate-100">
-                {gameStats.totalGames}
+        {/* Featured Games Carousel */}
+        <div className="mb-12">
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-slate-100 mb-8 text-center">
+            Game nổi bật
+          </h2>
+          <div className="relative overflow-hidden rounded-xl bg-gradient-to-r from-purple-100 to-blue-100 dark:from-slate-800 dark:to-slate-700 p-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {/* Game 1: Flashcard */}
+              <div className="text-center group cursor-pointer" onClick={() => handleGameSelect("flashcard")}>
+                <div className="relative overflow-hidden rounded-lg mb-4 transition-transform duration-300 group-hover:scale-105">
+                  <img
+                    src="/flashcard.png"
+                    alt="Flashcard Game"
+                    className="w-full h-32 object-cover rounded-lg shadow-lg"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent rounded-lg" />
+                  <div className="absolute bottom-2 left-2">
+                    <Badge className="bg-blue-500 text-white">Phổ biến nhất</Badge>
+                  </div>
+                </div>
+                <h3 className="font-semibold text-lg mb-2 text-gray-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                  Flashcard nhanh
+                </h3>
+                <p className="text-sm text-gray-600 dark:text-slate-300">
+                  Ôn tập nhanh với thẻ lật truyền thống
+                </p>
               </div>
-            </CardContent>
-          </Card>
-          <Card className="bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 shadow-sm">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-900 dark:text-slate-100">
-                Câu trả lời đúng
-              </CardTitle>
-              <Target className="h-4 w-4 text-green-500" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-gray-900 dark:text-slate-100">
-                {gameStats.correctAnswers}
+
+              {/* Game 2: Typing */}
+              <div className="text-center group cursor-pointer" onClick={() => handleGameSelect("typing")}>
+                <div className="relative overflow-hidden rounded-lg mb-4 transition-transform duration-300 group-hover:scale-105">
+                  <img
+                    src="/typing_game.png"
+                    alt="Typing Game"
+                    className="w-full h-32 object-cover rounded-lg shadow-lg"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent rounded-lg" />
+                  <div className="absolute bottom-2 left-2">
+                    <Badge className="bg-purple-500 text-white">Thử thách</Badge>
+                  </div>
+                </div>
+                <h3 className="font-semibold text-lg mb-2 text-gray-900 dark:text-slate-100 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                  Gõ từ nhanh
+                </h3>
+                <p className="text-sm text-gray-600 dark:text-slate-300">
+                  Rèn luyện tốc độ và độ chính xác
+                </p>
               </div>
-            </CardContent>
-          </Card>
-          <Card className="bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 shadow-sm">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-900 dark:text-slate-100">
-                Thời gian chơi
-              </CardTitle>
-              <Clock className="h-4 w-4 text-blue-500" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-gray-900 dark:text-slate-100">
-                {Math.round(gameStats.totalTime / 60)}m
+
+              {/* Game 3: Candy Catcher */}
+              <div className="text-center group cursor-pointer" onClick={() => handleGameSelect("godot")}>
+                <div className="relative overflow-hidden rounded-lg mb-4 transition-transform duration-300 group-hover:scale-105">
+                  <img
+                    src="/godot_game.png"
+                    alt="Candy Catcher Game"
+                    className="w-full h-32 object-cover rounded-lg shadow-lg"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent rounded-lg" />
+                  <div className="absolute bottom-2 left-2">
+                    <Badge className="bg-pink-500 text-white">Mới nhất</Badge>
+                  </div>
+                </div>
+                <h3 className="font-semibold text-lg mb-2 text-gray-900 dark:text-slate-100 group-hover:text-pink-600 dark:group-hover:text-pink-400 transition-colors">
+                  Candy Catcher
+                </h3>
+                <p className="text-sm text-gray-600 dark:text-slate-300">
+                  Game hành động học từ vựng
+                </p>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+            
+            {/* Decorative elements */}
+            <div className="absolute top-4 right-4 opacity-20">
+              <Gamepad2 className="w-12 h-12 text-purple-500" />
+            </div>
+            <div className="absolute bottom-4 left-4 opacity-20">
+              <Trophy className="w-8 h-8 text-yellow-500" />
+            </div>
+          </div>
         </div>
 
         {/* Games Grid */}

@@ -21,6 +21,7 @@ Redirect URLs (thêm cả hai):
 ### 2. **Cấu hình Environment Variables**
 
 #### Trong `.env.local` (local development):
+
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
@@ -28,6 +29,7 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 
 #### Trong Vercel Dashboard (production):
+
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
@@ -59,6 +61,7 @@ Trong Supabase Dashboard → **Authentication** → **Email Templates**:
 Trong Google Cloud Console → **APIs & Services** → **Credentials**:
 
 Authorized redirect URIs:
+
 ```
 https://your-project-id.supabase.co/auth/v1/callback
 https://your-domain.vercel.app/auth/callback

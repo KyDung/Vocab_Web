@@ -414,7 +414,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         country: data.country || user.user_metadata?.country,
         occupation: data.occupation || user.user_metadata?.occupation,
         learning_goal: data.learning_goal || user.user_metadata?.learning_goal,
-        language_level: data.language_level || user.user_metadata?.language_level,
+        language_level:
+          data.language_level || user.user_metadata?.language_level,
       },
     };
     setUser(updatedUser);
