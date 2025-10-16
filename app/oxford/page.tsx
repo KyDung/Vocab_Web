@@ -802,7 +802,7 @@ export default function OxfordPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       {/* Hero Banner - Asymmetric Layout for Diversity */}
-      <div className="relative overflow-hidden bg-gradient-to-r from-blue-500 to-purple-600 dark:from-blue-800 dark:to-purple-900 py-20">
+      <div className="relative overflow-hidden bg-gradient-to-r from-blue-500 to-purple-600 dark:from-blue-800 dark:to-purple-900 py-12">
         {/* Animated Background Elements */}
         <div className="absolute inset-0">
           <div className="absolute top-10 left-10 w-32 h-32 bg-white/10 rounded-full animate-pulse"></div>
@@ -828,13 +828,13 @@ export default function OxfordPage() {
                 </Badge>
               </div>
 
-              <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+              <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
                 Oxford
                 <br />
                 <span className="text-blue-200">Vocabulary</span>
               </h1>
 
-              <p className="text-xl text-white/90 mb-8 leading-relaxed max-w-2xl">
+              <p className="text-lg text-white/90 mb-6 leading-relaxed max-w-2xl">
                 Khám phá{" "}
                 {oxfordWords.length > 0
                   ? oxfordWords.length.toLocaleString()
@@ -844,7 +844,7 @@ export default function OxfordPage() {
               </p>
 
               {/* Feature List */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
                 <div className="flex items-center text-white/90">
                   <Star className="w-5 h-5 mr-3 text-blue-200" />
                   Từ vựng chất lượng cao
@@ -871,7 +871,7 @@ export default function OxfordPage() {
                   <img
                     src="/3000_Vocab.png"
                     alt="3000 Vocabulary Collection"
-                    className="w-full h-96 object-cover"
+                    className="w-full h-64 object-cover"
                     onError={(e) => {
                       e.currentTarget.src =
                         "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDQwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yMDAgMTUwQzIxMS4wNDYgMTUwIDIyMCAxNDAuNDkzIDIyMCAxMjguNjM2QzIyMCAxMTYuNzc5IDIxMS4wNDYgMTA3LjI3MyAyMDAgMTA3LjI3M0MxODguOTU0IDEwNy4yNzMgMTgwIDExNi43NzkgMTgwIDEyOC42MzZDMTgwIDE0MC40OTMgMTg4Ljk1NCAxNTAgMjAwIDE1MFoiIGZpbGw9IiM5Q0EzQUYiLz4KPHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4PSIxODgiIHk9IjEzOCI+CjxwYXRoIGQ9Ik0xMiAyQzYuNDggMiAyIDYuNDggMiAxMlM2LjQ4IDIyIDEyIDIyIDIyIDE3LjUyIDIyIDEyIDE3LjUyIDIgMTIgMlpNMTMgMTdIMTFWMTVIMTNWMTdaTTEzIDEzSDExVjdIMTNWMTNaIiBmaWxsPSIjOUNBM0FGIi8+Cjwvc3ZnPgo8L3N2Zz4K";

@@ -679,7 +679,7 @@ export default function TopicsPage() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
         {/* Hero Banner - Beautiful Gradient inspired by Games Page */}
-        <div className="relative overflow-hidden bg-gradient-to-r from-green-500 to-blue-500 dark:from-green-800 dark:to-blue-900 py-20">
+        <div className="relative overflow-hidden bg-gradient-to-r from-green-500 to-blue-500 dark:from-green-800 dark:to-blue-900 py-12">
           {/* Background Pattern */}
           <div className="absolute inset-0 opacity-10">
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
@@ -689,27 +689,27 @@ export default function TopicsPage() {
 
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative">
             {/* Content in vertical layout with image on top */}
-            <div className="text-center text-white mb-8">
-              <div className="inline-flex items-center px-4 py-2 bg-white/15 backdrop-blur-sm rounded-full text-sm font-medium mb-6 border border-white/20">
+            <div className="text-center text-white mb-6">
+              <div className="inline-flex items-center px-4 py-2 bg-white/15 backdrop-blur-sm rounded-full text-sm font-medium mb-4 border border-white/20">
                 <BookOpen className="w-4 h-4 mr-2" />
                 Học theo chủ đề
               </div>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3">
                 📚 Học theo chủ đề
               </h1>
-              <p className="text-xl text-white/90 mb-6 leading-relaxed max-w-2xl mx-auto">
+              <p className="text-lg text-white/90 mb-4 leading-relaxed max-w-2xl mx-auto">
                 Chọn chủ đề để học từ vựng một cách có hệ thống và hiệu quả
               </p>
             </div>
 
             {/* Banner Image - Centered */}
-            <div className="flex justify-center mb-8">
-              <div className="relative max-w-2xl w-full">
+            <div className="flex justify-center mb-6">
+              <div className="relative max-w-xl w-full">
                 <div className="relative overflow-hidden rounded-2xl shadow-2xl transform hover:scale-105 transition-transform duration-300">
                   <img
                     src="/vocab_topic.jpg"
                     alt="Vocabulary Topics"
-                    className="w-full h-64 md:h-80 object-cover"
+                    className="w-full h-48 md:h-56 object-cover"
                     onError={(e) => {
                       e.currentTarget.src =
                         "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDQwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yMDAgMTUwQzIxMS4wNDYgMTUwIDIyMCAxNDAuNDkzIDIyMCAxMjguNjM2QzIyMCAxMTYuNzc5IDIxMS4wNDYgMTA3LjI3MyAyMDAgMTA3LjI3M0MxODguOTU0IDEwNy4yNzMgMTgwIDExNi43NzkgMTgwIDEyOC42MzZDMTgwIDE0MC40OTMgMTg4Ljk1NCAxNTAgMjAwIDE1MFoiIGZpbGw9IiM5Q0EzQUYiLz4KPHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4PSIxODgiIHk9IjEzOCI+CjxwYXRoIGQ9Ik0xMiAyQzYuNDggMiAyIDYuNDggMiAxMlM2LjQ4IDIyIDEyIDIyIDIyIDE3LjUyIDIyIDEyIDE3LjUyIDIgMTIgMlpNMTMgMTdIMTFWMTVIMTNWMTdaTTEzIDEzSDExVjdIMTNWMTNaIiBmaWxsPSIjOUNBM0FGIi8+Cjwvc3ZnPgo8L3N2Zz4K";
