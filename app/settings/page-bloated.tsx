@@ -17,6 +17,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -31,13 +32,20 @@ import {
   Lock,
   Bell,
   Palette,
+  Database,
   LogOut,
   Camera,
   Phone,
+  MapPin,
   Calendar,
   Briefcase,
-  MapPin,
+  Target,
+  BookOpen,
   Globe,
+  Download,
+  Upload,
+  Trash2,
+  Shield,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -52,9 +60,12 @@ export default function SettingsPage() {
   const [phone, setPhone] = useState("");
   const [birthDate, setBirthDate] = useState("");
   const [gender, setGender] = useState("");
+  const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
   const [occupation, setOccupation] = useState("");
+  const [learningGoal, setLearningGoal] = useState("");
+  const [languageLevel, setLanguageLevel] = useState("");
 
   // Security States
   const [currentPassword, setCurrentPassword] = useState("");
@@ -66,7 +77,11 @@ export default function SettingsPage() {
 
   // Settings
   const [emailNotifications, setEmailNotifications] = useState(true);
+  const [pushNotifications, setPushNotifications] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
+  const [studyReminder, setStudyReminder] = useState(true);
+  const [progressNotifications, setProgressNotifications] = useState(true);
+  const [weeklyReport, setWeeklyReport] = useState(true);
 
   useEffect(() => {
     if (user) {
@@ -76,9 +91,12 @@ export default function SettingsPage() {
       setPhone(user.phone || "");
       setBirthDate(user.birth_date || "");
       setGender(user.gender || "");
+      setAddress(user.address || "");
       setCity(user.city || "");
       setCountry(user.country || "");
       setOccupation(user.occupation || "");
+      setLearningGoal(user.learning_goal || "");
+      setLanguageLevel(user.language_level || "");
     }
   }, [user]);
 
@@ -97,8 +115,19 @@ export default function SettingsPage() {
     }
 
     // Load notification settings
-    const emailNotif = localStorage.getItem("emailNotifications");
-    setEmailNotifications(emailNotif !== null ? emailNotif === "true" : true);
+    const settings = {
+      emailNotifications: localStorage.getItem("emailNotifications"),
+      pushNotifications: localStorage.getItem("pushNotifications"),
+      studyReminder: localStorage.getItem("studyReminder"),
+      progressNotifications: localStorage.getItem("progressNotifications"),
+      weeklyReport: localStorage.getItem("weeklyReport"),
+    };
+
+    setEmailNotifications(settings.emailNotifications !== null ? settings.emailNotifications === "true" : true);
+    setPushNotifications(settings.pushNotifications !== null ? settings.pushNotifications === "true" : false);
+    setStudyReminder(settings.studyReminder !== null ? settings.studyReminder === "true" : true);
+    setProgressNotifications(settings.progressNotifications !== null ? settings.progressNotifications === "true" : true);
+    setWeeklyReport(settings.weeklyReport !== null ? settings.weeklyReport === "true" : true);
   }, []);
 
   const showMessage = (msg: string, type: "success" | "error" = "success") => {
@@ -118,9 +147,12 @@ export default function SettingsPage() {
         phone,
         birth_date: birthDate,
         gender,
+        address,
         city,
         country,
         occupation,
+        learning_goal: learningGoal,
+        language_level: languageLevel,
       });
       showMessage("Cập nhật thông tin cá nhân thành công!", "success");
     } catch (error) {
@@ -181,9 +213,57 @@ export default function SettingsPage() {
     }
   };
 
-  const handleEmailNotificationsChange = (checked: boolean) => {
-    setEmailNotifications(checked);
-    localStorage.setItem("emailNotifications", checked.toString());
+  // Settings handlers
+  const handleSettingChange = (setting: string, value: boolean) => {
+    localStorage.setItem(setting, value.toString());
+    switch (setting) {
+      case "emailNotifications":
+        setEmailNotifications(value);
+        break;
+      case "pushNotifications":
+        setPushNotifications(value);
+        break;
+      case "studyReminder":
+        setStudyReminder(value);
+        break;
+      case "progressNotifications":
+        setProgressNotifications(value);
+        break;
+      case "weeklyReport":
+        setWeeklyReport(value);
+        break;
+    }
+  };
+
+  const handleExportData = async () => {
+    try {
+      // TODO: Implement actual data export
+      const userData = {
+        profile: user,
+        settings: {
+          emailNotifications,
+          pushNotifications,
+          studyReminder,
+          progressNotifications,
+          weeklyReport,
+          darkMode,
+        },
+        exportDate: new Date().toISOString(),
+      };
+
+      const dataStr = JSON.stringify(userData, null, 2);
+      const dataBlob = new Blob([dataStr], { type: "application/json" });
+      const url = URL.createObjectURL(dataBlob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `vocab-data-${new Date().toISOString().split("T")[0]}.json`;
+      link.click();
+      URL.revokeObjectURL(url);
+
+      showMessage("Xuất dữ liệu thành công!", "success");
+    } catch (error) {
+      showMessage("Có lỗi xảy ra khi xuất dữ liệu.", "error");
+    }
   };
 
   if (!user) {
@@ -207,7 +287,7 @@ export default function SettingsPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <div className="container mx-auto px-4 py-8 max-w-6xl">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-800 dark:text-white mb-2">
             Cài đặt tài khoản
@@ -227,16 +307,17 @@ export default function SettingsPage() {
           </div>
         )}
 
-        <Tabs defaultValue="profile" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="profile">Hồ sơ</TabsTrigger>
+        <Tabs defaultValue="personal" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-5">
+            <TabsTrigger value="personal">Cá nhân</TabsTrigger>
+            <TabsTrigger value="learning">Học tập</TabsTrigger>
             <TabsTrigger value="security">Bảo mật</TabsTrigger>
             <TabsTrigger value="preferences">Tùy chọn</TabsTrigger>
-            <TabsTrigger value="account">Tài khoản</TabsTrigger>
+            <TabsTrigger value="data">Dữ liệu</TabsTrigger>
           </TabsList>
 
-          {/* Profile Tab */}
-          <TabsContent value="profile" className="space-y-6">
+          {/* Personal Info Tab */}
+          <TabsContent value="personal" className="space-y-6">
             <Card className="bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-slate-100">
@@ -273,6 +354,9 @@ export default function SettingsPage() {
                       Đổi ảnh đại diện
                     </Button>
                   </div>
+                  <Badge variant="default">
+                    {user.user_metadata?.language_level || "Beginner"}
+                  </Badge>
                 </div>
 
                 <Separator />
@@ -404,10 +488,74 @@ export default function SettingsPage() {
                     </div>
                   </div>
 
+                  <div className="space-y-2">
+                    <Label htmlFor="address">Địa chỉ</Label>
+                    <Input
+                      id="address"
+                      value={address}
+                      onChange={(e) => setAddress(e.target.value)}
+                      placeholder="123 Đường ABC, Quận XYZ"
+                    />
+                  </div>
+
                   <Button type="submit" disabled={loading} className="w-full md:w-auto">
                     {loading ? "Đang cập nhật..." : "Cập nhật thông tin"}
                   </Button>
                 </form>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Learning Tab */}
+          <TabsContent value="learning" className="space-y-6">
+            <Card className="bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-slate-100">
+                  <BookOpen className="w-5 h-5" />
+                  Cài đặt học tập
+                </CardTitle>
+                <CardDescription>
+                  Cá nhân hóa trải nghiệm học tập của bạn
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="languageLevel">Trình độ tiếng Anh</Label>
+                    <Select value={languageLevel} onValueChange={setLanguageLevel}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Chọn trình độ" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="beginner">Beginner (A1-A2)</SelectItem>
+                        <SelectItem value="intermediate">Intermediate (B1-B2)</SelectItem>
+                        <SelectItem value="advanced">Advanced (C1-C2)</SelectItem>
+                        <SelectItem value="native">Native Speaker</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="learningGoal">Mục tiêu học tập</Label>
+                    <div className="relative">
+                      <Target className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                      <Input
+                        id="learningGoal"
+                        value={learningGoal}
+                        onChange={(e) => setLearningGoal(e.target.value)}
+                        placeholder="TOEIC, IELTS, giao tiếp hàng ngày..."
+                        className="pl-10"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <Button 
+                  onClick={() => updateProfile({ learning_goal: learningGoal, language_level: languageLevel })}
+                  disabled={loading}
+                  className="w-full md:w-auto"
+                >
+                  {loading ? "Đang cập nhật..." : "Cập nhật mục tiêu học tập"}
+                </Button>
               </CardContent>
             </Card>
           </TabsContent>
@@ -418,10 +566,10 @@ export default function SettingsPage() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-slate-100">
                   <Lock className="w-5 h-5" />
-                  Đổi mật khẩu
+                  Bảo mật tài khoản
                 </CardTitle>
                 <CardDescription>
-                  Cập nhật mật khẩu để bảo mật tài khoản
+                  Cập nhật mật khẩu và cài đặt bảo mật
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -465,6 +613,39 @@ export default function SettingsPage() {
                 </form>
               </CardContent>
             </Card>
+
+            <Card className="bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-slate-100">
+                  <Shield className="w-5 h-5" />
+                  Cài đặt bảo mật khác
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label>Xác thực 2 lớp</Label>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      Thêm lớp bảo mật cho tài khoản
+                    </p>
+                  </div>
+                  <Button variant="outline" size="sm">
+                    Thiết lập
+                  </Button>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label>Phiên đăng nhập</Label>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      Quản lý các thiết bị đã đăng nhập
+                    </p>
+                  </div>
+                  <Button variant="outline" size="sm">
+                    Xem chi tiết
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           {/* Preferences Tab */}
@@ -490,7 +671,59 @@ export default function SettingsPage() {
                   <Switch
                     id="email-notifications"
                     checked={emailNotifications}
-                    onCheckedChange={handleEmailNotificationsChange}
+                    onCheckedChange={(checked) => handleSettingChange("emailNotifications", checked)}
+                  />
+                </div>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label htmlFor="push-notifications">Thông báo đẩy</Label>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      Nhận thông báo đẩy trên trình duyệt
+                    </p>
+                  </div>
+                  <Switch
+                    id="push-notifications"
+                    checked={pushNotifications}
+                    onCheckedChange={(checked) => handleSettingChange("pushNotifications", checked)}
+                  />
+                </div>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label htmlFor="study-reminder">Nhắc nhở học tập</Label>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      Nhận nhắc nhở học tập hàng ngày
+                    </p>
+                  </div>
+                  <Switch
+                    id="study-reminder"
+                    checked={studyReminder}
+                    onCheckedChange={(checked) => handleSettingChange("studyReminder", checked)}
+                  />
+                </div>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label htmlFor="progress-notifications">Thông báo tiến độ</Label>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      Nhận thông báo về milestone và achievement
+                    </p>
+                  </div>
+                  <Switch
+                    id="progress-notifications"
+                    checked={progressNotifications}
+                    onCheckedChange={(checked) => handleSettingChange("progressNotifications", checked)}
+                  />
+                </div>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label htmlFor="weekly-report">Báo cáo tuần</Label>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      Nhận báo cáo tiến độ học tập hàng tuần
+                    </p>
+                  </div>
+                  <Switch
+                    id="weekly-report"
+                    checked={weeklyReport}
+                    onCheckedChange={(checked) => handleSettingChange("weeklyReport", checked)}
                   />
                 </div>
               </CardContent>
@@ -522,48 +755,57 @@ export default function SettingsPage() {
             </Card>
           </TabsContent>
 
-          {/* Account Tab */}
-          <TabsContent value="account" className="space-y-6">
+          {/* Data Tab */}
+          <TabsContent value="data" className="space-y-6">
             <Card className="bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-slate-100">
-                  <User className="w-5 h-5" />
-                  Quản lý tài khoản
+                  <Database className="w-5 h-5" />
+                  Quản lý dữ liệu
                 </CardTitle>
                 <CardDescription>
-                  Các tùy chọn về tài khoản của bạn
+                  Xuất, nhập hoặc xóa dữ liệu của bạn
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="p-4 border border-blue-200 dark:border-blue-800 rounded-lg bg-blue-50 dark:bg-blue-900/20">
-                  <h4 className="font-medium text-blue-900 dark:text-blue-100 mb-2">
-                    Thông tin tài khoản
-                  </h4>
-                  <div className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
-                    <p><strong>Email:</strong> {user.email}</p>
-                    <p><strong>Ngày tạo:</strong> {new Date().toLocaleDateString('vi-VN')}</p>
-                    <p><strong>Trạng thái:</strong> Đã xác thực</p>
-                  </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Button variant="outline" onClick={handleExportData} className="flex items-center gap-2">
+                    <Download className="w-4 h-4" />
+                    Xuất dữ liệu học tập
+                  </Button>
+                  <Button variant="outline" className="flex items-center gap-2">
+                    <Upload className="w-4 h-4" />
+                    Nhập từ vựng từ file
+                  </Button>
+                  <Button variant="outline" className="flex items-center gap-2">
+                    <Database className="w-4 h-4" />
+                    Sao lưu tiến độ
+                  </Button>
+                  <Button variant="outline" className="flex items-center gap-2">
+                    <Download className="w-4 h-4" />
+                    Khôi phục dữ liệu
+                  </Button>
                 </div>
 
                 <Separator />
 
                 <div className="space-y-4">
-                  <h4 className="font-semibold text-red-600 dark:text-red-400">
+                  <h4 className="font-semibold text-red-600 dark:text-red-400 flex items-center gap-2">
+                    <Trash2 className="w-4 h-4" />
                     Vùng nguy hiểm
                   </h4>
                   <div className="flex items-center justify-between p-4 border border-red-200 dark:border-red-800 rounded-lg bg-red-50 dark:bg-red-900/10">
                     <div>
                       <p className="font-medium text-gray-900 dark:text-slate-100">
-                        Đăng xuất
+                        Xóa tài khoản
                       </p>
                       <p className="text-sm text-gray-600 dark:text-slate-400">
-                        Đăng xuất khỏi tài khoản trên thiết bị này
+                        Xóa vĩnh viễn tài khoản và toàn bộ dữ liệu
                       </p>
                     </div>
-                    <Button variant="outline" onClick={handleLogout}>
-                      <LogOut className="w-4 h-4 mr-2" />
-                      Đăng xuất
+                    <Button variant="destructive" className="flex items-center gap-2">
+                      <Trash2 className="w-4 h-4" />
+                      Xóa tài khoản
                     </Button>
                   </div>
                 </div>
@@ -571,6 +813,26 @@ export default function SettingsPage() {
             </Card>
           </TabsContent>
         </Tabs>
+
+        {/* Logout Card */}
+        <Card className="mt-8 bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700">
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="font-semibold text-gray-900 dark:text-slate-100">
+                  Đăng xuất
+                </h3>
+                <p className="text-sm text-gray-600 dark:text-slate-400">
+                  Đăng xuất khỏi tài khoản trên thiết bị này
+                </p>
+              </div>
+              <Button variant="outline" onClick={handleLogout} className="flex items-center gap-2">
+                <LogOut className="w-4 h-4" />
+                Đăng xuất
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
