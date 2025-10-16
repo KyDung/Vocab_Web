@@ -38,7 +38,10 @@ import {
   Briefcase,
   MapPin,
   Globe,
+  Check,
+  AlertCircle,
 } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 
 export default function SettingsPage() {
@@ -101,6 +104,53 @@ export default function SettingsPage() {
     setEmailNotifications(emailNotif !== null ? emailNotif === "true" : true);
   }, []);
 
+  // Password strength checker
+  const getPasswordStrength = (password: string) => {
+    let score = 0;
+    if (password.length >= 6) score += 1;
+    if (password.length >= 8) score += 1;
+    if (/[A-Z]/.test(password)) score += 1;
+    if (/[a-z]/.test(password)) score += 1;
+    if (/[0-9]/.test(password)) score += 1;
+    if (/[^A-Za-z0-9]/.test(password)) score += 1;
+    return score;
+  };
+
+  const getPasswordStrengthText = (score: number) => {
+    if (score <= 2) return { text: "Yếu", color: "text-red-500" };
+    if (score <= 3) return { text: "Trung bình", color: "text-yellow-500" };
+    if (score <= 4) return { text: "Mạnh", color: "text-blue-500" };
+    return { text: "Rất mạnh", color: "text-green-500" };
+  };
+
+  const getPasswordStrengthBar = (score: number) => {
+    const percentage = (score / 6) * 100;
+    let colorClass = "bg-red-500";
+    if (score > 2) colorClass = "bg-yellow-500";
+    if (score > 3) colorClass = "bg-blue-500";
+    if (score > 4) colorClass = "bg-green-500";
+    return { percentage, colorClass };
+  };
+
+  // Enhanced password validation
+  const validatePassword = (password: string) => {
+    const requirements = {
+      minLength: password.length >= 8,
+      hasUppercase: /[A-Z]/.test(password),
+      hasLowercase: /[a-z]/.test(password),
+      hasNumber: /[0-9]/.test(password),
+      hasSpecialChar: /[!@#$%^&*]/.test(password)
+    };
+
+    const isValid = Object.values(requirements).every(req => req === true);
+    
+    return { 
+      isValid, 
+      requirements,
+      score: getPasswordStrength(password)
+    };
+  };
+
   const showMessage = (msg: string, type: "success" | "error" = "success") => {
     setMessage(msg);
     setMessageType(type);
@@ -134,27 +184,69 @@ export default function SettingsPage() {
     e.preventDefault();
     setLoading(true);
 
+    // Basic validation
     if (newPassword !== confirmPassword) {
       showMessage("Mật khẩu xác nhận không khớp", "error");
       setLoading(false);
       return;
     }
 
-    if (newPassword.length < 6) {
-      showMessage("Mật khẩu mới phải có ít nhất 6 ký tự", "error");
+    // Enhanced password validation
+    const passwordValidation = validatePassword(newPassword);
+    if (!passwordValidation.isValid) {
+      showMessage("Mật khẩu mới chưa đạt yêu cầu bảo mật", "error");
       setLoading(false);
       return;
     }
 
     try {
-      // TODO: Implement actual password change with Supabase
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // Step 1: Verify current password without changing session
+      const currentUser = await supabase.auth.getUser();
+      if (!currentUser.data.user?.email) {
+        showMessage("Không thể xác minh người dùng", "error");
+        setLoading(false);
+        return;
+      }
+
+      // Try to sign in with current password to verify it
+      const { error: verifyError } = await supabase.auth.signInWithPassword({
+        email: currentUser.data.user.email,
+        password: currentPassword
+      });
+
+      if (verifyError) {
+        showMessage("Mật khẩu hiện tại không đúng", "error");
+        setLoading(false);
+        return;
+      }
+
+      // Step 2: Update password
+      const { error: updateError } = await supabase.auth.updateUser({
+        password: newPassword
+      });
+
+      if (updateError) {
+        // Handle specific Supabase errors
+        if (updateError.message.includes("Password should be at least")) {
+          showMessage("Mật khẩu phải có ít nhất 6 ký tự", "error");
+        } else if (updateError.message.includes("New password should be different")) {
+          showMessage("Mật khẩu mới phải khác mật khẩu hiện tại", "error");
+        } else {
+          showMessage(`Lỗi cập nhật mật khẩu: ${updateError.message}`, "error");
+        }
+        setLoading(false);
+        return;
+      }
+
+      // Success
       showMessage("Đổi mật khẩu thành công!", "success");
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
-    } catch (error) {
-      showMessage("Có lỗi xảy ra khi đổi mật khẩu.", "error");
+      
+    } catch (error: any) {
+      console.error("Password change error:", error);
+      showMessage("Có lỗi không mong muốn xảy ra. Vui lòng thử lại.", "error");
     } finally {
       setLoading(false);
     }
@@ -444,9 +536,45 @@ export default function SettingsPage() {
                       type="password"
                       value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}
-                      placeholder="Nhập mật khẩu mới"
+                      placeholder="Nhập mật khẩu mới (tối thiểu 6 ký tự)"
                       required
                     />
+                    {newPassword && (
+                      <div className="space-y-2">
+                        <div className="flex justify-between items-center text-sm">
+                          <span className="text-gray-600 dark:text-gray-400">Độ mạnh mật khẩu:</span>
+                          <span className={getPasswordStrengthText(getPasswordStrength(newPassword)).color}>
+                            {getPasswordStrengthText(getPasswordStrength(newPassword)).text}
+                          </span>
+                        </div>
+                        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                          <div 
+                            className={`h-2 rounded-full transition-all duration-300 ${getPasswordStrengthBar(getPasswordStrength(newPassword)).colorClass}`}
+                            style={{ width: `${getPasswordStrengthBar(getPasswordStrength(newPassword)).percentage}%` }}
+                          ></div>
+                        </div>
+                        <div className="text-xs text-gray-500 dark:text-gray-400 space-y-1">
+                          <p>Để có mật khẩu mạnh hơn, hãy bao gồm:</p>
+                          <ul className="ml-4 space-y-0.5">
+                            <li className={validatePassword(newPassword).requirements.minLength ? "text-green-600" : "text-gray-400"}>
+                              ✓ Ít nhất 8 ký tự
+                            </li>
+                            <li className={validatePassword(newPassword).requirements.hasUppercase ? "text-green-600" : "text-gray-400"}>
+                              ✓ Chữ hoa (A-Z)
+                            </li>
+                            <li className={validatePassword(newPassword).requirements.hasLowercase ? "text-green-600" : "text-gray-400"}>
+                              ✓ Chữ thường (a-z)
+                            </li>
+                            <li className={validatePassword(newPassword).requirements.hasNumber ? "text-green-600" : "text-gray-400"}>
+                              ✓ Số (0-9)
+                            </li>
+                            <li className={validatePassword(newPassword).requirements.hasSpecialChar ? "text-green-600" : "text-gray-400"}>
+                              ✓ Ký tự đặc biệt (!@#$%^&*)
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="confirmPassword">Xác nhận mật khẩu mới</Label>
@@ -458,9 +586,32 @@ export default function SettingsPage() {
                       placeholder="Nhập lại mật khẩu mới"
                       required
                     />
+                    {confirmPassword && newPassword && confirmPassword !== newPassword && (
+                      <p className="text-sm text-red-500 flex items-center gap-1">
+                        <AlertCircle className="w-4 h-4" />
+                        Mật khẩu xác nhận không khớp
+                      </p>
+                    )}
+                    {confirmPassword && newPassword && confirmPassword === newPassword && confirmPassword.length > 0 && (
+                      <p className="text-sm text-green-600 flex items-center gap-1">
+                        <Check className="w-4 h-4" />
+                        Mật khẩu khớp
+                      </p>
+                    )}
                   </div>
-                  <Button type="submit" disabled={loading}>
-                    {loading ? "Đang cập nhật..." : "Đổi mật khẩu"}
+                  <Button 
+                    type="submit" 
+                    disabled={loading || !currentPassword || !newPassword || !confirmPassword || newPassword !== confirmPassword || !validatePassword(newPassword).isValid}
+                    className="w-full md:w-auto"
+                  >
+                    {loading ? (
+                      <div className="flex items-center gap-2">
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        Đang cập nhật...
+                      </div>
+                    ) : (
+                      "Đổi mật khẩu"
+                    )}
                   </Button>
                 </form>
               </CardContent>
