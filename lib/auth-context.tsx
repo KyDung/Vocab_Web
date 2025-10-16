@@ -15,9 +15,29 @@ interface User {
   name: string;
   email: string;
   avatar?: string;
+  bio?: string;
+  phone?: string;
+  birth_date?: string;
+  gender?: string;
+  address?: string;
+  city?: string;
+  country?: string;
+  occupation?: string;
+  learning_goal?: string;
+  language_level?: string;
   user_metadata?: {
     full_name?: string;
     avatar_url?: string;
+    bio?: string;
+    phone?: string;
+    birth_date?: string;
+    gender?: string;
+    address?: string;
+    city?: string;
+    country?: string;
+    occupation?: string;
+    learning_goal?: string;
+    language_level?: string;
   };
 }
 
@@ -37,6 +57,16 @@ interface AuthContextType {
   updateProfile: (data: {
     name?: string;
     avatar_url?: string;
+    bio?: string;
+    phone?: string;
+    birth_date?: string;
+    gender?: string;
+    address?: string;
+    city?: string;
+    country?: string;
+    occupation?: string;
+    learning_goal?: string;
+    language_level?: string;
   }) => Promise<void>;
   loginWithGoogle: () => Promise<void>;
 }
@@ -89,11 +119,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         generateAvatarPlaceholder(
           supabaseUser.user_metadata?.name || supabaseUser.email || "U"
         ),
+      bio: supabaseUser.user_metadata?.bio,
+      phone: supabaseUser.user_metadata?.phone,
+      birth_date: supabaseUser.user_metadata?.birth_date,
+      gender: supabaseUser.user_metadata?.gender,
+      address: supabaseUser.user_metadata?.address,
+      city: supabaseUser.user_metadata?.city,
+      country: supabaseUser.user_metadata?.country,
+      occupation: supabaseUser.user_metadata?.occupation,
+      learning_goal: supabaseUser.user_metadata?.learning_goal,
+      language_level: supabaseUser.user_metadata?.language_level,
       user_metadata: {
         full_name:
           supabaseUser.user_metadata?.full_name ||
           supabaseUser.user_metadata?.name,
         avatar_url: supabaseUser.user_metadata?.avatar_url,
+        bio: supabaseUser.user_metadata?.bio,
+        phone: supabaseUser.user_metadata?.phone,
+        birth_date: supabaseUser.user_metadata?.birth_date,
+        gender: supabaseUser.user_metadata?.gender,
+        address: supabaseUser.user_metadata?.address,
+        city: supabaseUser.user_metadata?.city,
+        country: supabaseUser.user_metadata?.country,
+        occupation: supabaseUser.user_metadata?.occupation,
+        learning_goal: supabaseUser.user_metadata?.learning_goal,
+        language_level: supabaseUser.user_metadata?.language_level,
       },
     };
   };
@@ -303,6 +353,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const updateProfile = async (data: {
     name?: string;
     avatar_url?: string;
+    bio?: string;
+    phone?: string;
+    birth_date?: string;
+    gender?: string;
+    address?: string;
+    city?: string;
+    country?: string;
+    occupation?: string;
+    learning_goal?: string;
+    language_level?: string;
   }) => {
     if (!user) return;
 
@@ -311,6 +371,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         name: data.name,
         full_name: data.name,
         avatar_url: data.avatar_url,
+        bio: data.bio,
+        phone: data.phone,
+        birth_date: data.birth_date,
+        gender: data.gender,
+        address: data.address,
+        city: data.city,
+        country: data.country,
+        occupation: data.occupation,
+        learning_goal: data.learning_goal,
+        language_level: data.language_level,
       },
     });
 
@@ -321,10 +391,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const updatedUser = {
       ...user,
       name: data.name || user.name,
+      bio: data.bio || user.bio,
+      phone: data.phone || user.phone,
+      birth_date: data.birth_date || user.birth_date,
+      gender: data.gender || user.gender,
+      address: data.address || user.address,
+      city: data.city || user.city,
+      country: data.country || user.country,
+      occupation: data.occupation || user.occupation,
+      learning_goal: data.learning_goal || user.learning_goal,
+      language_level: data.language_level || user.language_level,
       user_metadata: {
         ...user.user_metadata,
         full_name: data.name || user.user_metadata?.full_name,
         avatar_url: data.avatar_url || user.user_metadata?.avatar_url,
+        bio: data.bio || user.user_metadata?.bio,
+        phone: data.phone || user.user_metadata?.phone,
+        birth_date: data.birth_date || user.user_metadata?.birth_date,
+        gender: data.gender || user.user_metadata?.gender,
+        address: data.address || user.user_metadata?.address,
+        city: data.city || user.user_metadata?.city,
+        country: data.country || user.user_metadata?.country,
+        occupation: data.occupation || user.user_metadata?.occupation,
+        learning_goal: data.learning_goal || user.user_metadata?.learning_goal,
+        language_level: data.language_level || user.user_metadata?.language_level,
       },
     };
     setUser(updatedUser);
