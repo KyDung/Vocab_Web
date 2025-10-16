@@ -707,7 +707,7 @@ export default function TopicsPage() {
               <div className="relative max-w-2xl w-full">
                 <div className="relative overflow-hidden rounded-2xl shadow-2xl transform hover:scale-105 transition-transform duration-300">
                   <img
-                    src="/vocab_topic.png"
+                    src="/vocab_topic.jpg"
                     alt="Vocabulary Topics"
                     className="w-full h-64 md:h-80 object-cover"
                     onError={(e) => {
