@@ -36,6 +36,7 @@ import {
   CreditCard,
   BookOpen,
   Star,
+  Target,
 } from "lucide-react";
 import { WordEvaluation } from "@/components/word-evaluation";
 import { WordCardSkeleton, WordListSkeleton } from "@/components/ui/skeleton";
@@ -800,51 +801,99 @@ export default function OxfordPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      {/* Hero Banner */}
-      <div className="relative overflow-hidden bg-gradient-to-r from-blue-600 to-indigo-700 dark:from-blue-800 dark:to-indigo-900 py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="text-white">
-              <div className="inline-flex items-center px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-sm font-medium mb-4">
-                <BookOpen className="w-4 h-4 mr-2" />
-                Oxford Vocabulary
+      {/* Hero Banner - Asymmetric Layout for Diversity */}
+      <div className="relative overflow-hidden bg-gradient-to-tr from-amber-500 via-orange-600 to-red-600 dark:from-amber-800 dark:via-orange-900 dark:to-red-900 py-24">
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0">
+          <div className="absolute top-10 left-10 w-32 h-32 bg-white/5 rounded-full animate-pulse"></div>
+          <div className="absolute bottom-20 right-20 w-24 h-24 bg-white/5 rounded-full animate-pulse delay-300"></div>
+          <div className="absolute top-1/2 left-1/4 w-16 h-16 bg-white/5 rounded-full animate-pulse delay-700"></div>
+        </div>
+        
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
+            {/* Left Side - Text Content (2/3 width) */}
+            <div className="lg:col-span-2 text-white">
+              <div className="flex items-center space-x-4 mb-6">
+                <div className="flex items-center px-4 py-2 bg-white/15 backdrop-blur-sm rounded-full text-sm font-medium border border-white/20">
+                  <BookOpen className="w-4 h-4 mr-2" />
+                  Oxford Vocabulary
+                </div>
+                <Badge variant="secondary" className="bg-white/20 text-white border-white/30">
+                  Premium Quality
+                </Badge>
               </div>
-              <h1 className="text-4xl md:text-6xl font-bold mb-6">
-                📚 Oxford Vocabulary
+              
+              <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+                � Oxford
+                <br />
+                <span className="text-yellow-200">Vocabulary</span>
               </h1>
-              <p className="text-xl text-white/90 mb-8 leading-relaxed">
+              
+              <p className="text-xl text-white/90 mb-8 leading-relaxed max-w-2xl">
                 Khám phá{" "}
                 {oxfordWords.length > 0
                   ? oxfordWords.length.toLocaleString()
                   : "3000+"}{" "}
-                từ vựng tiếng Anh với hình ảnh và phát âm
+                từ vựng tiếng Anh chất lượng cao với hình ảnh sinh động và phát âm chuẩn
               </p>
-              <div className="flex gap-4">
-                <div className="bg-white/20 backdrop-blur-sm text-white px-6 py-3 rounded-lg font-semibold">
-                  <Star className="w-5 h-5 mr-2 inline" />
+              
+              {/* Feature List */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                <div className="flex items-center text-white/90">
+                  <Star className="w-5 h-5 mr-3 text-yellow-300" />
                   Từ vựng chất lượng cao
+                </div>
+                <div className="flex items-center text-white/90">
+                  <Volume2 className="w-5 h-5 mr-3 text-yellow-300" />
+                  Phát âm chuẩn xác
+                </div>
+                <div className="flex items-center text-white/90">
+                  <BookOpen className="w-5 h-5 mr-3 text-yellow-300" />
+                  Ví dụ thực tế
+                </div>
+                <div className="flex items-center text-white/90">
+                  <Target className="w-5 h-5 mr-3 text-yellow-300" />
+                  Hình ảnh minh họa
                 </div>
               </div>
             </div>
-            <div className="relative">
-              <div className="relative overflow-hidden rounded-2xl shadow-2xl">
-                <img
-                  src="/oxford-banner.jpg"
-                  alt="Oxford Vocabulary"
-                  className="w-full h-80 object-cover"
-                  onError={(e) => {
-                    e.currentTarget.src =
-                      "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDQwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yMDAgMTUwQzIxMS4wNDYgMTUwIDIyMCAxNDAuNDkzIDIyMCAxMjguNjM2QzIyMCAxMTYuNzc5IDIxMS4wNDYgMTA3LjI3MyAyMDAgMTA3LjI3M0MxODguOTU0IDEwNy4yNzMgMTgwIDExNi43NzkgMTgwIDEyOC42MzZDMTgwIDE0MC40OTMgMTg4Ljk1NCAxNTAgMjAwIDE1MFoiIGZpbGw9IiM5Q0EzQUYiLz4KPHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4PSIxODgiIHk9IjEzOCI+CjxwYXRoIGQ9Ik0xMiAyQzYuNDggMiAyIDYuNDggMiAxMlM2LjQ4IDIyIDEyIDIyIDIyIDE3LjUyIDIyIDEyIDE3LjUyIDIgMTIgMlpNMTMgMTdIMTFWMTVIMTNWMTdaTTEzIDEzSDExVjdIMTNWMTNaIiBmaWxsPSIjOUNBM0FGIi8+Cjwvc3ZnPgo8L3N2Zz4K";
-                  }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+            
+            {/* Right Side - Image (1/3 width) */}
+            <div className="lg:col-span-1">
+              <div className="relative">
+                <div className="relative overflow-hidden rounded-3xl shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-500">
+                  <img
+                    src="/oxford-dictionary-books-and-vocabulary-cards.jpg"
+                    alt="Oxford Dictionary and Vocabulary"
+                    className="w-full h-96 object-cover"
+                    onError={(e) => {
+                      e.currentTarget.src =
+                        "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDQwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yMDAgMTUwQzIxMS4wNDYgMTUwIDIyMCAxNDAuNDkzIDIyMCAxMjguNjM2QzIyMCAxMTYuNzc5IDIxMS4wNDYgMTA3LjI3MyAyMDAgMTA3LjI3M0MxODguOTU0IDEwNy4yNzMgMTgwIDExNi43NzkgMTgwIDEyOC42MzZDMTgwIDE0MC40OTMgMTg4Ljk1NCAxNTAgMjAwIDE1MFoiIGZpbGw9IiM5Q0EzQUYiLz4KPHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4PSIxODgiIHk9IjEzOCI+CjxwYXRoIGQ9Ik0xMiAyQzYuNDggMiAyIDYuNDggMiAxMlM2LjQ4IDIyIDEyIDIyIDIyIDE3LjUyIDIyIDEyIDE3LjUyIDIgMTIgMlpNMTMgMTdIMTFWMTVIMTNWMTdaTTEzIDEzSDExVjdIMTNWMTNaIiBmaWxsPSIjOUNBM0FGIi8+Cjwvc3ZnPgo8L3N2Zz4K";
+                    }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                  
+                  {/* Floating Stats */}
+                  <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm rounded-lg p-3 text-gray-800">
+                    <div className="text-2xl font-bold">3000+</div>
+                    <div className="text-xs">Từ vựng</div>
+                  </div>
+                  
+                  <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-lg p-3 text-gray-800">
+                    <div className="text-xl font-bold">⭐</div>
+                    <div className="text-xs">Oxford</div>
+                  </div>
+                </div>
+                
+                {/* Decorative elements */}
+                <div className="absolute -z-10 -top-4 -left-4 w-full h-full bg-gradient-to-br from-yellow-400/20 to-orange-400/20 rounded-3xl transform rotate-6"></div>
+                <div className="absolute -z-20 -top-8 -left-8 w-full h-full bg-gradient-to-br from-red-400/10 to-pink-400/10 rounded-3xl transform rotate-12"></div>
               </div>
-              {/* Decorative elements */}
-              <div className="absolute -top-4 -right-4 w-24 h-24 bg-white/10 rounded-full blur-xl"></div>
-              <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-white/10 rounded-full blur-xl"></div>
             </div>
           </div>
         </div>
+      </div>
 
         {/* Image loading indicator */}
         {imageLoadingCount > 0 && (

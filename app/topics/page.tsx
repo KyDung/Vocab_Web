@@ -677,44 +677,69 @@ export default function TopicsPage() {
   if (!selectedTopic) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-        {/* Hero Banner */}
-        <div className="relative overflow-hidden bg-gradient-to-r from-green-600 to-emerald-700 dark:from-green-800 dark:to-emerald-900 py-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div className="text-white">
-                <div className="inline-flex items-center px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-sm font-medium mb-4">
-                  <BookOpen className="w-4 h-4 mr-2" />
-                  Học theo chủ đề
-                </div>
-                <h1 className="text-4xl md:text-6xl font-bold mb-6">
-                  📚 Học theo chủ đề
-                </h1>
-                <p className="text-xl text-white/90 mb-8 leading-relaxed">
-                  Chọn chủ đề để học từ vựng một cách có hệ thống
-                </p>
-                <div className="flex gap-4">
-                  <div className="bg-white/20 backdrop-blur-sm text-white px-6 py-3 rounded-lg font-semibold">
-                    <Users className="w-5 h-5 mr-2 inline" />
-                    Học tập có hệ thống
-                  </div>
-                </div>
+        {/* Hero Banner - Vertical Layout for Diversity */}
+        <div className="relative overflow-hidden bg-gradient-to-br from-emerald-500 via-teal-600 to-cyan-700 dark:from-emerald-800 dark:via-teal-900 dark:to-cyan-900 py-16">
+          {/* Background Pattern */}
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
+          </div>
+          
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+            {/* Content in vertical layout with image on top */}
+            <div className="text-center text-white mb-8">
+              <div className="inline-flex items-center px-4 py-2 bg-white/15 backdrop-blur-sm rounded-full text-sm font-medium mb-6 border border-white/20">
+                <BookOpen className="w-4 h-4 mr-2" />
+                Học theo chủ đề
               </div>
-              <div className="relative">
-                <div className="relative overflow-hidden rounded-2xl shadow-2xl">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
+                📚 Học theo chủ đề
+              </h1>
+              <p className="text-xl text-white/90 mb-6 leading-relaxed max-w-2xl mx-auto">
+                Chọn chủ đề để học từ vựng một cách có hệ thống và hiệu quả
+              </p>
+            </div>
+            
+            {/* Banner Image - Centered */}
+            <div className="flex justify-center mb-8">
+              <div className="relative max-w-2xl w-full">
+                <div className="relative overflow-hidden rounded-2xl shadow-2xl transform hover:scale-105 transition-transform duration-300">
                   <img
-                    src="/topics-banner.jpg"
-                    alt="Topics Learning"
-                    className="w-full h-80 object-cover"
+                    src="/topic-based-learning-categories-with-colorful-icon.jpg"
+                    alt="Topic-based Learning"
+                    className="w-full h-64 md:h-80 object-cover"
                     onError={(e) => {
                       e.currentTarget.src =
                         "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDQwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yMDAgMTUwQzIxMS4wNDYgMTUwIDIyMCAxNDAuNDkzIDIyMCAxMjguNjM2QzIyMCAxMTYuNzc5IDIxMS4wNDYgMTA3LjI3MyAyMDAgMTA3LjI3M0MxODguOTU0IDEwNy4yNzMgMTgwIDExNi43NzkgMTgwIDEyOC42MzZDMTgwIDE0MC40OTMgMTg4Ljk1NCAxNTAgMjAwIDE1MFoiIGZpbGw9IiM5Q0EzQUYiLz4KPHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4PSIxODgiIHk9IjEzOCI+CjxwYXRoIGQ9Ik0xMiAyQzYuNDggMiAyIDYuNDggMiAxMlM2LjQ4IDIyIDEyIDIyIDIyIDE3LjUyIDIyIDEyIDE3LjUyIDIgMTIgMlpNMTMgMTdIMTFWMTVIMTNWMTdaTTEzIDEzSDExVjdIMTNWMTNaIiBmaWxsPSIjOUNBM0FGIi8+Cjwvc3ZnPgo8L3N2Zz4K";
                     }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+                  {/* Floating Icons */}
+                  <div className="absolute top-4 left-4 bg-white/20 backdrop-blur-sm rounded-full p-2">
+                    <Users className="w-5 h-5 text-white" />
+                  </div>
+                  <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm rounded-full p-2">
+                    <Target className="w-5 h-5 text-white" />
+                  </div>
                 </div>
-                {/* Decorative elements */}
-                <div className="absolute -top-4 -right-4 w-24 h-24 bg-white/10 rounded-full blur-xl"></div>
-                <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-white/10 rounded-full blur-xl"></div>
+                {/* Decorative elements around image */}
+                <div className="absolute -top-2 -left-2 w-16 h-16 bg-yellow-400/20 rounded-full blur-xl"></div>
+                <div className="absolute -bottom-2 -right-2 w-20 h-20 bg-pink-400/20 rounded-full blur-xl"></div>
+              </div>
+            </div>
+            
+            {/* Action Cards Row */}
+            <div className="flex flex-wrap justify-center gap-4 max-w-4xl mx-auto">
+              <div className="bg-white/10 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-semibold border border-white/20 flex items-center">
+                <Users className="w-5 h-5 mr-2" />
+                Học tập có hệ thống
+              </div>
+              <div className="bg-white/10 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-semibold border border-white/20 flex items-center">
+                <Target className="w-5 h-5 mr-2" />
+                25 chủ đề đa dạng
+              </div>
+              <div className="bg-white/10 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-semibold border border-white/20 flex items-center">
+                <BookOpen className="w-5 h-5 mr-2" />
+                Phương pháp hiệu quả
               </div>
             </div>
           </div>

@@ -77,16 +77,16 @@ export function AboutSection() {
                 </h4>
               </div>
               <div className="space-y-3">
-                <div className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-slate-700">
-                  <span className="font-medium text-gray-600 dark:text-slate-400">
+                <div className="flex items-center gap-3 py-2 border-b border-gray-100 dark:border-slate-700">
+                  <span className="font-medium text-gray-600 dark:text-slate-400 min-w-[60px]">
                     Khoa:
                   </span>
                   <span className="text-gray-900 dark:text-slate-200">
                     Công nghệ thông tin
                   </span>
                 </div>
-                <div className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-slate-700">
-                  <span className="font-medium text-gray-600 dark:text-slate-400">
+                <div className="flex items-center gap-3 py-2 border-b border-gray-100 dark:border-slate-700">
+                  <span className="font-medium text-gray-600 dark:text-slate-400 min-w-[60px]">
                     Lớp:
                   </span>
                   <span className="text-gray-900 dark:text-slate-200">
@@ -126,16 +126,16 @@ export function AboutSection() {
                 </h4>
               </div>
               <div className="space-y-3">
-                <div className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-slate-700">
-                  <span className="font-medium text-gray-600 dark:text-slate-400">
+                <div className="flex items-center gap-3 py-2 border-b border-gray-100 dark:border-slate-700">
+                  <span className="font-medium text-gray-600 dark:text-slate-400 min-w-[60px]">
                     Khoa:
                   </span>
                   <span className="text-gray-900 dark:text-slate-200">
                     Công nghệ thông tin
                   </span>
                 </div>
-                <div className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-slate-700">
-                  <span className="font-medium text-gray-600 dark:text-slate-400">
+                <div className="flex items-center gap-3 py-2 border-b border-gray-100 dark:border-slate-700">
+                  <span className="font-medium text-gray-600 dark:text-slate-400 min-w-[60px]">
                     Lớp:
                   </span>
                   <span className="text-gray-900 dark:text-slate-200">
