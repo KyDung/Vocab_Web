@@ -809,7 +809,7 @@ export default function OxfordPage() {
           <div className="absolute bottom-20 right-20 w-24 h-24 bg-white/5 rounded-full animate-pulse delay-300"></div>
           <div className="absolute top-1/2 left-1/4 w-16 h-16 bg-white/5 rounded-full animate-pulse delay-700"></div>
         </div>
-        
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
             {/* Left Side - Text Content (2/3 width) */}
@@ -819,25 +819,29 @@ export default function OxfordPage() {
                   <BookOpen className="w-4 h-4 mr-2" />
                   Oxford Vocabulary
                 </div>
-                <Badge variant="secondary" className="bg-white/20 text-white border-white/30">
+                <Badge
+                  variant="secondary"
+                  className="bg-white/20 text-white border-white/30"
+                >
                   Premium Quality
                 </Badge>
               </div>
-              
+
               <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
                 � Oxford
                 <br />
                 <span className="text-yellow-200">Vocabulary</span>
               </h1>
-              
+
               <p className="text-xl text-white/90 mb-8 leading-relaxed max-w-2xl">
                 Khám phá{" "}
                 {oxfordWords.length > 0
                   ? oxfordWords.length.toLocaleString()
                   : "3000+"}{" "}
-                từ vựng tiếng Anh chất lượng cao với hình ảnh sinh động và phát âm chuẩn
+                từ vựng tiếng Anh chất lượng cao với hình ảnh sinh động và phát
+                âm chuẩn
               </p>
-              
+
               {/* Feature List */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
                 <div className="flex items-center text-white/90">
@@ -858,7 +862,7 @@ export default function OxfordPage() {
                 </div>
               </div>
             </div>
-            
+
             {/* Right Side - Image (1/3 width) */}
             <div className="lg:col-span-1">
               <div className="relative">
@@ -873,19 +877,19 @@ export default function OxfordPage() {
                     }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-                  
+
                   {/* Floating Stats */}
                   <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm rounded-lg p-3 text-gray-800">
                     <div className="text-2xl font-bold">3000+</div>
                     <div className="text-xs">Từ vựng</div>
                   </div>
-                  
+
                   <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-lg p-3 text-gray-800">
                     <div className="text-xl font-bold">⭐</div>
                     <div className="text-xs">Oxford</div>
                   </div>
                 </div>
-                
+
                 {/* Decorative elements */}
                 <div className="absolute -z-10 -top-4 -left-4 w-full h-full bg-gradient-to-br from-yellow-400/20 to-orange-400/20 rounded-3xl transform rotate-6"></div>
                 <div className="absolute -z-20 -top-8 -left-8 w-full h-full bg-gradient-to-br from-red-400/10 to-pink-400/10 rounded-3xl transform rotate-12"></div>
@@ -893,7 +897,6 @@ export default function OxfordPage() {
             </div>
           </div>
         </div>
-      </div>
 
         {/* Image loading indicator */}
         {imageLoadingCount > 0 && (

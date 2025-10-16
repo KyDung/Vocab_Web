@@ -46,6 +46,7 @@ import {
   CreditCard,
   Users,
   Star,
+  Target,
 } from "lucide-react";
 import { WordEvaluation } from "@/components/word-evaluation";
 import {
@@ -683,7 +684,7 @@ export default function TopicsPage() {
           <div className="absolute inset-0 opacity-10">
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
           </div>
-          
+
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative">
             {/* Content in vertical layout with image on top */}
             <div className="text-center text-white mb-8">
@@ -698,7 +699,7 @@ export default function TopicsPage() {
                 Chọn chủ đề để học từ vựng một cách có hệ thống và hiệu quả
               </p>
             </div>
-            
+
             {/* Banner Image - Centered */}
             <div className="flex justify-center mb-8">
               <div className="relative max-w-2xl w-full">
@@ -726,7 +727,7 @@ export default function TopicsPage() {
                 <div className="absolute -bottom-2 -right-2 w-20 h-20 bg-pink-400/20 rounded-full blur-xl"></div>
               </div>
             </div>
-            
+
             {/* Action Cards Row */}
             <div className="flex flex-wrap justify-center gap-4 max-w-4xl mx-auto">
               <div className="bg-white/10 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-semibold border border-white/20 flex items-center">
