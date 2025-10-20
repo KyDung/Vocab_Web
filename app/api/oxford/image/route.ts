@@ -8,6 +8,8 @@ async function fetchUnsplash(term: string) {
   url.searchParams.set("per_page", "1");
   url.searchParams.set("orientation", "squarish");
 
+  console.log(`🔍 Fetching Unsplash image for: "${term}"`);
+
   const res = await fetch(url.toString(), {
     headers: {
       Authorization: `Client-ID ${process.env.UNSPLASH_ACCESS_KEY!}`,
@@ -15,10 +17,36 @@ async function fetchUnsplash(term: string) {
     },
     next: { revalidate: 60 * 60 }, // cache 1h
   });
-  if (!res.ok) throw new Error(`Unsplash ${res.status}`);
+
+  // Log rate limit info
+  const remaining = res.headers.get("X-Ratelimit-Remaining");
+  const limit = res.headers.get("X-Ratelimit-Limit");
+  console.log(
+    `📊 Unsplash rate limit: ${remaining}/${limit} remaining (Status: ${res.status})`
+  );
+
+  if (!res.ok) {
+    if (res.status === 403) {
+      console.error(`❌ Unsplash 403 Forbidden - Possible causes:
+        - API key invalid or expired
+        - Rate limit exceeded (${remaining}/${limit})
+        - Application not approved
+        - Key: ${process.env.UNSPLASH_ACCESS_KEY?.substring(0, 10)}...`);
+    }
+    throw new Error(`Unsplash ${res.status}: ${res.statusText}`);
+  }
+
   const data = await res.json();
   const hit = data?.results?.[0];
-  return hit?.urls?.small || hit?.urls?.regular || null;
+  const imageUrl = hit?.urls?.small || hit?.urls?.regular || null;
+
+  if (imageUrl) {
+    console.log(`✅ Found image for "${term}": ${imageUrl}`);
+  } else {
+    console.log(`⚠️ No image found for "${term}"`);
+  }
+
+  return imageUrl;
 }
 
 export async function POST(req: NextRequest) {

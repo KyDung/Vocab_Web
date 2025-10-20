@@ -308,13 +308,27 @@ export default function OxfordPage() {
       `Starting batch load for ${wordsWithoutImages.length} words without images`
     );
 
+    if (wordsWithoutImages.length === 0) {
+      console.log("✅ All words already have images");
+      return;
+    }
+
+    // Tăng delay để tiết kiệm quota
     for (let i = 0; i < wordsWithoutImages.length; i++) {
       const word = wordsWithoutImages[i];
+      
+      // Chỉ load ảnh cho 5 từ đầu tiên mỗi session để tiết kiệm quota
+      if (i >= 5) {
+        console.log(`⏸️ Pausing image loading after 5 words to preserve quota. Remaining: ${wordsWithoutImages.length - i}`);
+        break;
+      }
+      
       await autoLoadImage(word);
 
-      // Delay between requests to avoid rate limiting
-      if (i < wordsWithoutImages.length - 1) {
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // 1 second delay
+      // Tăng delay lên 3 giây để tránh rate limiting
+      if (i < wordsWithoutImages.length - 1 && i < 4) {
+        console.log(`⏳ Waiting 3 seconds before next image... (${i + 1}/5)`);
+        await new Promise((resolve) => setTimeout(resolve, 3000)); // 3 second delay
       }
     }
   };
