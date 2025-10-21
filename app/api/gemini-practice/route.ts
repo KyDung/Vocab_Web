@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-goog-api-key": "AIzaSyDBjGo2VNcCax-h_WHZZ2vuT85YWA0whVQ",
+          "X-goog-api-key": process.env.GEMINI_API_KEY || "",
         },
         body: JSON.stringify({
           contents: [
