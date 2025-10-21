@@ -48,10 +48,27 @@ Trả lời trực tiếp, không dài dòng.`,
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error("API Error response:", errorText);
-      throw new Error(
-        `HTTP error! status: ${response.status}, body: ${errorText}`
-      );
+      console.error("🚨 GEMINI PRACTICE API ERROR:", response.status, errorText);
+
+      let errorMessage = "Hệ thống AI phân tích từ vựng đang gặp sự cố. ";
+      
+      if (response.status === 429) {
+        errorMessage += "Đã vượt quá giới hạn sử dụng API.";
+        console.error("🚫 QUOTA EXCEEDED");
+      } else if (response.status === 403) {
+        errorMessage += "Không có quyền truy cập AI API.";
+        console.error("🚫 FORBIDDEN - Kiểm tra API key");
+      } else {
+        errorMessage += `Lỗi không xác định (${response.status}).`;
+      }
+
+      return NextResponse.json({
+        success: false,
+        error: errorMessage,
+        details: errorText,
+        geminiStatus: response.status,
+        timestamp: new Date().toISOString(),
+      }, { status: 503 });
     }
 
     const data = await response.json();
@@ -67,13 +84,23 @@ Trả lời trực tiếp, không dài dòng.`,
       throw new Error("Invalid response format from Gemini API");
     }
   } catch (error) {
-    console.error("Gemini API error:", error);
-    return NextResponse.json(
-      {
+    console.error("💥 GEMINI PRACTICE SYSTEM ERROR:", error);
+    
+    if (!process.env.GEMINI_API_KEY) {
+      console.error("🔑 MISSING GEMINI_API_KEY environment variable");
+      return NextResponse.json({
         success: false,
-        error: "Có lỗi xảy ra khi phân tích. Vui lòng thử lại!",
-      },
-      { status: 500 }
-    );
+        error: "Hệ thống AI chưa được cấu hình đúng. Thiếu API key.",
+        details: "GEMINI_API_KEY not found",
+        timestamp: new Date().toISOString(),
+      }, { status: 500 });
+    }
+    
+    return NextResponse.json({
+      success: false,
+      error: "Hệ thống AI phân tích gặp lỗi nghiêm trọng. Vui lòng liên hệ quản trị viên.",
+      details: error instanceof Error ? error.message : "Unknown error",
+      timestamp: new Date().toISOString(),
+    }, { status: 500 });
   }
 }

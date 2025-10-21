@@ -79,29 +79,36 @@ Trả lời trực tiếp, không bao bọc trong JSON, markdown hay code block.
 
     if (!geminiResponse.ok) {
       const errorText = await geminiResponse.text();
-      console.error("Gemini API Error:", errorText);
+      console.error("🚨 GEMINI API ERROR:", geminiResponse.status, errorText);
 
-      // Handle quota exceeded or API key issues
+      // Return specific error messages for different status codes
+      let errorMessage = "Hệ thống AI đánh giá đang gặp sự cố. ";
+      let errorDetails = "";
+
       if (geminiResponse.status === 429) {
-        // Quota exceeded - return a simple evaluation
-        console.log("Gemini quota exceeded, using fallback evaluation");
-        const hasWord = userInput.toLowerCase().includes(word.toLowerCase());
-        const evaluation: EvaluationResponse = {
-          passed: hasWord && userInput.trim().length > 3,
-          feedback: hasWord
-            ? `✅ Tốt! Bạn đã sử dụng từ "${word}" trong câu. (AI tạm thời không khả dụng)`
-            : `❌ Bạn chưa sử dụng từ "${word}" trong câu. Hãy thử viết lại câu có chứa từ này.`,
-          confidence: 0.5,
-        };
-
-        return NextResponse.json({
-          success: true,
-          evaluation: evaluation,
-          source: "fallback-simple",
-        });
+        errorMessage += "Đã vượt quá giới hạn sử dụng API.";
+        errorDetails = "Quota exceeded - cần nâng cấp hoặc đợi reset quota";
+        console.error("🚫 QUOTA EXCEEDED - Cần kiểm tra billing và quota");
+      } else if (geminiResponse.status === 403) {
+        errorMessage += "Không có quyền truy cập AI API.";
+        errorDetails = "API key invalid hoặc chưa enable billing";
+        console.error("🚫 FORBIDDEN - Kiểm tra API key và billing setup");
+      } else if (geminiResponse.status === 400) {
+        errorMessage += "Định dạng yêu cầu không hợp lệ.";
+        errorDetails = "Bad request format";
+        console.error("🚫 BAD REQUEST - Kiểm tra request format");
+      } else {
+        errorMessage += `Lỗi không xác định (${geminiResponse.status}).`;
+        errorDetails = errorText;
       }
 
-      throw new Error(`Gemini API failed: ${geminiResponse.status}`);
+      return NextResponse.json({
+        success: false,
+        error: errorMessage,
+        details: errorDetails,
+        geminiStatus: geminiResponse.status,
+        timestamp: new Date().toISOString(),
+      }, { status: 503 }); // Service Unavailable
     }
 
     const geminiData = await geminiResponse.json();
@@ -142,14 +149,24 @@ Trả lời trực tiếp, không bao bọc trong JSON, markdown hay code block.
       source: "gemini-ai",
     });
   } catch (error) {
-    console.error("AI Evaluation API Error:", error);
-    return NextResponse.json(
-      {
+    console.error("💥 AI EVALUATION SYSTEM ERROR:", error);
+    
+    // Check if it's missing API key
+    if (!process.env.GEMINI_API_KEY) {
+      console.error("🔑 MISSING GEMINI_API_KEY environment variable");
+      return NextResponse.json({
         success: false,
-        error: "Có lỗi xảy ra khi đánh giá. Vui lòng thử lại!",
-        details: error instanceof Error ? error.message : "Unknown error",
-      },
-      { status: 500 }
-    );
+        error: "Hệ thống AI chưa được cấu hình đúng. Thiếu API key.",
+        details: "GEMINI_API_KEY environment variable is missing",
+        timestamp: new Date().toISOString(),
+      }, { status: 500 });
+    }
+    
+    return NextResponse.json({
+      success: false,
+      error: "Hệ thống AI gặp lỗi nghiêm trọng. Vui lòng liên hệ quản trị viên.",
+      details: error instanceof Error ? error.message : "Unknown system error",
+      timestamp: new Date().toISOString(),
+    }, { status: 500 });
   }
 }
