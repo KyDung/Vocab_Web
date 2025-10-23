@@ -316,13 +316,17 @@ export default function OxfordPage() {
     // Tăng delay để tiết kiệm quota
     for (let i = 0; i < wordsWithoutImages.length; i++) {
       const word = wordsWithoutImages[i];
-      
+
       // Chỉ load ảnh cho 5 từ đầu tiên mỗi session để tiết kiệm quota
       if (i >= 5) {
-        console.log(`⏸️ Pausing image loading after 5 words to preserve quota. Remaining: ${wordsWithoutImages.length - i}`);
+        console.log(
+          `⏸️ Pausing image loading after 5 words to preserve quota. Remaining: ${
+            wordsWithoutImages.length - i
+          }`
+        );
         break;
       }
-      
+
       await autoLoadImage(word);
 
       // Tăng delay lên 3 giây để tránh rate limiting
@@ -681,11 +685,29 @@ export default function OxfordPage() {
           `✅ Updated word status for "${selectedWord.term}" to "${newStatus}" using string method`
         );
       } else {
-        setPracticeFeedback("Có lỗi xảy ra khi phân tích. Vui lòng thử lại!");
+        // Show detailed error message from API
+        const errorMessage =
+          evaluationData.error ||
+          "Có lỗi xảy ra khi phân tích. Vui lòng thử lại!";
+        const errorDetails = evaluationData.details
+          ? `\n\nChi tiết lỗi: ${evaluationData.details}`
+          : "";
+        const statusInfo = evaluationData.geminiStatus
+          ? `\n\nMã lỗi: ${evaluationData.geminiStatus}`
+          : "";
+
+        setPracticeFeedback(`${errorMessage}${errorDetails}${statusInfo}`);
+        setPracticeResult(false);
+        console.error("🚨 AI Evaluation Error:", evaluationData);
       }
     } catch (error) {
       console.error("Practice error:", error);
-      setPracticeFeedback("Có lỗi xảy ra khi phân tích. Vui lòng thử lại!");
+      setPracticeFeedback(
+        `Lỗi kết nối tới hệ thống AI. Vui lòng kiểm tra kết nối mạng và thử lại!\n\nChi tiết lỗi: ${
+          error instanceof Error ? error.message : "Unknown network error"
+        }`
+      );
+      setPracticeResult(false);
     } finally {
       setPracticeLoading(false);
     }

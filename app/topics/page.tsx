@@ -598,11 +598,29 @@ export default function TopicsPage() {
           `✅ Updated word status for "${selectedWord.term}" to "${newStatus}" using string method in Topics`
         );
       } else {
-        setPracticeFeedback("Có lỗi xảy ra khi phân tích. Vui lòng thử lại!");
+        // Show detailed error message from API
+        const errorMessage =
+          evaluationData.error ||
+          "Có lỗi xảy ra khi phân tích. Vui lòng thử lại!";
+        const errorDetails = evaluationData.details
+          ? `\n\nChi tiết lỗi: ${evaluationData.details}`
+          : "";
+        const statusInfo = evaluationData.geminiStatus
+          ? `\n\nMã lỗi: ${evaluationData.geminiStatus}`
+          : "";
+
+        setPracticeFeedback(`${errorMessage}${errorDetails}${statusInfo}`);
+        setPracticeResult(false);
+        console.error("🚨 AI Evaluation Error:", evaluationData);
       }
     } catch (error) {
       console.error("Practice error:", error);
-      setPracticeFeedback("Có lỗi xảy ra khi phân tích. Vui lòng thử lại!");
+      setPracticeFeedback(
+        `Lỗi kết nối tới hệ thống AI. Vui lòng kiểm tra kết nối mạng và thử lại!\n\nChi tiết lỗi: ${
+          error instanceof Error ? error.message : "Unknown network error"
+        }`
+      );
+      setPracticeResult(false);
     } finally {
       setPracticeLoading(false);
     }

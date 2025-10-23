@@ -102,13 +102,16 @@ Trả lời trực tiếp, không bao bọc trong JSON, markdown hay code block.
         errorDetails = errorText;
       }
 
-      return NextResponse.json({
-        success: false,
-        error: errorMessage,
-        details: errorDetails,
-        geminiStatus: geminiResponse.status,
-        timestamp: new Date().toISOString(),
-      }, { status: 503 }); // Service Unavailable
+      return NextResponse.json(
+        {
+          success: false,
+          error: errorMessage,
+          details: errorDetails,
+          geminiStatus: geminiResponse.status,
+          timestamp: new Date().toISOString(),
+        },
+        { status: 503 }
+      ); // Service Unavailable
     }
 
     const geminiData = await geminiResponse.json();
@@ -150,23 +153,31 @@ Trả lời trực tiếp, không bao bọc trong JSON, markdown hay code block.
     });
   } catch (error) {
     console.error("💥 AI EVALUATION SYSTEM ERROR:", error);
-    
+
     // Check if it's missing API key
     if (!process.env.GEMINI_API_KEY) {
       console.error("🔑 MISSING GEMINI_API_KEY environment variable");
-      return NextResponse.json({
-        success: false,
-        error: "Hệ thống AI chưa được cấu hình đúng. Thiếu API key.",
-        details: "GEMINI_API_KEY environment variable is missing",
-        timestamp: new Date().toISOString(),
-      }, { status: 500 });
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Hệ thống AI chưa được cấu hình đúng. Thiếu API key.",
+          details: "GEMINI_API_KEY environment variable is missing",
+          timestamp: new Date().toISOString(),
+        },
+        { status: 500 }
+      );
     }
-    
-    return NextResponse.json({
-      success: false,
-      error: "Hệ thống AI gặp lỗi nghiêm trọng. Vui lòng liên hệ quản trị viên.",
-      details: error instanceof Error ? error.message : "Unknown system error",
-      timestamp: new Date().toISOString(),
-    }, { status: 500 });
+
+    return NextResponse.json(
+      {
+        success: false,
+        error:
+          "Hệ thống AI gặp lỗi nghiêm trọng. Vui lòng liên hệ quản trị viên.",
+        details:
+          error instanceof Error ? error.message : "Unknown system error",
+        timestamp: new Date().toISOString(),
+      },
+      { status: 500 }
+    );
   }
 }

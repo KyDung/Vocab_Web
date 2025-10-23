@@ -1,8 +1,18 @@
+// Load environment variables
+require("dotenv").config({ path: ".env.local" });
+
 // Test Gemini API để kiểm tra quota và functionality
 const testGeminiAPI = async () => {
   console.log("🤖 Testing Gemini API...");
 
-  const apiKey = "AIzaSyDBjGo2VNcCax-h_WHZZ2vuT85YWA0whVQ";
+  // Đọc API key từ environment variable
+  const apiKey = process.env.GEMINI_API_KEY;
+
+  if (!apiKey) {
+    console.error("❌ GEMINI_API_KEY environment variable is not set!");
+    console.log("Please add GEMINI_API_KEY to your .env.local file");
+    return;
+  }
 
   try {
     console.log(
