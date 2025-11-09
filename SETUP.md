@@ -164,6 +164,11 @@ GOOGLE_SHEETS_SPREADSHEET_ID=your_sheet_id
 3. Set environment variables trên Vercel Dashboard
 4. Deploy!
 
+## 👥 Credits
+
+- **Full-Stack Development**: Xa Kỳ Trung Dũng (toàn bộ web application)
+- **Documentation & Analysis**: Chu Thị Việt Chinh (setup guides, reports, presentations)
+
 ---
 
 **Happy Coding! 🎉**

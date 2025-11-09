@@ -1,6 +1,6 @@
 # 📚 VocabApp - Ứng dụng học từ vựng tiếng Anh thông minh
 
-> **Đồ án tốt nghiệp** - Ứng dụng học từ vựng hiện đại với AI đánh giá và game tương tác
+> **Đồ án** - Ứng dụng học từ vựng hiện đại với AI đánh giá và game tương tác
 
 [![Next.js](https://img.shields.io/badge/Next.js-15.2.4-black?logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.2-blue?logo=typescript)](https://www.typescriptlang.org/)
@@ -149,10 +149,10 @@ docker run -p 3000:3000 vocabapp
 
 ## 👥 Đội ngũ phát triển
 
-| Tác giả                | Vai trò            | Liên hệ             |
-| ---------------------- | ------------------ | ------------------- |
-| **Xa Kỳ Trung Dũng**   | Frontend Developer | Kydung204@gmail.com |
-| **Chu Thị Việt Chinh** | Backend Developer  | [Updating...]       |
+| Tác giả                | Vai trò                            | Liên hệ             |
+| ---------------------- | ---------------------------------- | ------------------- |
+| **Xa Kỳ Trung Dũng**   | Full-Stack Developer (Toàn bộ web) | Kydung204@gmail.com |
+| **Chu Thị Việt Chinh** | Technical Writer (Báo cáo & PPTX)  | [Updating...]       |
 
 **Khoa:** Công nghệ Thông tin  
 **Trường:** [Tên trường]

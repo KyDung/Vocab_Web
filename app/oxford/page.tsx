@@ -39,6 +39,7 @@ import {
   Target,
 } from "lucide-react";
 import { WordEvaluation } from "@/components/word-evaluation";
+import autoImageLoader from "@/lib/auto-image-loader";
 import { WordCardSkeleton, WordListSkeleton } from "@/components/ui/skeleton";
 
 // Star Status Component
@@ -265,77 +266,78 @@ export default function OxfordPage() {
     Record<string, "mastered" | "learning" | "not-started">
   >({});
 
-  // Image loading tracking
-  const [imageLoadingCount, setImageLoadingCount] = useState(0);
+  // Auto loader status tracking
+  const [autoLoaderStatus, setAutoLoaderStatus] = useState<{
+    isRunning: boolean;
+    remainingImages: number;
+  }>({ isRunning: false, remainingImages: 0 });
 
-  // Auto-load image for a word
-  const autoLoadImage = async (word: Word) => {
-    if (word.image_url) return; // Already has image
+  // Initialize auto image loader and listen for events
+  useEffect(() => {
+    console.log("� Initializing auto image loader...");
 
-    try {
-      setImageLoadingCount((prev) => prev + 1);
-      console.log(`🖼️ Loading image for word: ${word.term}`);
+    // Start auto loader when component mounts
+    autoImageLoader.start();
 
-      const response = await fetch("/api/oxford/image", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ term: word.term }),
-      });
+    // Listen for image loading events
+    const handleImagesLoaded = (event: CustomEvent) => {
+      const { processed, remaining, results } = event.detail;
+      console.log(`📸 Auto-loaded ${processed} images, ${remaining} remaining`);
 
-      if (response.ok) {
-        const data = await response.json();
-        if (data.image_url) {
-          console.log(`✅ Image loaded for ${word.term}: ${data.image_url}`);
-          // Update filteredWords (since oxfordWords comes from context and is readonly)
-          setFilteredWords((prevWords) =>
-            prevWords.map((w) =>
-              w.id === word.id ? { ...w, image_url: data.image_url } : w
-            )
-          );
-        }
+      // Update filtered words with new images
+      if (results && results.length > 0) {
+        setFilteredWords((prevWords) => {
+          const updatedWords = [...prevWords];
+          results.forEach((result: any) => {
+            if (result.status === "success" && result.imageUrl) {
+              const wordIndex = updatedWords.findIndex(
+                (w) => w.term === result.term
+              );
+              if (wordIndex !== -1) {
+                updatedWords[wordIndex] = {
+                  ...updatedWords[wordIndex],
+                  image_url: result.imageUrl,
+                };
+              }
+            }
+          });
+          return updatedWords;
+        });
       }
-    } catch (error) {
-      console.error(`Failed to load image for ${word.term}:`, error);
-    } finally {
-      setImageLoadingCount((prev) => prev - 1);
-    }
-  };
 
-  // Batch load images with delay to avoid rate limiting
-  const batchLoadImages = async (words: Word[]) => {
-    const wordsWithoutImages = words.filter((w) => !w.image_url);
-    console.log(
-      `Starting batch load for ${wordsWithoutImages.length} words without images`
+      // Update status
+      setAutoLoaderStatus({
+        isRunning: autoImageLoader.isRunning(),
+        remainingImages: remaining,
+      });
+    };
+
+    window.addEventListener(
+      "imagesLoaded",
+      handleImagesLoaded as EventListener
     );
 
-    if (wordsWithoutImages.length === 0) {
-      console.log("✅ All words already have images");
-      return;
-    }
-
-    // Tăng delay để tiết kiệm quota
-    for (let i = 0; i < wordsWithoutImages.length; i++) {
-      const word = wordsWithoutImages[i];
-
-      // Chỉ load ảnh cho 5 từ đầu tiên mỗi session để tiết kiệm quota
-      if (i >= 5) {
-        console.log(
-          `⏸️ Pausing image loading after 5 words to preserve quota. Remaining: ${
-            wordsWithoutImages.length - i
-          }`
-        );
-        break;
+    // Update initial status
+    const updateStatus = async () => {
+      const status = await autoImageLoader.getStatus();
+      if (status) {
+        setAutoLoaderStatus({
+          isRunning: autoImageLoader.isRunning(),
+          remainingImages: status.remainingWords || 0,
+        });
       }
+    };
+    updateStatus();
 
-      await autoLoadImage(word);
-
-      // Tăng delay lên 3 giây để tránh rate limiting
-      if (i < wordsWithoutImages.length - 1 && i < 4) {
-        console.log(`⏳ Waiting 3 seconds before next image... (${i + 1}/5)`);
-        await new Promise((resolve) => setTimeout(resolve, 3000)); // 3 second delay
-      }
-    }
-  };
+    // Cleanup on unmount
+    return () => {
+      window.removeEventListener(
+        "imagesLoaded",
+        handleImagesLoaded as EventListener
+      );
+      // Note: Don't stop the auto loader on unmount - let it continue in background
+    };
+  }, []);
 
   // Simple word status loading - using string method
   const loadWordStatuses = async (wordsArray: Word[]) => {
@@ -548,19 +550,6 @@ export default function OxfordPage() {
     }
   }, [user, oxfordWords, oxfordLoading]); // React when user or words change - fixed to include oxfordWords array
 
-  // Auto-load images for words without images
-  useEffect(() => {
-    if (oxfordWords.length > 0) {
-      const wordsWithoutImages = oxfordWords.filter((w: Word) => !w.image_url);
-      if (wordsWithoutImages.length > 0) {
-        console.log(
-          `🖼️ Starting auto-load for ${wordsWithoutImages.length} words without images`
-        );
-        batchLoadImages(wordsWithoutImages);
-      }
-    }
-  }, [oxfordWords.length]); // Only run when oxford words are loaded
-
   // Filter and search logic
   useEffect(() => {
     let filtered = oxfordWords;
@@ -670,35 +659,63 @@ export default function OxfordPage() {
         }),
       });
 
+      // Check if the response is OK before parsing JSON
+      if (!evaluationResponse.ok) {
+        throw new Error(
+          `Server error: ${evaluationResponse.status} - ${evaluationResponse.statusText}`
+        );
+      }
+
       const evaluationData = await evaluationResponse.json();
+
+      // Check if response is valid
+      if (!evaluationData) {
+        throw new Error("Không nhận được phản hồi từ hệ thống AI");
+      }
 
       if (evaluationData.success) {
         const { passed, feedback } = evaluationData.evaluation;
         setPracticeFeedback(feedback);
         setPracticeResult(passed);
 
-        // Step 2: Update word status using string method
-        const newStatus = passed ? "mastered" : "learning";
-        await updateWordStatus(selectedWord.term, newStatus);
+        // Step 2: Update word status using string method (only if user is logged in)
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
 
-        console.log(
-          `✅ Updated word status for "${selectedWord.term}" to "${newStatus}" using string method`
-        );
+        if (session?.access_token) {
+          const newStatus = passed ? "mastered" : "learning";
+          await updateWordStatus(selectedWord.term, newStatus);
+
+          console.log(
+            `✅ Updated word status for "${selectedWord.term}" to "${newStatus}" using string method`
+          );
+        } else {
+          console.log(
+            `ℹ️ Practice completed for "${selectedWord.term}" but not saved (user not logged in)`
+          );
+        }
       } else {
         // Show detailed error message from API
         const errorMessage =
-          evaluationData.error ||
+          evaluationData?.error ||
           "Có lỗi xảy ra khi phân tích. Vui lòng thử lại!";
-        const errorDetails = evaluationData.details
+        const errorDetails = evaluationData?.details
           ? `\n\nChi tiết lỗi: ${evaluationData.details}`
           : "";
-        const statusInfo = evaluationData.geminiStatus
+        const statusInfo = evaluationData?.geminiStatus
           ? `\n\nMã lỗi: ${evaluationData.geminiStatus}`
           : "";
 
         setPracticeFeedback(`${errorMessage}${errorDetails}${statusInfo}`);
         setPracticeResult(false);
-        console.error("🚨 AI Evaluation Error:", evaluationData);
+
+        // Only log if there's meaningful error data
+        if (evaluationData && Object.keys(evaluationData).length > 0) {
+          console.error("🚨 AI Evaluation Error:", evaluationData);
+        } else {
+          console.error("🚨 AI Evaluation failed: Empty or invalid response");
+        }
       }
     } catch (error) {
       console.error("Practice error:", error);
@@ -867,7 +884,7 @@ export default function OxfordPage() {
               <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
                 Oxford
                 <br />
-                <span className="text-blue-200">Vocabulary</span>
+                <span className="text-white">Vocabulary</span>
               </h1>
 
               <p className="text-lg text-white/90 mb-6 leading-relaxed max-w-2xl">
@@ -935,11 +952,13 @@ export default function OxfordPage() {
           </div>
         </div>
 
-        {/* Image loading indicator */}
-        {imageLoadingCount > 0 && (
+        {/* Auto image loading indicator */}
+        {autoLoaderStatus.isRunning && autoLoaderStatus.remainingImages > 0 && (
           <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex items-center justify-center gap-2 text-sm text-white/80 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full">
             <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"></div>
-            <span>Đang tải ảnh cho {imageLoadingCount} từ...</span>
+            <span>
+              Đang tự động tải ảnh... Còn {autoLoaderStatus.remainingImages} từ
+            </span>
           </div>
         )}
       </div>

@@ -349,6 +349,19 @@ export function WordsProvider({ children }: { children: ReactNode }) {
     try {
       console.log("🔄 Computing topic stats...");
 
+      // ENSURE Oxford words are loaded first (auto-dependency)
+      if (oxfordWords.length === 0 && !oxfordLoading) {
+        console.log("📚 Oxford words not loaded - loading dependency first...");
+        await loadOxfordWords();
+
+        // Wait a bit for state to update
+        let retries = 0;
+        while (oxfordWords.length === 0 && retries < 10) {
+          await new Promise((resolve) => setTimeout(resolve, 100));
+          retries++;
+        }
+      }
+
       // Compute topic stats from Oxford words (should already be loaded)
       if (oxfordWords.length === 0) {
         console.warn(
@@ -466,17 +479,41 @@ export function WordsProvider({ children }: { children: ReactNode }) {
     console.log("🧹 Cache cleared");
   };
 
-  // Auto-load on mount
+  // Auto-load on mount - PRELOAD everything for all pages
   useEffect(() => {
+    console.log("🚀 WordsProvider mounted - Starting preload...");
     loadOxfordWords();
   }, []);
 
-  // Load topic stats after Oxford words are loaded
+  // Load topic stats after Oxford words are loaded - IMMEDIATE preload
   useEffect(() => {
     if (oxfordLoaded && oxfordWords.length > 0) {
+      console.log("📊 Oxford words loaded - Computing topic stats...");
       loadTopicStats();
     }
   }, [oxfordLoaded, oxfordWords.length]);
+
+  // ADDITIONAL: Force load if somehow missed (safety net)
+  useEffect(() => {
+    const forceLoadTimer = setTimeout(() => {
+      if (!oxfordLoaded && !oxfordLoading) {
+        console.log("⚡ Force loading Oxford words (safety net)...");
+        loadOxfordWords();
+      }
+      if (!topicStatsLoaded && !topicStatsLoading && oxfordWords.length > 0) {
+        console.log("⚡ Force loading topic stats (safety net)...");
+        loadTopicStats();
+      }
+    }, 2000); // After 2 seconds
+
+    return () => clearTimeout(forceLoadTimer);
+  }, [
+    oxfordLoaded,
+    oxfordLoading,
+    topicStatsLoaded,
+    topicStatsLoading,
+    oxfordWords.length,
+  ]);
 
   const value: WordsContextType = {
     oxfordWords,

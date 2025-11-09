@@ -183,7 +183,16 @@ const TOPICS = [
 
 export default function TopicsPage() {
   const { user } = useAuth(); // Add authentication hook
-  const { topicStats, topicStatsLoading, getWordsByTopic } = useWords(); // Use words context
+  const {
+    topicStats,
+    topicStatsLoading,
+    topicStatsLoaded,
+    loadTopicStats,
+    oxfordLoaded,
+    oxfordLoading,
+    loadOxfordWords,
+    getWordsByTopic,
+  } = useWords(); // Use words context
 
   console.log("🎯 Topics page debug:", {
     topicStatsLoading,
@@ -374,10 +383,29 @@ export default function TopicsPage() {
     }, 100);
   };
 
-  // Load topic word counts on mount - now handled by context
+  // Load topic word counts on mount - FORCE load if needed
   useEffect(() => {
-    // Topic stats are loaded automatically by context
-  }, []);
+    console.log("🎯 Topics page mounted - checking data availability...");
+
+    // Force load if not already loading or loaded
+    if (!topicStatsLoaded && !topicStatsLoading) {
+      console.log("⚡ Force loading topic stats from Topics page...");
+      loadTopicStats();
+    }
+
+    // Also ensure Oxford words are loaded (dependency)
+    if (!oxfordLoaded && !oxfordLoading) {
+      console.log("⚡ Force loading Oxford words from Topics page...");
+      loadOxfordWords();
+    }
+  }, [
+    topicStatsLoaded,
+    topicStatsLoading,
+    oxfordLoaded,
+    oxfordLoading,
+    loadTopicStats,
+    loadOxfordWords,
+  ]);
 
   // Load word statuses when user authentication state changes
   useEffect(() => {
@@ -583,35 +611,59 @@ export default function TopicsPage() {
         }),
       });
 
+      // Check if the response is OK before parsing JSON
+      if (!evaluationResponse.ok) {
+        throw new Error(
+          `Server error: ${evaluationResponse.status} - ${evaluationResponse.statusText}`
+        );
+      }
+
       const evaluationData = await evaluationResponse.json();
+
+      // Check if response is valid
+      if (!evaluationData) {
+        throw new Error("Không nhận được phản hồi từ hệ thống AI");
+      }
 
       if (evaluationData.success) {
         const { passed, feedback } = evaluationData.evaluation;
         setPracticeFeedback(feedback);
         setPracticeResult(passed);
 
-        // Step 2: Update word status using string method
-        const newStatus = passed ? "mastered" : "learning";
-        await updateWordStatus(selectedWord.term, newStatus);
+        // Step 2: Update word status using string method (only if user is logged in)
+        if (user) {
+          const newStatus = passed ? "mastered" : "learning";
+          await updateWordStatus(selectedWord.term, newStatus);
 
-        console.log(
-          `✅ Updated word status for "${selectedWord.term}" to "${newStatus}" using string method in Topics`
-        );
+          console.log(
+            `✅ Updated word status for "${selectedWord.term}" to "${newStatus}" using string method in Topics`
+          );
+        } else {
+          console.log(
+            `ℹ️ Practice completed for "${selectedWord.term}" but not saved (user not logged in)`
+          );
+        }
       } else {
         // Show detailed error message from API
         const errorMessage =
-          evaluationData.error ||
+          evaluationData?.error ||
           "Có lỗi xảy ra khi phân tích. Vui lòng thử lại!";
-        const errorDetails = evaluationData.details
+        const errorDetails = evaluationData?.details
           ? `\n\nChi tiết lỗi: ${evaluationData.details}`
           : "";
-        const statusInfo = evaluationData.geminiStatus
+        const statusInfo = evaluationData?.geminiStatus
           ? `\n\nMã lỗi: ${evaluationData.geminiStatus}`
           : "";
 
         setPracticeFeedback(`${errorMessage}${errorDetails}${statusInfo}`);
         setPracticeResult(false);
-        console.error("🚨 AI Evaluation Error:", evaluationData);
+
+        // Only log if there's meaningful error data
+        if (evaluationData && Object.keys(evaluationData).length > 0) {
+          console.error("🚨 AI Evaluation Error:", evaluationData);
+        } else {
+          console.error("🚨 AI Evaluation failed: Empty or invalid response");
+        }
       }
     } catch (error) {
       console.error("Practice error:", error);

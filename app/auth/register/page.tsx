@@ -208,6 +208,8 @@ export default function RegisterPage() {
             </Button>
           </form>
 
+          {/* Google registration temporarily hidden - TODO: Implement Google OAuth */}
+          {/* 
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
               <Separator className="w-full" />
@@ -229,6 +231,7 @@ export default function RegisterPage() {
             <Chrome className="mr-2 h-4 w-4" />
             Đăng ký với Google
           </Button>
+          */}
 
           <div className="text-center text-sm">
             <span className="text-gray-600 dark:text-gray-400">

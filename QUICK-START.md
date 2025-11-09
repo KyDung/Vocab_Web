@@ -73,6 +73,11 @@ pnpm dev
 - ✅ Check terminal có lỗi gì
 - ✅ Liên hệ: Kydung204@gmail.com
 
+## 👥 Credits
+
+**Web Development:** Xa Kỳ Trung Dũng (toàn bộ source code)  
+**Documentation:** Chu Thị Việt Chinh (guides & tutorials)
+
 ---
 
 **🎯 Mục tiêu: Chỉ cần 5 phút để có web chạy local!**

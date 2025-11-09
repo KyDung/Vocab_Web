@@ -106,3 +106,6 @@ coverage/
 # Temporary folders
 tmp/
 temp/
+
+# Internal documentation (not for public repo)
+BaoCao/
