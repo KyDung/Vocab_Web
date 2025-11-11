@@ -397,9 +397,48 @@ export default function CustomVocabPage() {
 
   function checkInputAnswer() {
     if (!current || answered) return;
-    const input = (answerText || "").trim().toLowerCase();
-    const correct = (current[answerLang] || "").toLowerCase(); // en-to-vn => so với vn; vn-to-en => so với en
-    const ok = input === correct;
+    const input = (answerText || "").trim();
+    const correct = (current[answerLang] || "").trim();
+
+    // Detailed byte debugging: Show character codes
+    console.log("🔍 DETAILED DEBUG:", {
+      mode,
+      answerLang,
+      userInput: `"${input}"`,
+      correctAnswer: `"${correct}"`,
+      inputLength: input.length,
+      correctLength: correct.length,
+      inputBytes: [...input].map((c) => `${c}=${c.charCodeAt(0)}`),
+      correctBytes: [...correct].map((c) => `${c}=${c.charCodeAt(0)}`),
+      inputLower: `"${input.toLowerCase()}"`,
+      correctLower: `"${correct.toLowerCase()}"`,
+      basicEqual: input.toLowerCase() === correct.toLowerCase(),
+    });
+
+    // Unicode normalization: normalize('NFD') + Remove diacritics + Whitespace normalization
+    const normalizeString = (str: string) => {
+      return str
+        .toLowerCase()
+        .normalize("NFD") // Decompose accented characters
+        .replace(/[\u0300-\u036f]/g, "") // Remove diacritics: Strip accents để so sánh base characters
+        .replace(/\s+/g, " ") // Whitespace normalization: Handle space differences
+        .trim();
+    };
+
+    const normalizedInput = normalizeString(input);
+    const normalizedCorrect = normalizeString(correct);
+
+    console.log("🔍 NORMALIZED DEBUG:", {
+      normalizedInput: `"${normalizedInput}"`,
+      normalizedCorrect: `"${normalizedCorrect}"`,
+      normalizedEqual: normalizedInput === normalizedCorrect,
+    });
+
+    // COMPARISON with Unicode normalization
+    const ok = input.length > 0 && normalizedInput === normalizedCorrect;
+
+    console.log("✅ Final result:", ok);
+
     updateProgressCounters(ok);
     setAnswered(true);
     setShowingResult(true);
