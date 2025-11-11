@@ -91,7 +91,9 @@ export function CapyrunGame({ onBack }: CapyrunGameProps) {
           <CardContent>
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <h3 className="font-semibold mb-2 text-gray-800 dark:text-slate-200">🎮 Điều khiển:</h3>
+                <h3 className="font-semibold mb-2 text-gray-800 dark:text-slate-200">
+                  🎮 Điều khiển:
+                </h3>
                 <ul className="space-y-1 text-sm text-gray-600 dark:text-slate-400">
                   <li>• Sử dụng phím mũi tên hoặc WASD để di chuyển</li>
                   <li>• Space để nhảy</li>
@@ -100,7 +102,9 @@ export function CapyrunGame({ onBack }: CapyrunGameProps) {
                 </ul>
               </div>
               <div>
-                <h3 className="font-semibold mb-2 text-gray-800 dark:text-slate-200">🎯 Mục tiêu:</h3>
+                <h3 className="font-semibold mb-2 text-gray-800 dark:text-slate-200">
+                  🎯 Mục tiêu:
+                </h3>
                 <ul className="space-y-1 text-sm text-gray-600 dark:text-slate-400">
                   <li>• Điều khiển Capybara chạy và vượt chướng ngại vật</li>
                   <li>• Thu thập các vật phẩm đặc biệt</li>

@@ -517,7 +517,14 @@ export default function CustomVocabPage() {
                   </div>
                   Google Sheet
                 </CardTitle>
-                <Badge variant={sheetId ? "default" : "secondary"} className={sheetId ? "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300" : ""}>
+                <Badge
+                  variant={sheetId ? "default" : "secondary"}
+                  className={
+                    sheetId
+                      ? "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300"
+                      : ""
+                  }
+                >
                   {sheetId ? "Đang dùng link đã lưu" : "Chưa cấu hình"}
                 </Badge>
               </div>
@@ -554,16 +561,28 @@ export default function CustomVocabPage() {
                   className="flex-1 border-indigo-200 dark:border-slate-600 focus:border-indigo-400 dark:focus:border-indigo-400"
                   required
                 />
-                <Button type="submit" disabled={loading} className="bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600">
+                <Button
+                  type="submit"
+                  disabled={loading}
+                  className="bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600"
+                >
                   {loading ? "Đang tải..." : "Lưu link"}
                 </Button>
               </form>
 
               <div className="flex gap-2">
-                <Button variant="outline" onClick={clearSavedSheet} className="border-red-200 text-red-600 hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-900/20">
+                <Button
+                  variant="outline"
+                  onClick={clearSavedSheet}
+                  className="border-red-200 text-red-600 hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-900/20"
+                >
                   Xóa link đã lưu
                 </Button>
-                <Button variant="outline" onClick={reloadFromSaved} className="border-indigo-200 text-indigo-600 hover:bg-indigo-50 dark:border-indigo-600 dark:text-indigo-400 dark:hover:bg-indigo-900/20">
+                <Button
+                  variant="outline"
+                  onClick={reloadFromSaved}
+                  className="border-indigo-200 text-indigo-600 hover:bg-indigo-50 dark:border-indigo-600 dark:text-indigo-400 dark:hover:bg-indigo-900/20"
+                >
                   Tải lại dữ liệu
                 </Button>
               </div>
@@ -585,7 +604,11 @@ export default function CustomVocabPage() {
                 variant={mode === "en-to-vn" ? "default" : "outline"}
                 onClick={() => startMode("en-to-vn")}
                 disabled={!vocab.length}
-                className={mode === "en-to-vn" ? "bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700" : "border-indigo-200 text-indigo-700 hover:bg-indigo-50 dark:border-indigo-600 dark:text-indigo-300 dark:hover:bg-indigo-900/20"}
+                className={
+                  mode === "en-to-vn"
+                    ? "bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700"
+                    : "border-indigo-200 text-indigo-700 hover:bg-indigo-50 dark:border-indigo-600 dark:text-indigo-300 dark:hover:bg-indigo-900/20"
+                }
               >
                 ✍️ EN → VN (Input)
               </Button>
@@ -593,7 +616,11 @@ export default function CustomVocabPage() {
                 variant={mode === "vn-to-en" ? "default" : "outline"}
                 onClick={() => startMode("vn-to-en")}
                 disabled={!vocab.length}
-                className={mode === "vn-to-en" ? "bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700" : "border-indigo-200 text-indigo-700 hover:bg-indigo-50 dark:border-indigo-600 dark:text-indigo-300 dark:hover:bg-indigo-900/20"}
+                className={
+                  mode === "vn-to-en"
+                    ? "bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700"
+                    : "border-indigo-200 text-indigo-700 hover:bg-indigo-50 dark:border-indigo-600 dark:text-indigo-300 dark:hover:bg-indigo-900/20"
+                }
               >
                 ✍️ VN → EN (Input)
               </Button>
@@ -601,7 +628,11 @@ export default function CustomVocabPage() {
                 variant={mode === "quiz-en" ? "default" : "outline"}
                 onClick={() => startMode("quiz-en")}
                 disabled={!vocab.length}
-                className={mode === "quiz-en" ? "bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700" : "border-purple-200 text-purple-700 hover:bg-purple-50 dark:border-purple-600 dark:text-purple-300 dark:hover:bg-purple-900/20"}
+                className={
+                  mode === "quiz-en"
+                    ? "bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700"
+                    : "border-purple-200 text-purple-700 hover:bg-purple-50 dark:border-purple-600 dark:text-purple-300 dark:hover:bg-purple-900/20"
+                }
               >
                 ✅ Quiz (EN → VN)
               </Button>
@@ -609,7 +640,11 @@ export default function CustomVocabPage() {
                 variant={mode === "quiz-vn" ? "default" : "outline"}
                 onClick={() => startMode("quiz-vn")}
                 disabled={!vocab.length}
-                className={mode === "quiz-vn" ? "bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700" : "border-purple-200 text-purple-700 hover:bg-purple-50 dark:border-purple-600 dark:text-purple-300 dark:hover:bg-purple-900/20"}
+                className={
+                  mode === "quiz-vn"
+                    ? "bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700"
+                    : "border-purple-200 text-purple-700 hover:bg-purple-50 dark:border-purple-600 dark:text-purple-300 dark:hover:bg-purple-900/20"
+                }
               >
                 ✅ Quiz (VN → EN)
               </Button>
@@ -617,7 +652,11 @@ export default function CustomVocabPage() {
                 variant={mode === "flash-en" ? "default" : "outline"}
                 onClick={() => startMode("flash-en")}
                 disabled={!vocab.length}
-                className={mode === "flash-en" ? "bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700" : "border-emerald-200 text-emerald-700 hover:bg-emerald-50 dark:border-emerald-600 dark:text-emerald-300 dark:hover:bg-emerald-900/20"}
+                className={
+                  mode === "flash-en"
+                    ? "bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700"
+                    : "border-emerald-200 text-emerald-700 hover:bg-emerald-50 dark:border-emerald-600 dark:text-emerald-300 dark:hover:bg-emerald-900/20"
+                }
               >
                 🪪 Flashcard (EN → VN)
               </Button>
@@ -625,11 +664,20 @@ export default function CustomVocabPage() {
                 variant={mode === "flash-vn" ? "default" : "outline"}
                 onClick={() => startMode("flash-vn")}
                 disabled={!vocab.length}
-                className={mode === "flash-vn" ? "bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700" : "border-emerald-200 text-emerald-700 hover:bg-emerald-50 dark:border-emerald-600 dark:text-emerald-300 dark:hover:bg-emerald-900/20"}
+                className={
+                  mode === "flash-vn"
+                    ? "bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700"
+                    : "border-emerald-200 text-emerald-700 hover:bg-emerald-50 dark:border-emerald-600 dark:text-emerald-300 dark:hover:bg-emerald-900/20"
+                }
               >
                 🪪 Flashcard (VN → EN)
               </Button>
-              <Badge variant="secondary" className="bg-gradient-to-r from-yellow-100 to-orange-100 text-orange-700 dark:from-yellow-900/30 dark:to-orange-900/30 dark:text-orange-300 border-0">Live data</Badge>
+              <Badge
+                variant="secondary"
+                className="bg-gradient-to-r from-yellow-100 to-orange-100 text-orange-700 dark:from-yellow-900/30 dark:to-orange-900/30 dark:text-orange-300 border-0"
+              >
+                Live data
+              </Badge>
             </div>
 
             {/* HUD */}
