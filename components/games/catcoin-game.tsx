@@ -16,7 +16,7 @@ export function CatCoinGame({ onBack }: CatCoinGameProps) {
   const [correctAnswers, setCorrectAnswers] = useState(0);
   const [gameWon, setGameWon] = useState(false);
 
-  const gameUrl = "/games/catcoin/FirstGame.html";
+  const gameUrl = "/games/catcoin/CatCoin.html";
 
   const handlePlayGame = () => {
     // Mở game trong tab mới
