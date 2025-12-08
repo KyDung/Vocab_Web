@@ -25,8 +25,16 @@ import { QuizGame } from "@/components/games/quiz-game";
 import { TypingGame } from "@/components/games/typing-game";
 import { GodotGame } from "@/components/games/godot-game";
 import { CapyrunGame } from "@/components/games/capyrun-game";
+import { CatCoinGame } from "@/components/games/catcoin-game";
 
-type GameType = "flashcard" | "quiz" | "typing" | "godot" | "capyrun" | null;
+type GameType =
+  | "flashcard"
+  | "quiz"
+  | "typing"
+  | "godot"
+  | "capyrun"
+  | "catcoin"
+  | null;
 
 const games = [
   {
@@ -79,6 +87,17 @@ const games = [
     difficulty: "Trung bình",
     time: "15-25 phút",
     image: "/Capybara_adventure.png",
+  },
+  {
+    id: "catcoin",
+    title: "Cat Coin Adventure",
+    description:
+      "Điều khiển mèo nhặt 10 xu và trả lời đúng 10 câu hỏi từ vựng để chiến thắng",
+    icon: Trophy,
+    color: "bg-gradient-to-br from-yellow-500 to-orange-500",
+    difficulty: "Dễ",
+    time: "10-15 phút",
+    image: "/cat_coin.png",
   },
 ];
 
@@ -177,6 +196,8 @@ export default function GamesPage() {
         return <GodotGame onBack={handleBackToGames} />;
       case "capyrun":
         return <CapyrunGame onBack={handleBackToGames} />;
+      case "catcoin":
+        return <CatCoinGame onBack={handleBackToGames} />;
       default:
         return null;
     }
