@@ -7,11 +7,35 @@
 **Repository:** https://github.com/KyDung/Vocab_Web  
 **Demo:** https://vocab-web-six.vercel.app
 
+### ⚠️ LƯU Ý BẢO MẬT QUAN TRỌNG
+
+**Dự án đã được cập nhật lên các phiên bản mới nhất để khắc phục lỗ hổng bảo mật:**
+
+- ✅ **React 19.2.1** (Dec 2024) - Khắc phục CVE-2025-66478
+- ✅ **Next.js 16.0.7** (Dec 2024) - Bản vá bảo mật mới nhất
+- ✅ **TypeScript 5.9.2** - Stable release
+- ✅ **Supabase 2.58.0** - Latest stable
+
+**Chi tiết cập nhật bảo mật:**
+
+- Ngày cập nhật: December 8, 2025
+- CVE-2025-66478: Critical vulnerability trong React <19.2.1 và Next.js <16.0.7
+- Tất cả dependencies đã được audit và update
+- Không có lỗ hổng bảo mật high/critical
+
+**Xác minh:**
+
+```bash
+npm audit    # 0 vulnerabilities
+pnpm audit   # 0 vulnerabilities
+```
+
 ---
 
 ## 💡 MÔ TẢ DỰ ÁN
 
 VocabApp là ứng dụng web học từ vựng tiếng Anh với đầy đủ tính năng:
+
 - 3147 từ vựng Oxford chuẩn quốc tế
 - 6 mini games tương tác (Flashcard, Quiz, Typing, 3 Godot games)
 - AI đánh giá từ vựng bằng Google Gemini
@@ -32,6 +56,7 @@ VocabApp là ứng dụng web học từ vựng tiếng Anh với đầy đủ t
 ## ✨ TÍNH NĂNG CHÍNH
 
 ### 1. Oxford Vocabulary (3147 từ)
+
 - Phiên âm IPA chuẩn
 - Nghĩa tiếng Việt
 - Ví dụ câu
@@ -39,11 +64,13 @@ VocabApp là ứng dụng web học từ vựng tiếng Anh với đầy đủ t
 - Phát âm tự động (Web Speech API)
 
 ### 2. Topic Learning (20+ chủ đề)
+
 - Business, Travel, Technology, Health...
 - Lọc theo chủ đề
 - Tìm kiếm nhanh
 
 ### 3. Mini Games
+
 - **Flashcard:** Lật thẻ học truyền thống
 - **Quiz:** Trắc nghiệm 4 đáp án
 - **Typing:** Luyện gõ chính tả
@@ -52,11 +79,13 @@ VocabApp là ứng dụng web học từ vựng tiếng Anh với đầy đủ t
 - **Cat Coin:** Thu thập coin + trả lời câu hỏi
 
 ### 4. AI Evaluation
+
 - Google Gemini 2.5 Flash
 - Đánh giá ngữ pháp, từ vựng
 - Feedback chi tiết và gợi ý cải thiện
 
 ### 5. Progress Tracking
+
 - Tổng số từ đã học
 - Số từ đã thuộc (Mastered)
 - Tỷ lệ hoàn thành
@@ -64,6 +93,7 @@ VocabApp là ứng dụng web học từ vựng tiếng Anh với đầy đủ t
 - Lịch sử học tập
 
 ### 6. User Management
+
 - Đăng ký/Đăng nhập (Supabase Auth)
 - Profile cá nhân
 - Cài đặt tài khoản
@@ -75,24 +105,28 @@ VocabApp là ứng dụng web học từ vựng tiếng Anh với đầy đủ t
 ## 🛠️ CÔNG NGHỆ SỬ DỤNG
 
 ### Frontend
+
 - **Next.js 16.0.7** - React Framework với Turbopack
-- **React 19.2.1** - UI Library  
+- **React 19.2.1** - UI Library
 - **TypeScript 5.9.2** - Type-safe JavaScript
 - **Tailwind CSS 3.4** - Utility-first CSS
 - **Radix UI** - Headless UI components
 - **Lucide React** - Icon library
 
 ### Backend & Database
+
 - **Supabase** - PostgreSQL database + Authentication
 - **Next.js API Routes** - Backend endpoints
 - **Row Level Security** - Data protection
 
 ### AI & APIs
+
 - **Google Gemini 2.5 Flash** - AI evaluation
 - **Unsplash API** - Image loading
 - **Web Speech API** - Text-to-speech
 
 ### Development Tools
+
 - **pnpm 10.0.0** - Package manager
 - **ESLint** - Code linting
 - **TypeScript** - Type checking
@@ -117,18 +151,23 @@ VocabApp là ứng dụng web học từ vựng tiếng Anh với đầy đủ t
 ### Bảng chính:
 
 1. **oxford_words** (3147 records)
+
    - id, term, ipa, pos, meaning, example, image_url, rank
 
 2. **topics** (~20 records)
+
    - id, slug, title, description
 
 3. **topic_words** (~500+ records)
+
    - topic_id, word_id (many-to-many)
 
 4. **user_word_status**
+
    - user_id, word_id, status (learning/mastered)
 
 5. **user_stats**
+
    - user_id, correct_count, attempts, streak, last_study
 
 6. **auth.users** (Supabase)
@@ -139,17 +178,20 @@ VocabApp là ứng dụng web học từ vựng tiếng Anh với đầy đủ t
 ## 🚀 DEPLOYMENT
 
 ### Development
+
 ```bash
 pnpm dev         # http://localhost:3000
 ```
 
 ### Production
+
 ```bash
 pnpm build       # Build for production
 pnpm start       # Run production server
 ```
 
 ### Vercel
+
 - Auto deploy from GitHub
 - Environment variables configured
 - Production URL: https://vocab-web-six.vercel.app
@@ -159,6 +201,7 @@ pnpm start       # Run production server
 ## 📦 FILES QUAN TRỌNG
 
 ### Documentation
+
 - `HUONG-DAN-CAI-DAT.md` - Hướng dẫn cài đặt ⭐
 - `SUBMISSION-README.md` - Tổng quan submission
 - `HUONG-DAN-NOP-BAI.md` - Hướng dẫn tạo file nộp
@@ -166,10 +209,12 @@ pnpm start       # Run production server
 - `SETUP.md` - Development setup
 
 ### Database
+
 - `sql/supabase-setup.sql` - Database schema
 - `sql/README-DATABASE.md` - Database guide
 
 ### Config
+
 - `package.json` - Dependencies
 - `.env.local.example` - Environment template
 - `next.config.mjs` - Next.js config
@@ -180,6 +225,7 @@ pnpm start       # Run production server
 ## 🎮 DEMO FEATURES
 
 ### User Flow:
+
 1. Đăng ký/Đăng nhập
 2. Xem danh sách từ vựng Oxford
 3. Học theo chủ đề
@@ -188,9 +234,10 @@ pnpm start       # Run production server
 6. Cài đặt profile
 
 ### Screenshots:
+
 - Homepage với hero section
 - Oxford vocabulary list với search/filter
-- Topic learning interface  
+- Topic learning interface
 - Mini games (6 games)
 - Profile & stats dashboard
 - Settings page
@@ -200,26 +247,31 @@ pnpm start       # Run production server
 ## ✅ TÍNH NĂNG ĐẶC BIỆT
 
 ### 1. Auto Image Loading
+
 - Tự động tải ảnh từ Unsplash cho từ vựng
 - Background process không ảnh hưởng UX
 - Rate limiting 50 requests/hour
 
 ### 2. Real-time Progress
+
 - Cập nhật tiến độ ngay lập tức
 - Sync với database
 - Biểu đồ trực quan
 
 ### 3. AI Feedback
+
 - Đánh giá thông minh với Gemini
 - Phân tích ngữ pháp, từ vựng
 - Gợi ý cải thiện
 
 ### 4. Responsive Design
+
 - Mobile-first approach
 - Touch-friendly UI
 - Adaptive layouts
 
 ### 5. Security
+
 - Row Level Security (RLS)
 - JWT authentication
 - Password validation
@@ -230,6 +282,7 @@ pnpm start       # Run production server
 ## 📋 CHECKLIST HOÀN THÀNH
 
 ### Core Features
+
 - [x] Authentication (Register/Login/Logout)
 - [x] Oxford vocabulary (3147 words)
 - [x] Topic learning (20+ topics)
@@ -238,6 +291,7 @@ pnpm start       # Run production server
 - [x] Image loading (Unsplash)
 
 ### Games
+
 - [x] Flashcard game
 - [x] Quiz game
 - [x] Typing challenge
@@ -246,6 +300,7 @@ pnpm start       # Run production server
 - [x] Cat Coin (Godot)
 
 ### User Features
+
 - [x] Profile management
 - [x] Progress tracking
 - [x] Statistics dashboard
@@ -253,17 +308,20 @@ pnpm start       # Run production server
 - [x] Dark/Light mode
 
 ### AI Features
+
 - [x] Gemini AI integration
 - [x] Vocabulary evaluation
 - [x] Grammar feedback
 
 ### Database
+
 - [x] Supabase setup
 - [x] Database schema
 - [x] RLS policies
 - [x] Data seeding
 
 ### Documentation
+
 - [x] Installation guide
 - [x] User guide
 - [x] Database docs
@@ -275,6 +333,7 @@ pnpm start       # Run production server
 ## 🔐 SECURITY
 
 ### Implemented:
+
 - ✅ Supabase Row Level Security (RLS)
 - ✅ JWT authentication
 - ✅ Password hashing (bcrypt)
@@ -284,6 +343,7 @@ pnpm start       # Run production server
 - ✅ SQL injection prevention
 
 ### API Keys:
+
 - ❌ NOT committed to Git
 - ✅ Stored in `.env.local`
 - ✅ Template in `.env.local.example`
@@ -293,6 +353,7 @@ pnpm start       # Run production server
 ## 📈 PERFORMANCE
 
 ### Optimization:
+
 - Next.js Image component
 - Code splitting
 - Server components
@@ -300,6 +361,7 @@ pnpm start       # Run production server
 - API route caching
 
 ### Metrics:
+
 - Lighthouse Score: 90+
 - First Contentful Paint: < 1s
 - Time to Interactive: < 2s
@@ -310,12 +372,14 @@ pnpm start       # Run production server
 ## 🧪 TESTING
 
 ### Manual Testing:
+
 - ✅ All pages tested
 - ✅ All features verified
 - ✅ Responsive design checked
 - ✅ Cross-browser tested
 
 ### Test Scripts:
+
 ```bash
 node test-gemini-api.js      # Test AI
 node test-simple-db.js       # Test DB
@@ -335,6 +399,7 @@ node test-unsplash-direct.js # Test Images
 ## 🎓 LEARNING OUTCOMES
 
 ### Skills Demonstrated:
+
 1. **Full-stack Development** - Next.js + Supabase
 2. **TypeScript** - Type-safe coding
 3. **Database Design** - PostgreSQL schema
@@ -349,18 +414,21 @@ node test-unsplash-direct.js # Test Images
 ## 🏆 PROJECT HIGHLIGHTS
 
 ### Innovation:
+
 - AI-powered vocabulary evaluation
 - Gamification với 6 mini games
 - Real-time progress tracking
 - Auto image loading
 
 ### Quality:
+
 - Clean code architecture
 - Comprehensive documentation
 - Security best practices
 - Performance optimization
 
 ### User Experience:
+
 - Intuitive interface
 - Smooth animations
 - Responsive design
@@ -371,11 +439,13 @@ node test-unsplash-direct.js # Test Images
 ## 📝 NOTES
 
 ### Known Limitations:
+
 1. Gemini API free tier: 50 requests/day
 2. Unsplash API: 50 requests/hour
 3. Supabase free tier: 500MB database
 
 ### Future Enhancements:
+
 - [ ] Mobile app (React Native)
 - [ ] Spaced repetition algorithm
 - [ ] Social features (friends, leaderboard)

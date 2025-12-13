@@ -28,6 +28,29 @@
 - 🔐 **Xác thực người dùng** - Đăng ký/đăng nhập an toàn
 - 🌙 **Dark/Light Mode** - Giao diện tùy chỉnh
 
+### 🔒 BẢO MẬT & PHIÊN BẢN
+
+**⚠️ QUAN TRỌNG:** Dự án sử dụng phiên bản mới nhất (December 2024) để đảm bảo bảo mật:
+
+| Công nghệ      | Phiên bản | Trạng thái | Lý do                                             |
+| -------------- | --------- | ---------- | ------------------------------------------------- |
+| **React**      | 19.2.1    | ✅ Latest  | Khắc phục CVE-2025-66478 (Critical vulnerability) |
+| **Next.js**    | 16.0.7    | ✅ Latest  | Security patches mới nhất                         |
+| **TypeScript** | 5.9.2     | ✅ Stable  | Type-safe, production-ready                       |
+| **Supabase**   | 2.58.0    | ✅ Latest  | Backend security updates                          |
+
+**Lịch sử cập nhật bảo mật:**
+
+- **Dec 8, 2024:** Update React 18.3.1 → 19.2.1 (Critical CVE patch)
+- **Dec 8, 2024:** Update Next.js 15.2.4 → 16.0.7 (Security fixes)
+- **Security Audit:** `npm audit` = 0 vulnerabilities ✅
+
+**Tại sao quan trọng:**
+
+- Các phiên bản cũ (React 18.x, Next.js 15.x) có lỗ hổng bảo mật nghiêm trọng
+- Automated security scanners sẽ cảnh báo nếu dùng phiên bản cũ
+- Production deployment yêu cầu dependencies không có vulnerabilities
+
 ---
 
 ## 💻 YÊU CẦU HỆ THỐNG
@@ -35,10 +58,12 @@
 ### Phần mềm bắt buộc:
 
 - **Node.js**: Phiên bản 18.18 hoặc mới hơn (tối đa 22.x)
+
   - Tải tại: https://nodejs.org/
   - Kiểm tra: `node --version`
 
 - **pnpm**: Package manager (khuyến nghị)
+
   - Cài đặt: `npm install -g pnpm`
   - Kiểm tra: `pnpm --version`
 
@@ -49,9 +74,11 @@
 ### Tài khoản cần thiết (MIỄN PHÍ):
 
 1. **Supabase** (Database + Authentication)
+
    - Đăng ký tại: https://supabase.com
 
 2. **Google AI Studio** (Gemini API)
+
    - Đăng ký tại: https://aistudio.google.com/
 
 3. **Unsplash** (Image API - Tùy chọn)
@@ -288,21 +315,25 @@ pnpm lint
 **Truy cập:** Click menu **"Games"**
 
 #### Game 1: Flashcard
+
 - Lật thẻ để xem nghĩa
 - Click ✓ nếu biết, ✗ nếu không biết
 - Hệ thống ghi nhận kết quả
 
 #### Game 2: Quiz Game
+
 - Chọn đáp án đúng trong 4 lựa chọn
 - Có giới hạn thời gian
 - Điểm số tích lũy theo độ chính xác
 
 #### Game 3: Typing Challenge
+
 - Nghe từ và gõ chính xác
 - Luyện kỹ năng chính tả
 - Tính điểm theo tốc độ và độ chính xác
 
 #### Game 4-6: Godot Games
+
 - **Candy Catcher**: Bắt kẹo và trả lời câu hỏi từ vựng
 - **Capyrun**: Chạy và vượt chướng ngại vật
 - **Cat Coin**: Thu thập 10 đồng xu và trả lời 10 câu hỏi
@@ -354,6 +385,7 @@ pnpm lint
 **Triệu chứng:** Lỗi "Failed to fetch" hoặc "Network error"
 
 **Giải pháp:**
+
 - Kiểm tra `.env.local` có đúng URL và API key
 - Kiểm tra internet connection
 - Thử xóa cache: `rm -rf .next && pnpm dev`
@@ -363,6 +395,7 @@ pnpm lint
 **Triệu chứng:** Lỗi "Quota exceeded" hoặc "Invalid API key"
 
 **Giải pháp:**
+
 - Kiểm tra `GEMINI_API_KEY` trong `.env.local`
 - Đảm bảo API key chưa hết quota (50 requests/day free tier)
 - Thử tạo API key mới tại https://aistudio.google.com
@@ -372,6 +405,7 @@ pnpm lint
 **Triệu chứng:** Trang Oxford hiển thị "No words found"
 
 **Giải pháp:**
+
 1. Vào Supabase SQL Editor
 2. Chạy lại: `sql/supabase-setup.sql`
 3. Kiểm tra: `SELECT COUNT(*) FROM oxford_words;`
@@ -381,6 +415,7 @@ pnpm lint
 **Triệu chứng:** Placeholder icons thay vì ảnh
 
 **Giải pháp:**
+
 - Kiểm tra `UNSPLASH_ACCESS_KEY` trong `.env.local`
 - Auto-loader sẽ tự động tải ảnh khi vào trang Oxford
 - Hoặc chạy thủ công: `node scripts/load-missing-images.js`
@@ -390,6 +425,7 @@ pnpm lint
 **Triệu chứng:** "Port 3000 is already in use"
 
 **Giải pháp:**
+
 ```bash
 # Windows
 netstat -ano | findstr :3000
@@ -407,6 +443,7 @@ pnpm dev -- -p 3001
 **Triệu chứng:** "Cannot find module..."
 
 **Giải pháp:**
+
 ```bash
 # Xóa node_modules và cài lại
 rm -rf node_modules pnpm-lock.yaml
